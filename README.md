@@ -9,9 +9,9 @@ Das Projekt wurde in 4 Teilprojekte aufgeteilt:
 	
 
 Jedes Teilprojekt hat die Verzeichnisstruktur:
-* debug		enthaelt Objektfiles zum Testen
-* lib		enthaelt Objektfiles zum Erstellen der shared library des Teilprojekts
-* src		enthaelt den Source-Code
+* `debug` enthaelt Objektfiles zum Testen
+* `lib` enthaelt Objektfiles zum Erstellen der shared library des Teilprojekts
+* `src`	enthaelt den Source-Code
 
 jedes Teilprojekt enthaelt ein eigenes Makefile und eine eigene Main-Klasse, um die Funktionalitaet zu testen.
 	
