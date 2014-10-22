@@ -4,7 +4,6 @@
  */
 
 #include "Automat.h"
-#include
 
 
 Automat::Automat() {
@@ -72,8 +71,7 @@ bool Automat::testChar(char c){
 		typ = Plus;
 		break;
 	default:
-		printf("Zeichen nicht erkannt!");
-		exit();
+		typ = Error;
 	}
 
 	return true;
