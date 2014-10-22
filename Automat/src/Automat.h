@@ -30,6 +30,8 @@ private:
 	State currentState;
 	int stepsSinceLastFinalState;
 	State stateMatrix[2][10];
+	int zeile;
+	int spalte;
 };
 
 #endif /* Automat_H_ */

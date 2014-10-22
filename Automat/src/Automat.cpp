@@ -10,6 +10,8 @@ Automat::Automat() {
 	lastFinalState = Start;
 	stepsSinceLastFinalState = 0;
 	currentState = Start;
+	zeile = 1;
+	spalte = 1;
 }
 
 Automat::~Automat() {
