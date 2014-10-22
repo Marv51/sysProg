@@ -10,12 +10,13 @@
 
 enum State
 {
-	Start, Number
+	Undefined,
+	Start,
+	Number,
+	Identifier,
+	KleinerAls
 };
 
-enum EingabeType{
-	Zahl, Leerzeichen, Buchstabe, Plus, Minus, Gleich, Punkt//, Doppelpunkt, Komma, Semikolon
-};
 
 class Automat {
 public:
@@ -24,12 +25,15 @@ public:
 	State getLastFinalState();
 	int getStepsSinceLastFinalState();
 	bool testChar(char c);
+	int getZeile();
+	int getSpalte();
 
 private:
 	State lastFinalState;
 	State currentState;
 	int stepsSinceLastFinalState;
-	State stateMatrix[2][10];
+	State stateMatrix[20][256];
+	bool finaleStates[20];
 	int zeile;
 	int spalte;
 };
