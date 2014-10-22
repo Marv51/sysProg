@@ -1,0 +1,43 @@
+SysProg – Scanner
+
+Scanner  nextToken()
+a) Buffer getChar() (Index erhöhen und Zeichen an der Stelle Index-1 zurückgeben)
+Wenn Zeichen nicht \0 ist: 
+Scanner speichert das Zeichen in der Liste
+Automat erhöht SchritteSeitLetztemEndZustand um 1
+Automat putChar()  -> Automat schaut ob es Übergang gibt
+Speichert Aktuellen Zustand.
+Wenn der Neue Zustand ein endzustand ist, SchritteSeitLetztemEndZustand auf 0 und LetzterEndzustand ist der Neue Zustand
+Wenn es keinen neuen Zustand gab springt er wieder in den Anfangszustand
+return ob es einen Übergang gab.
+Bei true: Scanner wiederholt ab (a)
+Bei false oder wenn \0 aus Buffer kommt: Scanner holt letzten Endzustand und Schritte seit dem.
+Wenn es keinen letzten Endzustand gibt Fehler-Token zurück
+Scanner schmeißt so viele Zeichen aus Liste wie Schritte + sagt Buffer Schritte zurück
+Aus Inhalt der Liste + Zustand baut Token und return
+
+Buffer:
+char getChar()
+void SchritteZurueck(int wieviele)
+
+Scanner: 
+Token NextToken();
+
+Automat:
+Boolean putChar(char dieses)
+Int getSchritteSeitLetztemEndzustand()
+Zustand/enum/ getletzterZustand()
+
+Zustands-Klassse:
+putChar()->gibt neuen Zustand zurück
+Liste aus Input Zeichen und Folge Zustand
+
+Automat:
+Aktueller Zustand
+Letzter Endzustand
+Start Zustand
+SchritteSeitLetzemEndzustand
+
+Aufbau 
+Erzeugt alle Zustände
+Verlinkt Zustände
