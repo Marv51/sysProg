@@ -7,13 +7,12 @@
 
 
 Automat::Automat() {
-	// TODO Auto-generated constructor stub
 	lastFinalState = Start;
 	stepsSinceLastFinalState = 0;
+	currentState = Start;
 }
 
 Automat::~Automat() {
-	// TODO Auto-generated destructor stub
 }
 
 State Automat::getLastFinalState(){
@@ -28,6 +27,18 @@ bool Automat::testChar(char c){
 	EingabeType typ;
 	if(c <= '9' && c >= '0'){
 		typ = Zahl;
+	}else if((c <= 'Z' && c >= 'A') || (c <= 'z' && c >= 'a')){
+		typ = Buchstabe;
+	}else if(c == '+'){
+		typ = Plus;
+	}else if(c == '-'){
+		typ = Minus;
+	}else if(c == ' '){
+		typ = Leerzeichen;
+	}else if(c == '='){
+		typ = Gleich;
+	}else if(c == '.'){
+		typ = Punkt;
 	}else{
 		// Error kein zulässiges Zeichen.
 	}

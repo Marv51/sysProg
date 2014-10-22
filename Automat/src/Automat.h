@@ -14,7 +14,7 @@ enum State
 };
 
 enum EingabeType{
-	Zahl, Leerzeichen, Buchstabe, Plus, Minus
+	Zahl, Leerzeichen, Buchstabe, Plus, Minus, Gleich, Punkt//, Doppelpunkt, Komma, Semikolon
 };
 
 class Automat {
@@ -27,6 +27,7 @@ public:
 
 private:
 	State lastFinalState;
+	State currentState;
 	int stepsSinceLastFinalState;
 	State stateMatrix[2][10];
 };
