@@ -14,7 +14,7 @@ enum State
 };
 
 enum EingabeType{
-	Zahl, Leerzeichen, Buchstabe, Plus, Minus, Error
+	Zahl, Leerzeichen, Buchstabe, Plus, Minus
 };
 
 class Automat {
