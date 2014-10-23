@@ -17,7 +17,7 @@ Scanner::~Scanner() {
 	delete automat;
 }
 
-void Scanner::nextToken() {
+Token Scanner::nextToken() {
 	bool cont;
 	char ch;
 	int i = 0; // nur nötig solange kein stack oä
@@ -33,5 +33,6 @@ void Scanner::nextToken() {
 		word[i] = '\0'; // TODO durch stack.pop() oä ersetzen?
 		i--;  // nur nötig solange kein stack oä
 	}
-	// TODO Token bauen aus lastFinalState und stack/liste und Zeile und Spalte
+	return new Token(Integer, automat->getZeile(), automat->getSpalte());
+	// TODO lastFinalState in TokenType umwandeln und Liste/Stack übergeben
 }

@@ -16,7 +16,7 @@ class Scanner {
 public:
 	Scanner();
 	virtual ~Scanner();
-	void nextToken(); // TODO Token zurückliefern
+	Token nextToken();
 
 private:
 	Automat* automat;
