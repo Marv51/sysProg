@@ -9,7 +9,10 @@
 
 Buffer::Buffer() {
 	// TODO Auto-generated constructor stub
-
+	Buffer::index = 0;
+	for (int i = 0; i < 11; i++){
+		file[i] = "Hallo_Welt\n"[i];
+	}
 }
 
 Buffer::~Buffer() {
@@ -17,10 +20,15 @@ Buffer::~Buffer() {
 }
 
 char Buffer::getChar(){
-	// TODO implementieren
-	return '1';
+
+	index++;
+	return file[index - 1];
 }
 
-void Buffer::ungetChar(){
-	// TODO implementieren
+void Buffer::ungetChar(int wieviele){
+	index -= wieviele;
+}
+
+int Buffer::getIndex(){
+	return index;
 }

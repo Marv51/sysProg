@@ -13,7 +13,11 @@ public:
 	Buffer();
 	virtual ~Buffer();
 	char getChar();
-	void ungetChar();
+	void ungetChar(int wieviele);
+	int getIndex(); // nur Debug
+private: 
+	int index;
+	char file[100];
 };
 
 #endif /* BUFFER_H_ */
