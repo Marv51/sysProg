@@ -5,6 +5,8 @@
  *      Author: knad0001
  */
 
+#include "../../Automat/src/Automat.h"
+#include "../../Buffer/src/Buffer.h"
 
 #ifndef SCANNER_H_
 #define SCANNER_H_
@@ -18,6 +20,7 @@ public:
 private:
 	Automat* automat;
 	Buffer* buffer;
+	char word[100]; // TODO durch Stack/Liste ersetzen?
 };
 
 #endif /* SCANNER_H_ */

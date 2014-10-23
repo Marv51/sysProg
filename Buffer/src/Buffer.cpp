@@ -15,3 +15,12 @@ Buffer::Buffer() {
 Buffer::~Buffer() {
 	// TODO Auto-generated destructor stub
 }
+
+char Buffer::getChar(){
+	// TODO implementieren
+	return '1';
+}
+
+void Buffer::ungetChar(){
+	// TODO implementieren
+}
