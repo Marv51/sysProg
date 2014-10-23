@@ -1,12 +1,12 @@
-#ifndef SCANNER_H_
-#define SCANNER_H_
+#ifndef TOKEN_H_
+#define TOKEN_H_
 
 class Token {
 public:
-
-private:
 	Token();
 	virtual ~Token();
+private:
+
 };
 
 

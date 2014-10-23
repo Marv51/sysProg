@@ -7,6 +7,7 @@
 
 #include "../../Automat/src/Automat.h"
 #include "../../Buffer/src/Buffer.h"
+#include "Token.h"
 
 #ifndef SCANNER_H_
 #define SCANNER_H_
