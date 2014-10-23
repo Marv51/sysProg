@@ -8,10 +8,16 @@
 #include "Scanner.h"
 
 Scanner::Scanner() {
-	// TODO Auto-generated constructor stub
-
+	buffer = new Buffer();
+	automat = new Automat();
 }
 
 Scanner::~Scanner() {
-	// TODO Auto-generated destructor stub
+}
+
+void Scanner::nextToken(){
+	bool cont;
+	do{
+		cont = automat->testChar(buffer->getChar());
+	}while(cont);
 }
