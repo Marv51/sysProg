@@ -14,7 +14,29 @@ enum State
 	Start,
 	Number,
 	Identifier,
-	KleinerAls
+	KleinerAls,
+	GeschweifteKlammerAuf,
+	GeschweifteKlammerZu,
+	VorwaertsSchraegstrich,
+	EckigeKlammerAuf,
+	EckigeKlammerZu,
+	UndZeichen,
+	GroesserAls,
+	Stern,
+	Ausrufezeichen,
+	RundeKlammerAuf,
+	RundeKlammerZu,
+	IstGleichZeichen,
+	Minus,
+	Plus,
+	Doppelpunkt,
+	DoppelpunktIstGleich,
+	Semikolon,
+	KleinerDoppelpunkt,
+	kleinerDoppelpunktGroesser,
+	SchraegStrichStern,
+	SchraegstrichSternStern,
+	SchraegstrichSternSternSchraegstrich
 };
 
 
@@ -29,11 +51,12 @@ public:
 	int getSpalte();
 
 private:
+	void addStateToMatrix(State s);
 	State lastFinalState;
 	State currentState;
 	int stepsSinceLastFinalState;
-	State stateMatrix[20][256];
-	bool finaleStates[20];
+	State stateMatrix[50][256];
+	bool finaleStates[50];
 	int zeile;
 	int spalte;
 };
