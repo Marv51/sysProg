@@ -7,7 +7,7 @@ enum TokenType {
 
 class Token {
 public:
-	Token(TokenType, int, int, char[]);
+	Token();
 	virtual ~Token();
 private:
 	TokenType tokentype;
