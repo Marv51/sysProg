@@ -19,6 +19,9 @@ Automat::Automat() {
 	zeile = 0;
 	spalte = 0;
 
+	TokenAnfangSpalte = 0;
+	TokenAnfangZeile = 0;
+
 	for (int i = Number; i != SchraegstrichSternSternSchraegstrich; i++){
 		addStateToMatrix((State)i);
 	}
@@ -111,11 +114,11 @@ int Automat::getStepsSinceLastFinalState(){
 }
 
 int Automat::getZeile(){
-	return zeile;
+	return TokenAnfangZeile;
 }
 
 int Automat::getSpalte(){
-	return spalte;
+	return TokenAnfangSpalte;
 }
 
 bool Automat::testChar(char c){
@@ -124,6 +127,10 @@ bool Automat::testChar(char c){
 	} else {
 		spalte = 0;
 		zeile++;
+	}
+	if (currentState == Start){
+			TokenAnfangSpalte = spalte;
+			TokenAnfangZeile = zeile;
 	}
 
 	if (stateMatrix[currentState][(unsigned short)c] != Undefined){

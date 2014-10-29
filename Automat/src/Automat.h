@@ -59,6 +59,8 @@ private:
 	bool finaleStates[50];
 	int zeile;
 	int spalte;
+	int TokenAnfangZeile;
+	int TokenAnfangSpalte;
 };
 
 #endif /* Automat_H_ */
