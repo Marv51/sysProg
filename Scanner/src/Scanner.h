@@ -21,7 +21,6 @@ public:
 private:
 	Automat* automat;
 	Buffer* buffer;
-	char word[100]; // TODO durch Stack/Liste ersetzen?
 };
 
 #endif /* SCANNER_H_ */

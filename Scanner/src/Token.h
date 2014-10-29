@@ -9,11 +9,17 @@ class Token {
 public:
 	Token();
 	virtual ~Token();
+	int getZeile();
+	int getSpalte();
+	void setZeile(int zeile);
+	void setSpalte(int spalte);
+	void setTokenType(TokenType t);
+	TokenType getTokenType();
+	char content[100];
 private:
 	TokenType tokentype;
 	int zeile;
 	int spalte;
-	char content[100];
 	// TODO Klasse Information erstellen -> Symboltabelle
 };
 

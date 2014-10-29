@@ -1,18 +1,30 @@
 #include "Token.h"
 
-/*Token::Token(TokenType type, int zeil, int spalt, char cont[]){
-	tokentype = type;
-	zeile = zeil;
-	spalte = spalt;
-	content = cont;
-}
-*/
-Token::Token(){
-	tokentype = Integer;
-	zeile = 0;
-	spalte = 0;
-}
 
 Token::~Token(){
 
 }
+
+void Token::setSpalte(int spalte){
+	this->spalte = spalte;
+}
+
+void Token::setZeile(int zeile){
+	this->zeile = zeile;
+}
+
+int Token::getSpalte(){
+	return spalte;
+}
+
+int Token::getZeile(){
+	return zeile;
+}
+
+void Token::setTokenType(TokenType t){
+	tokentype = t;
+}
+TokenType Token::getTokenType(){
+	return tokentype;
+}
+

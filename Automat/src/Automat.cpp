@@ -16,11 +16,11 @@ Automat::Automat() {
 	lastFinalState = Start;
 	stepsSinceLastFinalState = 0;
 	currentState = Start;
-	zeile = 0;
-	spalte = 0;
+	zeile = 1;
+	spalte = 1;
 
-	TokenAnfangSpalte = 0;
-	TokenAnfangZeile = 0;
+	TokenAnfangSpalte = 1;
+	TokenAnfangZeile = 1;
 
 	for (int i = Number; i != SchraegstrichSternSternSchraegstrich; i++){
 		addStateToMatrix((State)i);
@@ -45,7 +45,7 @@ Automat::Automat() {
 	stateMatrix[Start][':'] = Doppelpunkt;
 
 	// Die Uebergangs Matrix erstellen
-	for (int i = 0; i <= 9; i++){
+	for (int i = '0'; i <= '9'; i++){
 		stateMatrix[Start][i] = Number;
 		stateMatrix[Number][i] = Number;
 		stateMatrix[Identifier][i] = Identifier;
@@ -105,6 +105,11 @@ Automat::Automat() {
 Automat::~Automat() {
 }
 
+void Automat::clean(){
+	stepsSinceLastFinalState = 0;
+	currentState = Start;
+}
+
 State Automat::getLastFinalState(){
 	return lastFinalState;
 }
@@ -122,15 +127,19 @@ int Automat::getSpalte(){
 }
 
 bool Automat::testChar(char c){
-	if (c != '\n'){
-		spalte++;
-	} else {
-		spalte = 0;
-		zeile++;
-	}
 	if (currentState == Start){
 			TokenAnfangSpalte = spalte;
 			TokenAnfangZeile = zeile;
+	}
+	if (c != '\n'){
+		spalte++;
+	} else {
+		spalte = 1;
+		zeile++;
+	}
+
+	if (c == ' ' || c == '\n'){
+		return false;
 	}
 
 	if (stateMatrix[currentState][(unsigned short)c] != Undefined){

@@ -38,7 +38,7 @@ TestBufferTarget :  $(SRCDIR)/TestBuffer.cpp $(SRCDIR)/Buffer.h
 cleanBuffer:
 	rm -rf $(OBJDIR)/*
 	rm -rf $(LIBDIR)/*
-	$(MAKE) makeTestBuffer
+	#$(MAKE) makeTestBuffer
 	
 
 #	

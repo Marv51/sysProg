@@ -4,19 +4,16 @@
  *  Created on: Sep 26, 2012
  *      Author: knad0001
  */
-
 #include "Buffer.h"
 
 Buffer::Buffer() {
-	// TODO Auto-generated constructor stub
-	Buffer::index = 0;
-	for (int i = 0; i < 11; i++){
-		file[i] = "Hallo_Welt\n"[i];
+	index = 0;
+	for (int i = 0; i < 30; i++){
+		file[i] = "HASHDSHDSDHSDH    int i <:> 3 + 12;   \n"[i];
 	}
 }
 
 Buffer::~Buffer() {
-	// TODO Auto-generated destructor stub
 }
 
 char Buffer::getChar(){
