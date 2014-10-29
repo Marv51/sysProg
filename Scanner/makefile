@@ -73,6 +73,7 @@ $(OBJDIR)/TestScanner.o :  $(SRCDIR)/TestScanner.cpp
 
 cleanScanner:
 	rm -rf $(OBJDIR)/*
+	rm -rf $(LIBDIR)/*
 #	$(MAKE) makeTestScanner
 	
 	

@@ -32,7 +32,8 @@ TestAutomatTarget :  src/TestAutomat.cpp src/Automat.h
 cleanAutomat:
 	rm -rf obj/*
 	rm -rf lib/*
-	$(MAKE) makeTestAutomat
+	rm -rf debug/*
+	#$(MAKE) makeTestAutomat
 	
 	
 #

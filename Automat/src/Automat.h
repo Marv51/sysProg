@@ -49,6 +49,7 @@ public:
 	bool testChar(char c);
 	int getZeile();
 	int getSpalte();
+	void clean();
 
 private:
 	void addStateToMatrix(State s);

@@ -7,15 +7,15 @@
 
 int main(int argc, char **argv) {
 
-	Buffer*  buffer;
+	//Buffer*  buffer;
 
-	buffer = new Buffer();
+	//buffer = new Buffer();
 
-	Scanner* scanner;
+	//Scanner* scanner;
 
-	scanner = new Scanner();
-	scanner->setBuffer(buffer);
-	printf("%c", scanner->nextToken());
+	//scanner = new Scanner();
+	//scanner->setBuffer(buffer);
+	//printf("%c", scanner->nextToken());
 	/*
 	printf("%c",buffer->getChar());
 	printf("%c",buffer->getChar());

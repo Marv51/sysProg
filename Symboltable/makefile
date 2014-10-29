@@ -69,7 +69,7 @@ $(OBJDIR)/%.o :  $(SRCDIR)/%.cpp
 cleanSymboltable:
 	rm -rf $(OBJDIR)/*
 	rm -rf $(LIBDIR)/*
-	$(MAKE) makeTestSymboltable
+	#$(MAKE) makeTestSymboltable
 	
 #	
 # erstellen der shared library

@@ -6,6 +6,7 @@
  */
 
 #include "Scanner.h"
+#include <stdio.h>
 
 Scanner::Scanner() {
 	buffer = new Buffer();
@@ -18,21 +19,30 @@ Scanner::~Scanner() {
 }
 
 void Scanner::nextToken(Token* t) {
+	automat->clean();
 	bool cont;
 	char ch;
-	int i = 0; // nur nötig solange kein stack oä
+	int i = 0;
 	do {
 		ch = buffer->getChar();
-		word[i] = ch; // TODO durch stack.push() oä ersetzen?
-		i++; // nur nötig solange kein Stack oä
+		if (ch != ' '){
+		t->content[i] = ch;
+		i++;
+		}
 		cont = automat->testChar(ch);
+
 	} while (cont);
 
 	for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
-		buffer->ungetChar();
-		word[i] = '\0'; // TODO durch stack.pop() oä ersetzen?
-		i--;  // nur nötig solange kein stack oä
+		if (ch != ' '){
+			buffer->ungetChar();
+		}
+		i--;
+		t->content[i] = '\0';
+
 	}
-	//Token* tokenret = new Token(Integer, automat->getZeile(), automat->getSpalte(), &word);
-	//return tokenret;
+	t->content[i] = '\0';
+	t->setSpalte(automat->getSpalte());
+	t->setZeile(automat->getZeile());
+	t->setTokenType(Integer);
 }
