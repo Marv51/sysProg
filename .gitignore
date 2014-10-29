@@ -1,4 +1,5 @@
-debug/
+debug/*
+!debug/.gittouch
 
 # Compiled Object files
 *.slo
