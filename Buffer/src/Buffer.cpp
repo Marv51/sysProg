@@ -25,8 +25,8 @@ char Buffer::getChar(){
 	return file[index - 1];
 }
 
-void Buffer::ungetChar(int wieviele){
-	index -= wieviele;
+void Buffer::ungetChar(){
+	index --;
 }
 
 int Buffer::getIndex(){

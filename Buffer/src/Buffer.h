@@ -13,7 +13,7 @@ public:
 	Buffer();
 	virtual ~Buffer();
 	char getChar();
-	void ungetChar(int wieviele);
+	void ungetChar(/*int wieviele -> nicht benötigt*/);
 	int getIndex(); // nur Debug
 private: 
 	int index;
