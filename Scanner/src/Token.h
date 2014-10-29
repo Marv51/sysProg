@@ -7,13 +7,14 @@ enum TokenType {
 
 class Token {
 public:
-	Token(TokenType, int, int);
+	Token(TokenType, int, int, char[]);
 	virtual ~Token();
 private:
 	TokenType tokentype;
 	int zeile;
 	int spalte;
-	// TODO Klasse Information erstellen
+	char content[100];
+	// TODO Klasse Information erstellen -> Symboltabelle
 };
 
 #endif

@@ -29,7 +29,7 @@ Int getSchritteSeitLetztemEndzustand()
 Zustand/enum/ getletzterZustand()
 
 Zustands-Klassse:
-putChar()->gibt neuen Zustand zurück
+testChar()->gibt neuen Zustand zurück
 Liste aus Input Zeichen und Folge Zustand
 
 Automat:
@@ -37,6 +37,8 @@ Aktueller Zustand
 Letzter Endzustand
 Start Zustand
 SchritteSeitLetzemEndzustand
+Zeile
+Spalte
 
 Aufbau 
 Erzeugt alle Zustände
