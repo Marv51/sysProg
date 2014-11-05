@@ -18,7 +18,8 @@ public:
 	bool hasCharLeft();
 private: 
 	int index;
-	char *buffer;
+	char *current_buffer;
+	char *prev_buffer;
 	int fileHandle;
 	void readFromFile(char* where);
 };

@@ -16,7 +16,12 @@
 
 Buffer::Buffer() {
 	index = 0;
-	int result = posix_memalign((void**)&buffer, BLOCKSIZE, 2*BLOCKSIZE);
+	int result = posix_memalign((void**)&current_buffer, BLOCKSIZE, BLOCKSIZE);
+	if (result != 0){
+		printf("Konnte keinen Speicher für den Puffer bekommen.");
+		return;
+	}
+	result = posix_memalign((void**)&prev_buffer, BLOCKSIZE, BLOCKSIZE);
 	if (result != 0){
 		printf("Konnte keinen Speicher für den Puffer bekommen.");
 		return;
@@ -26,7 +31,7 @@ Buffer::Buffer() {
 		printf("Datei konnte nicht geöffnet werden.");
 		return;
 	}
-	readFromFile(buffer);
+	readFromFile(current_buffer);
 }
 
 void Buffer::readFromFile(char* where){
@@ -38,7 +43,8 @@ void Buffer::readFromFile(char* where){
 }
 
 Buffer::~Buffer() {
-	free(buffer);
+	free(current_buffer);
+	free(prev_buffer);
 
 	int res = close(fileHandle);
 	if (res < 0){
@@ -48,9 +54,18 @@ Buffer::~Buffer() {
 }
 
 char Buffer::getChar() {
-
+	if (index < 0){
+		return prev_buffer[BLOCKSIZE + index];
+	}
+	if (index == (BLOCKSIZE - 1)){
+		free(prev_buffer);
+		prev_buffer = current_buffer;
+		posix_memalign((void**)&current_buffer, BLOCKSIZE, BLOCKSIZE);
+		readFromFile(current_buffer);
+		index = 0;
+	}
 	index++;
-	return buffer[index - 1];
+	return current_buffer[index - 1];
 }
 
 void Buffer::ungetChar() {
@@ -62,5 +77,5 @@ int Buffer::getIndex() {
 }
 
 bool Buffer::hasCharLeft() {
-	return (buffer[index] != '\0');
+	return (current_buffer[index] != '\0');
 }
