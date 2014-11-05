@@ -18,7 +18,7 @@ public:
 	bool hasCharLeft();
 private: 
 	int index;
-	char file[100];
+	char *buffer;
 };
 
 #endif /* BUFFER_H_ */
