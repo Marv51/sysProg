@@ -2,7 +2,7 @@
 #define TOKEN_H_
 
 enum TokenType {
-	Integer, Float // TODO Token types weiter ergänzen
+	Unknown, Integer, Float // TODO Token types weiter ergänzen
 };
 
 class Token {

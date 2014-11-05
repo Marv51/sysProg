@@ -1,5 +1,10 @@
 #include "Token.h"
 
+Token::Token(){
+	spalte = 1;
+	zeile = 1;
+	tokentype = Unknown;
+}
 
 Token::~Token(){
 
