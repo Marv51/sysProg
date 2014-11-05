@@ -5,11 +5,11 @@
  *      Author: knad0001
  */
 #include "Buffer.h"
-#include <cstring>
+#include <string.h>
 
 Buffer::Buffer() {
 	index = 0;
-	strcpy(file, "HASHDSHDSDHSDHende      int\n\n\n\ni <:> 3 + 12;");
+	strcpy(file, "HASHen      int\n\n\n\ni <:> 3 + 12;");
 }
 
 Buffer::~Buffer() {

@@ -7,7 +7,7 @@
 
 #include "myListe.h"
 #include <stdlib.h>
-#include <cstring>
+#include <string.h>
 
 myListe::myListe() {
 	i = 0;

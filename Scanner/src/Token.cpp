@@ -4,7 +4,7 @@ Token::Token() {
 	content = new myListe();
 	spalte = 1;
 	zeile = 1;
-	tokentype = Unknown;
+	tokentype = Undefined;
 }
 
 Token::~Token() {
@@ -27,10 +27,22 @@ int Token::getZeile() {
 	return zeile;
 }
 
-void Token::setTokenType(TokenType t) {
+void Token::setTokenType(State t) {
 	tokentype = t;
 }
-TokenType Token::getTokenType() {
+State Token::getTokenType() {
 	return tokentype;
+}
+
+const char* Token::getTokenTypeString() {
+	const char* tokennames[] = { "Undefined", "Start", "Number", "Identifier",
+			"KleinerAls", "GeschweifteKlammerAuf", "GeschweifteKlammerZu",
+			"VorwaertsSchraegstrich", "EckigeKlammerAuf", "EckigeKlammerZu",
+			"UndZeichen", "GroesserAls", "Stern", "Ausrufezeichen", "RundeKlammerAuf",
+			"RundeKlammerZu", "IstGleichZeichen", "Minus", "Plus", "Doppelpunkt",
+			"DoppelpunktIstGleich", "Semikolon", "KleinerDoppelpunkt",
+			"kleinerDoppelpunktGroesser", "SchraegStrichStern",
+			"SchraegstrichSternStern", "SchraegstrichSternSternSchraegstrich" };
+	return tokennames[tokentype];
 }
 

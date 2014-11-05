@@ -35,6 +35,8 @@ bool Scanner::nextToken(Token* t) {
 			cont = automat->testChar(ch);
 		} while (cont);
 
+		t->setTokenType((State)(int)automat->getLastFinalState());
+
 		for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
 			if (!ignoreChar(ch)) {
 				buffer->ungetChar();
@@ -45,6 +47,5 @@ bool Scanner::nextToken(Token* t) {
 	}
 	t->setSpalte(automat->getSpalte());
 	t->setZeile(automat->getZeile());
-	t->setTokenType(Unknown);
 	return buffer->hasCharLeft();
 }

@@ -2,9 +2,7 @@
 #define TOKEN_H_
 
 #include "myListe.h"
-enum TokenType {
-	Unknown //TODO TokenType
-};
+#include "../../Automat/src/Automat.h"
 
 class Token {
 public:
@@ -14,12 +12,13 @@ public:
 	int getSpalte();
 	void setZeile(int zeile);
 	void setSpalte(int spalte);
-	void setTokenType(TokenType t);
-	TokenType getTokenType();
+	void setTokenType(State t);
+	State getTokenType();
+	const char* getTokenTypeString();
 	myListe* content;
 
 private:
-	TokenType tokentype;
+	State tokentype;
 	int zeile;
 	int spalte;
 	// TODO Klasse Information erstellen -> Symboltabelle

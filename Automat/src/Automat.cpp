@@ -72,6 +72,7 @@ Automat::Automat() {
 	stateMatrix[SchraegstrichSternStern]['/'] = SchraegstrichSternSternSchraegstrich;
 
 
+
 	// Einstellen welche Zustaende Finale Zustaende sind.
 	finaleStates[Start] = false;
 	finaleStates[Undefined] = false;
