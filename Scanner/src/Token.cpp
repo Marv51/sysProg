@@ -4,7 +4,7 @@ Token::Token() {
 	content = new myListe();
 	spalte = 1;
 	zeile = 1;
-	tokentype = Undefined;
+	tokentype = Unknown;
 }
 
 Token::~Token() {
