@@ -1,36 +1,36 @@
 #include "Token.h"
 
-Token::Token(){
+Token::Token() {
 	content = new myListe();
 	spalte = 1;
 	zeile = 1;
 	tokentype = Undefined;
 }
 
-Token::~Token(){
- delete content;
+Token::~Token() {
+	delete content;
 }
 
-void Token::setSpalte(int spalte){
+void Token::setSpalte(int spalte) {
 	this->spalte = spalte;
 }
 
-void Token::setZeile(int zeile){
+void Token::setZeile(int zeile) {
 	this->zeile = zeile;
 }
 
-int Token::getSpalte(){
+int Token::getSpalte() {
 	return spalte;
 }
 
-int Token::getZeile(){
+int Token::getZeile() {
 	return zeile;
 }
 
-void Token::setTokenType(TokenType t){
+void Token::setTokenType(TokenType t) {
 	tokentype = t;
 }
-TokenType Token::getTokenType(){
+TokenType Token::getTokenType() {
 	return tokentype;
 }
 

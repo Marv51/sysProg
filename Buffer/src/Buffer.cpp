@@ -15,20 +15,20 @@ Buffer::Buffer() {
 Buffer::~Buffer() {
 }
 
-char Buffer::getChar(){
+char Buffer::getChar() {
 
 	index++;
 	return file[index - 1];
 }
 
-void Buffer::ungetChar(){
-	index --;
+void Buffer::ungetChar() {
+	index--;
 }
 
-int Buffer::getIndex(){
+int Buffer::getIndex() {
 	return index;
 }
 
-bool Buffer::hasCharLeft(){
+bool Buffer::hasCharLeft() {
 	return (file[index] != '\0');
 }
