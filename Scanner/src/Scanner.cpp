@@ -18,6 +18,10 @@ Scanner::~Scanner() {
 	delete automat;
 }
 
+bool Scanner::ignoreChar(char ch){
+	return !(ch != ' ' && ch != '\n' && ch != '\t');
+}
+
 bool Scanner::nextToken(Token* t) {
 	automat->clean();
 	bool cont;
@@ -25,14 +29,14 @@ bool Scanner::nextToken(Token* t) {
 	while (t->content->isEmpty()) {
 		do {
 			ch = buffer->getChar();
-			if (ch != ' ' && ch != '\n' && ch != '\t') {
+			if (!ignoreChar(ch)) {
 				t->content->push(ch);
 			}
 			cont = automat->testChar(ch);
 		} while (cont);
 
 		for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
-			if (ch != ' ' && ch != '\n' && ch != '\t') {
+			if (!ignoreChar(ch)) {
 				buffer->ungetChar();
 			}
 			t->content->pop();

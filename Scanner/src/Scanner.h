@@ -19,6 +19,7 @@ public:
 	bool nextToken(Token *);
 
 private:
+	bool ignoreChar(char ch);
 	Automat* automat;
 	Buffer* buffer;
 };
