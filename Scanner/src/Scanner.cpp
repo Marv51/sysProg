@@ -22,13 +22,11 @@ bool Scanner::nextToken(Token* t) {
 	automat->clean();
 	bool cont;
 	char ch;
-	int i = 0;
-	while (i == 0) {
+	while (t->content->isEmpty()) {
 		do {
 			ch = buffer->getChar();
 			if (ch != ' ' && ch != '\n' && ch != '\t') {
-				t->content[i] = ch;
-				i++;
+				t->content->push(ch);
 			}
 			cont = automat->testChar(ch);
 		} while (cont);
@@ -37,14 +35,12 @@ bool Scanner::nextToken(Token* t) {
 			if (ch != ' ' && ch != '\n' && ch != '\t') {
 				buffer->ungetChar();
 			}
-			i--;
-			t->content[i] = '\0';
+			t->content->pop();
 
 		}
 	}
-	t->content[i] = '\0';
 	t->setSpalte(automat->getSpalte());
 	t->setZeile(automat->getZeile());
-	t->setTokenType(Integer);
+	t->setTokenType(Unknown);
 	return buffer->hasCharLeft();
 }

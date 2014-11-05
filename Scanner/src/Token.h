@@ -1,8 +1,9 @@
 #ifndef TOKEN_H_
 #define TOKEN_H_
 
+#include "myListe.h"
 enum TokenType {
-	Unknown, Integer, Float // TODO Token types weiter ergänzen
+	Unknown //TODO TokenType
 };
 
 class Token {
@@ -15,7 +16,8 @@ public:
 	void setSpalte(int spalte);
 	void setTokenType(TokenType t);
 	TokenType getTokenType();
-	char content[100];
+	myListe* content;
+
 private:
 	TokenType tokentype;
 	int zeile;

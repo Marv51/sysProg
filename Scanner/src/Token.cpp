@@ -1,13 +1,14 @@
 #include "Token.h"
 
 Token::Token(){
+	content = new myListe();
 	spalte = 1;
 	zeile = 1;
-	tokentype = Unknown;
+	tokentype = Undefined;
 }
 
 Token::~Token(){
-
+ delete content;
 }
 
 void Token::setSpalte(int spalte){

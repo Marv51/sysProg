@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
 		printf("Typ: %i\t", t->getTokenType());
 		printf("Zeile: %i\t ", t->getZeile());
 		printf("Spalte: %i\t", t->getSpalte());
-		printf("Inhalt: %s\n", t->content);
+		printf("Inhalt: %s\n", t->content->getString());
 	}while(moreTokens);
 
 	printf("Ende\n");

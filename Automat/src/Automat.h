@@ -8,8 +8,7 @@
 #ifndef Automat_H_
 #define Automat_H_
 
-enum State
-{
+enum State {
 	Undefined,
 	Start,
 	Number,
@@ -38,7 +37,6 @@ enum State
 	SchraegstrichSternStern,
 	SchraegstrichSternSternSchraegstrich
 };
-
 
 class Automat {
 public:

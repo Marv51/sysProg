@@ -15,14 +15,16 @@ SHAREDLIB = ../sharedlib
 
 OBJS = $(OBJDIR)/Scanner.o \
 	$(OBJDIR)/TestScanner.o \
-	$(OBJDIR)/Token.o
+	$(OBJDIR)/Token.o \
+	$(OBJDIR)/myListe.o
 
 #$(OBJDIR)/xx1.o \
 #$(OBJDIR)/xxn.o
 
 OBJSFORSCANNERLIB =  \
 	$(LIBDIR)/Scanner.o  \
-	$(LIBDIR)/Token.o
+	$(LIBDIR)/Token.o \
+	$(LIBDIR)/myListe.o
 	
 
 
@@ -30,8 +32,8 @@ OBJSFORSCANNERLIB =  \
  
 # linken der Object-files under shared libraries
 
-makeTestScanner: $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o
-	g++ -g $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o  -L../sharedlib  -lAutomat  -lBuffer -lSymboltable -o $(BINDIR)/ScannerTest
+makeTestScanner: $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o $(OBJDIR)/myListe.o
+	g++ -g $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o $(OBJDIR)/myListe.o  -L../sharedlib  -lAutomat  -lBuffer -lSymboltable -o $(BINDIR)/ScannerTest
 #	
 #	
 #	
@@ -39,7 +41,10 @@ makeTestScanner: $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o
 $(OBJDIR)/Token.o :  $(SRCDIR)/Token.cpp 
 	@echo "g++ $*.cpp"
 	g++ -g  -c -Wall  -o $(OBJDIR)/Token.o  $(SRCDIR)/Token.cpp
-
+	
+$(OBJDIR)/myListe.o :  $(SRCDIR)/myListe.cpp 
+	@echo "g++ $*.cpp"
+	g++ -g  -c -Wall  -o $(OBJDIR)/myListe.o  $(SRCDIR)/myListe.cpp
 
 $(OBJDIR)/Scanner.o :  $(SRCDIR)/Scanner.cpp 
 	@echo "g++ $*.cpp"
