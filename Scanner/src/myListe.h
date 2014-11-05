@@ -16,6 +16,7 @@ public:
 	char pop();
 	char* getString();
 	bool isEmpty();
+	void clear();
 private:
 	char* list;
 	int i;

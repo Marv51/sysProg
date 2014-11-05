@@ -26,7 +26,8 @@ bool Scanner::nextToken(Token* t) {
 	automat->clean();
 	bool cont;
 	char ch;
-	while (t->content->isEmpty()) {
+	while (t->content->isEmpty() ||  t->getTokenType() == SchraegstrichSternSternSchraegstrich) {
+		t->content->clear();
 		do {
 			ch = buffer->getChar();
 			if (!ignoreChar(ch)) {
@@ -40,7 +41,7 @@ bool Scanner::nextToken(Token* t) {
 			lastFinal = Fehler;
 		}
 		t->setTokenType((State)(int)lastFinal);
-		if (lastFinal != Fehler){
+		if (lastFinal != Fehler && lastFinal){
 			for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
 				if (!ignoreChar(ch)) {
 					buffer->ungetChar();

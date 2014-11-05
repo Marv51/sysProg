@@ -12,7 +12,7 @@
 #include <string.h>
 #include <errno.h>
 
-#define BLOCKSIZE 512
+#define BLOCKSIZE 512 // Sollte wahrscheinlich ein vielfaches von 512 sein.
 
 Buffer::Buffer() {
 	index = 0;

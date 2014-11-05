@@ -64,7 +64,7 @@ Automat::Automat() {
 	stateMatrix[Doppelpunkt]['='] = DoppelpunktIstGleich;
 	for (int i = 1; i <= 255; i++){
 		stateMatrix[SchraegstrichSternStern][i] = SchraegStrichStern;
-		stateMatrix[SchraegStrichStern][i] = SchraegstrichSternStern;
+		stateMatrix[SchraegStrichStern][i] = SchraegStrichStern;
 	}
 	stateMatrix[VorwaertsSchraegstrich]['*'] = SchraegStrichStern;
 	stateMatrix[SchraegStrichStern]['*'] = SchraegstrichSternStern;
@@ -139,7 +139,7 @@ bool Automat::testChar(char c){
 		zeile++;
 	}
 
-	if (c == ' ' || c == '\n'){
+	if (currentState != SchraegStrichStern && (c == ' ' || c == '\n')){
 		return false;
 	}
 

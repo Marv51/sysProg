@@ -32,6 +32,11 @@ void myListe::push(char ch) {
 	list[i] = '\0';
 }
 
+void myListe::clear(){
+	i = 0;
+	list[i] = '\0';
+}
+
 char myListe::pop() {
 	i--;
 	char ret = list[i];
