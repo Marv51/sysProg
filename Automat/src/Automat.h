@@ -35,7 +35,8 @@ enum State {
 	kleinerDoppelpunktGroesser,
 	SchraegStrichStern,
 	SchraegstrichSternStern,
-	SchraegstrichSternSternSchraegstrich
+	SchraegstrichSternSternSchraegstrich,
+	Fehler
 };
 
 class Automat {

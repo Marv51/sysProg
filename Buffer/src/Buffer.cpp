@@ -9,7 +9,7 @@
 
 Buffer::Buffer() {
 	index = 0;
-	strcpy(file, "HASHen      int\n\n\n\ni <:> 3 + 12;");
+	strcpy(file, "?HASHen      int\n\n\n\ni <:> 3 + 12;");
 }
 
 Buffer::~Buffer() {

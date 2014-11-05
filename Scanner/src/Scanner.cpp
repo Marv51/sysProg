@@ -35,14 +35,19 @@ bool Scanner::nextToken(Token* t) {
 			cont = automat->testChar(ch);
 		} while (cont);
 
-		t->setTokenType((State)(int)automat->getLastFinalState());
+		State lastFinal = automat->getLastFinalState();
+		if (lastFinal == Start){
+			lastFinal = Fehler;
+		}
+		t->setTokenType((State)(int)lastFinal);
+		if (lastFinal != Fehler){
+			for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
+				if (!ignoreChar(ch)) {
+					buffer->ungetChar();
+				}
+				t->content->pop();
 
-		for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
-			if (!ignoreChar(ch)) {
-				buffer->ungetChar();
 			}
-			t->content->pop();
-
 		}
 	}
 	t->setSpalte(automat->getSpalte());

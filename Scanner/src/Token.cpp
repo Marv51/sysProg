@@ -42,7 +42,7 @@ const char* Token::getTokenTypeString() {
 			"RundeKlammerZu", "IstGleichZeichen", "Minus", "Plus", "Doppelpunkt",
 			"DoppelpunktIstGleich", "Semikolon", "KleinerDoppelpunkt",
 			"kleinerDoppelpunktGroesser", "SchraegStrichStern",
-			"SchraegstrichSternStern", "SchraegstrichSternSternSchraegstrich" };
+			"SchraegstrichSternStern", "SchraegstrichSternSternSchraegstrich", "Fehler" };
 	return tokennames[tokentype];
 }
 
