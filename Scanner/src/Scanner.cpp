@@ -23,23 +23,24 @@ bool Scanner::nextToken(Token* t) {
 	bool cont;
 	char ch;
 	int i = 0;
-	do {
-		ch = buffer->getChar();
-		if (ch != ' '){
-		t->content[i] = ch;
-		i++;
+	while (i == 0) {
+		do {
+			ch = buffer->getChar();
+			if (ch != ' ' && ch != '\n' && ch != '\t') {
+				t->content[i] = ch;
+				i++;
+			}
+			cont = automat->testChar(ch);
+		} while (cont);
+
+		for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
+			if (ch != ' ' && ch != '\n' && ch != '\t') {
+				buffer->ungetChar();
+			}
+			i--;
+			t->content[i] = '\0';
+
 		}
-		cont = automat->testChar(ch);
-
-	} while (cont);
-
-	for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
-		if (ch != ' '){
-			buffer->ungetChar();
-		}
-		i--;
-		t->content[i] = '\0';
-
 	}
 	t->content[i] = '\0';
 	t->setSpalte(automat->getSpalte());
