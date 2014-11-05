@@ -15,6 +15,7 @@ public:
 	char getChar();
 	void ungetChar(/*int wieviele -> nicht benötigt*/);
 	int getIndex(); // nur Debug
+	bool hasCharLeft();
 private: 
 	int index;
 	char file[100];

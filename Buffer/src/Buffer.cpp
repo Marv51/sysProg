@@ -5,12 +5,11 @@
  *      Author: knad0001
  */
 #include "Buffer.h"
+#include <cstring>
 
 Buffer::Buffer() {
 	index = 0;
-	for (int i = 0; i < 30; i++){
-		file[i] = "HASHDSHDSDHSDH    int i <:> 3 + 12;   \n"[i];
-	}
+	strcpy(file, "HASHDSHDSDHSDH int i <:> 3 + 12;");
 }
 
 Buffer::~Buffer() {
@@ -28,4 +27,8 @@ void Buffer::ungetChar(){
 
 int Buffer::getIndex(){
 	return index;
+}
+
+bool Buffer::hasCharLeft(){
+	return (file[index] != '\0');
 }

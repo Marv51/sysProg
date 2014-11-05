@@ -16,7 +16,7 @@ class Scanner {
 public:
 	Scanner();
 	virtual ~Scanner();
-	void nextToken(Token *);
+	bool nextToken(Token *);
 
 private:
 	Automat* automat;

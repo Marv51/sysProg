@@ -18,7 +18,7 @@ Scanner::~Scanner() {
 	delete automat;
 }
 
-void Scanner::nextToken(Token* t) {
+bool Scanner::nextToken(Token* t) {
 	automat->clean();
 	bool cont;
 	char ch;
@@ -45,4 +45,5 @@ void Scanner::nextToken(Token* t) {
 	t->setSpalte(automat->getSpalte());
 	t->setZeile(automat->getZeile());
 	t->setTokenType(Integer);
+	return buffer->hasCharLeft();
 }
