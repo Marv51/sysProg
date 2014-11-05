@@ -109,6 +109,7 @@ Automat::~Automat() {
 void Automat::clean(){
 	stepsSinceLastFinalState = 0;
 	currentState = Start;
+	lastFinalState = Start;
 }
 
 State Automat::getLastFinalState(){
