@@ -1,8 +1,13 @@
 #include "Scanner.h"
 #include <stdio.h>
 
+
+
 int main(int argc, char **argv) {
 	printf("TestScanner:\n");
+
+
+
 	Scanner* scanner;
 
 	bool moreTokens;

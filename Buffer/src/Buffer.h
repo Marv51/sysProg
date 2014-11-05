@@ -19,6 +19,8 @@ public:
 private: 
 	int index;
 	char *buffer;
+	int fileHandle;
+	void readFromFile(char* where);
 };
 
 #endif /* BUFFER_H_ */
