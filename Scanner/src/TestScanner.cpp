@@ -14,15 +14,16 @@ int main(int argc, char **argv) {
 
 	scanner = new Scanner();
 	Token* t = new Token();
+	printf("Typ:\tZeile:\tSpalte:\tInhalt:       \t\tTypString:\n");
 	do {
 		delete t;
 		t = new Token();
 		moreTokens = scanner->nextToken(t);
-		printf("Typ: %i\t", t->getTokenType());
-		printf("Zeile: %i\t ", t->getZeile());
-		printf("Spalte: %i\t", t->getSpalte());
-		printf("Inhalt: %s\t", t->content->getString());
-		printf("TypString: %s\n", t->getTokenTypeString());
+		printf("%i\t", t->getTokenType());
+		printf("%i\t", t->getZeile());
+		printf("%i\t", t->getSpalte());
+		printf("%s       \t\t", t->content->getString());
+		printf("%s\n", t->getTokenTypeString());
 	} while (moreTokens);
 
 	printf("Ende\n");

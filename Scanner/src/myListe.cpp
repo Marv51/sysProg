@@ -11,7 +11,7 @@
 
 myListe::myListe() {
 	i = 0;
-	size = 5;
+	size = 8;
 	list = (char*) malloc(size * sizeof(char));
 }
 
