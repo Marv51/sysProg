@@ -116,6 +116,10 @@ State Automat::getLastFinalState(){
 	return lastFinalState;
 }
 
+void Automat::SpalteZurueck(){
+	spalte--;
+}
+
 int Automat::getStepsSinceLastFinalState(){
 	return stepsSinceLastFinalState;
 }
