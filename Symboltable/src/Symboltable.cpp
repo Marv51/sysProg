@@ -8,10 +8,11 @@
 #include "Symboltable.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h> //TODO verwenden
 
 Symboltable::Symboltable() {
 	memsize = sizeof(int);
-	keys = (int*) malloc(memsize * sizeof(int));
+	keys = (uint32_t*) malloc(memsize * sizeof(uint32_t));
 	informations = (Information**) malloc(memsize * sizeof(Information*));
 }
 
