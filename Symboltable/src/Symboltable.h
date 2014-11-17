@@ -15,10 +15,10 @@ public:
 	virtual ~Symboltable();
 	Information* getInfo(char* lexem);
 	void newInfo(char* lexem);
+	int hash(char* ch);
 private:
-	char* lexems;
+	int* keys;
 	int memsize;
-	int size;
 	Information** informations;
 };
 
