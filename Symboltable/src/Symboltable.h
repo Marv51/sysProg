@@ -9,15 +9,16 @@
 #ifndef SYMBOLTABLE_H_
 #define SYMBOLTABLE_H_
 
+#include <stdint.h>
+
 class Symboltable {
 public:
 	Symboltable();
 	virtual ~Symboltable();
-	Information* getInfo(char* lexem);
-	void newInfo(char* lexem);
-	int hash(char* ch);
+	Information* getInfo(uint16_t key);
+	uint16_t newInfo(char* lexem);
+	uint16_t hash(char* ch);
 private:
-	int* keys;
 	int memsize;
 	Information** informations;
 };
