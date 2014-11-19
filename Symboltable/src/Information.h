@@ -10,8 +10,13 @@
 
 class Information {
 public:
-	Information();
+	Information(char* lex);
 	virtual ~Information();
+	char* getLexem();
+	void setLexem(char* lex);
+	bool compareLexem(char* lex);
+private:
+	char* lexem;
 };
 
 #endif /* SYMBOLTABLE_SRC_INFORMATION_H_ */

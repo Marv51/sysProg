@@ -7,12 +7,30 @@
 
 #include "Information.h"
 
-Information::Information() {
-	// TODO Auto-generated constructor stub
-
+Information::Information(char* lex) {
+	lexem = lex;
 }
 
 Information::~Information() {
-	// TODO Auto-generated destructor stub
+
 }
 
+bool Information::compareLexem(char* lex) {
+	bool ret = true;
+	int i = -1;
+	do {
+		i++;
+		if (lexem[i] != lex[i]) {
+			ret = false;
+		}
+	} while (lexem[i] != '\0' && lex[i] != '\0');
+	return ret;
+}
+
+char* Information::getLexem() {
+	return lexem;
+}
+
+void Information::setLexem(char* lex) {
+	lexem = lex;
+}
