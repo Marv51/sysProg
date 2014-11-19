@@ -6,25 +6,19 @@
  */
 
 #include "Information.h"
+#include <string.h>
 
 Information::Information(char* lex) {
 	lexem = lex;
+	nextInfo = '\0';
 }
 
 Information::~Information() {
-
+	delete(nextInfo);
 }
 
 bool Information::compareLexem(char* lex) {
-	bool ret = true;
-	int i = -1;
-	do {
-		i++;
-		if (lexem[i] != lex[i]) {
-			ret = false;
-		}
-	} while (lexem[i] != '\0' && lex[i] != '\0');
-	return ret;
+	return strcmp(lex, lexem) == 0;
 }
 
 char* Information::getLexem() {
@@ -33,4 +27,12 @@ char* Information::getLexem() {
 
 void Information::setLexem(char* lex) {
 	lexem = lex;
+}
+
+Information* Information::getNextInfo(){
+	return nextInfo;
+}
+
+void Information::setNextInfo(Information* info){
+	nextInfo = info;
 }

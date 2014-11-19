@@ -10,15 +10,15 @@
 #include <string.h>
 
 Symboltable::Symboltable() {
-	memsize = 65536;
+	memsize = 128;
 	informations = (Information**) malloc(memsize * sizeof(Information*));
 	memset(informations, '\0', memsize * sizeof(Information*));
 }
 
 Symboltable::~Symboltable() {
-	for(int i = 0; i < memsize; i++){
-		if(informations[i] != '\0'){
-			delete(informations[i]);
+	for (int i = 0; i < memsize; i++) {
+		if (informations[i] != '\0') {
+			delete (informations[i]);
 		}
 	}
 	free(informations);
@@ -28,11 +28,11 @@ uint16_t Symboltable::hash(char* ch) {
 	uint16_t ergebnis = 0;
 	int i = 0;
 	while (ch[i] != '\0') {
-		i += (uint16_t) ch[i];
+		ergebnis += (uint16_t) ch[i];
 		i++;
 	}
 
-	return ergebnis;
+	return ergebnis % memsize;
 }
 
 Information* Symboltable::getInfo(uint16_t key) {
@@ -40,10 +40,9 @@ Information* Symboltable::getInfo(uint16_t key) {
 }
 
 uint16_t Symboltable::newInfo(char* lexem) {
-	//TODO implement newInfo
 	uint16_t key = hash(lexem);
 	if (getInfo(key) == '\0') {  // erstellen falls noch nicht existiert
-
+		informations[key] = new Information(lexem);
 	}
 	return key;
 }
