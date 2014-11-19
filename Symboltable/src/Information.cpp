@@ -8,9 +8,10 @@
 #include "Information.h"
 #include <string.h>
 
-Information::Information(char* lex) {
+Information::Information(char* lex, int k) {
 	lexem = lex;
 	nextInfo = '\0';
+	key = k;
 }
 
 Information::~Information() {
@@ -35,4 +36,8 @@ Information* Information::getNextInfo(){
 
 void Information::setNextInfo(Information* info){
 	nextInfo = info;
+}
+
+int Information::getKey(){
+	return key;
 }

@@ -10,23 +10,27 @@
 #include <string.h>
 
 Symboltable::Symboltable() {
-	memsize = 128;
+	memsize = 2;
+	keysizemax = memsize;
 	informations = (Information**) malloc(memsize * sizeof(Information*));
 	memset(informations, '\0', memsize * sizeof(Information*));
+	keys = (int*) malloc(memsize * sizeof(int));
+	keysize = 0;
 }
 
 Symboltable::~Symboltable() {
-	for (int i = 0; i < memsize; i++) {
+	for (uint16_t i = 0; i < memsize; i++) {
 		if (informations[i] != '\0') {
 			delete (informations[i]);
 		}
 	}
 	free(informations);
+	free(keys);
 }
 
 uint16_t Symboltable::hash(char* ch) {
 	uint16_t ergebnis = 0;
-	int i = 0;
+	uint16_t i = 0;
 	while (ch[i] != '\0') {
 		ergebnis += (uint16_t) ch[i];
 		i++;
@@ -36,13 +40,54 @@ uint16_t Symboltable::hash(char* ch) {
 }
 
 Information* Symboltable::getInfo(uint16_t key) {
-	return informations[key];
+	if (key >= keysize) { // Also ist key auf jeden Fall in der Symboltabelle
+		return '\0';
+	}
+	uint16_t derHash = keys[key];
+
+	Information* i = informations[derHash];
+	while (i->getKey() != key) {
+		i = i->getNextInfo();
+	}
+	return i;
+}
+
+void Symboltable::keySizeBigger() {
+	keysize++;
+	if (keysize > keysizemax) {
+		keysizemax *= 2;
+		int* tempList = (int*) malloc(keysizemax * sizeof(int));
+		memcpy(tempList, keys, keysizemax / 2 * sizeof(int));
+		free(keys);
+		keys = tempList;
+	}
 }
 
 uint16_t Symboltable::newInfo(char* lexem) {
-	uint16_t key = hash(lexem);
-	if (getInfo(key) == '\0') {  // erstellen falls noch nicht existiert
-		informations[key] = new Information(lexem);
+	uint16_t derHash = hash(lexem);
+	uint16_t key = keysize;
+	keys[key] = derHash;
+	keySizeBigger();
+	Information* i_next = informations[derHash];
+	if (i_next == '\0') {
+		i_next = new Information(lexem, key);
+		informations[derHash] = i_next;
+	} else {
+		do {
+			if (strcmp(lexem, i_next->getLexem()) == 0) {
+				keysize--;
+				return i_next->getKey();
+			}
+			if (i_next->getNextInfo() != '\0') {
+				i_next = i_next->getNextInfo();
+			}
+		} while (i_next->getNextInfo() != '\0');
+		i_next->setNextInfo(new Information(lexem, key));
 	}
+
 	return key;
+}
+
+void Symboltable::initSymbols(){
+
 }
