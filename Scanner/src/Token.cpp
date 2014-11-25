@@ -1,6 +1,7 @@
 #include "Token.h"
 
 Token::Token() {
+	key = '\0';
 	content = new myListe();
 	spalte = 1;
 	zeile = 1;
@@ -32,6 +33,18 @@ void Token::setTokenType(State t) {
 }
 State Token::getTokenType() {
 	return tokentype;
+}
+
+char* Token::getContent(){
+	return content->getString();
+}
+
+uint16_t Token::getKey(){
+	return key;
+}
+
+void Token::setKey(uint16_t k){
+	key = k;
 }
 
 const char* Token::getTokenTypeString() {

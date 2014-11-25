@@ -3,6 +3,7 @@
 
 #include "myListe.h"
 #include "../../Automat/src/Automat.h"
+#include <stdint.h>
 
 class Token {
 public:
@@ -15,13 +16,16 @@ public:
 	void setTokenType(State t);
 	State getTokenType();
 	const char* getTokenTypeString();
+	char* getContent();
+	uint16_t getKey();
+	void setKey(uint16_t k);
 	myListe* content;
 
 private:
 	State tokentype;
 	int zeile;
 	int spalte;
-	// TODO Klasse Information erstellen -> Symboltabelle
+	uint16_t key;
 };
 
 #endif

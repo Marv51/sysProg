@@ -10,7 +10,7 @@
 #include <string.h>
 
 Symboltable::Symboltable() {
-	memsize = 2;
+	memsize = 128;
 	keysizemax = memsize;
 	informations = (Information**) malloc(memsize * sizeof(Information*));
 	memset(informations, '\0', memsize * sizeof(Information*));
@@ -65,6 +65,7 @@ void Symboltable::keySizeBigger() {
 }
 
 uint16_t Symboltable::newInfo(char* lexem) {
+	// TODO Konzept für Typ ausdenken/nachschauen und implementieren (Typen nach Skript: sign, integer, identifier, if, while)
 	uint16_t derHash = hash(lexem);
 	uint16_t key = keysize;
 	keys[key] = derHash;
@@ -90,7 +91,7 @@ uint16_t Symboltable::newInfo(char* lexem) {
 }
 
 void Symboltable::initSymbols() {
-						// Keys für reservierte Ausdrücke:
+	// Keys für reservierte Ausdrücke:
 	newInfo("if");		// 0
 	newInfo("IF");		// 1
 	newInfo("while");	// 2

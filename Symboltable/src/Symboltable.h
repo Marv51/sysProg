@@ -18,7 +18,6 @@ public:
 	Information* getInfo(uint16_t key);
 	uint16_t newInfo(char* lexem);
 	uint16_t hash(char* ch);
-	void initSymbols();
 private:
 	uint16_t memsize;
 	Information** informations;
@@ -26,6 +25,7 @@ private:
 	uint16_t keysize;
 	uint16_t keysizemax;
 	void keySizeBigger();
+	void initSymbols();
 };
 
 #endif /* SYMBOLTABLE_H_ */
