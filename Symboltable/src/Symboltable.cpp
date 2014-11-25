@@ -91,7 +91,8 @@ uint16_t Symboltable::newInfo(char* lexem) {
 
 void Symboltable::initSymbols() {
 						// Keys für reservierte Ausdrücke:
-	newInfo("while");	// 0
-	newInfo("if");		// 1
-	// TODO nachschauen welche man sonst noch braucht und einfügen
+	newInfo("if");		// 0
+	newInfo("IF");		// 1
+	newInfo("while");	// 2
+	newInfo("WHILE");	// 3
 }

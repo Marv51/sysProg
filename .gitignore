@@ -30,3 +30,4 @@ debug/*
 *.exe
 *.out
 *.app
+/testfile.txt~
