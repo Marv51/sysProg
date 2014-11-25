@@ -16,6 +16,7 @@ Symboltable::Symboltable() {
 	memset(informations, '\0', memsize * sizeof(Information*));
 	keys = (int*) malloc(memsize * sizeof(int));
 	keysize = 0;
+	initSymbols();
 }
 
 Symboltable::~Symboltable() {
@@ -88,6 +89,9 @@ uint16_t Symboltable::newInfo(char* lexem) {
 	return key;
 }
 
-void Symboltable::initSymbols(){
-
+void Symboltable::initSymbols() {
+						// Keys für reservierte Ausdrücke:
+	newInfo("while");	// 0
+	newInfo("if");		// 1
+	// TODO nachschauen welche man sonst noch braucht und einfügen
 }
