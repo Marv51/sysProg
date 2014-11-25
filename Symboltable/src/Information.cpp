@@ -12,6 +12,7 @@ Information::Information(char* lex, int k) {
 	lexem = lex;
 	nextInfo = '\0';
 	key = k;
+	value = '\0';
 }
 
 Information::~Information() {
@@ -40,4 +41,12 @@ void Information::setNextInfo(Information* info){
 
 int Information::getKey(){
 	return key;
+}
+
+int Information::getValue(){
+	return value;
+}
+
+void Information::setValue(int i){
+	value = i;
 }

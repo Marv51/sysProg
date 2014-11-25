@@ -65,6 +65,7 @@ void Symboltable::keySizeBigger() {
 }
 
 uint16_t Symboltable::newInfo(char* lexem) {
+	// TODO Bei Typ Integer value bestimmen
 	// TODO Konzept für Typ ausdenken/nachschauen und implementieren (Typen nach Skript: sign, integer, identifier, if, while)
 	uint16_t derHash = hash(lexem);
 	uint16_t key = keysize;

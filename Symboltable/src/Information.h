@@ -18,10 +18,13 @@ public:
 	Information* getNextInfo();
 	void setNextInfo(Information* info);
 	int getKey();
+	int getValue();
+	void setValue(int i);
 private:
 	char* lexem;
 	Information* nextInfo;
 	int key;
+	int value;
 };
 
 #endif /* SYMBOLTABLE_SRC_INFORMATION_H_ */
