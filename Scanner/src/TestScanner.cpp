@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
 		printf("%s\n", t->getTokenTypeString());
 	} while (moreTokens);
 
+	// TODO evtl Ausgabe in Datei schreiben
 	printf("Ende\n");
 
 }
