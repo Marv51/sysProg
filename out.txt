@@ -1,0 +1,34 @@
+Token Identifier Line: 1	Column: 1	Lexem: X
+Token := 		 Line: 1	Column: 2
+Token Integer 	 Line: 1	Column: 4	Value: 3
+Token + 		 Line: 1	Column: 5
+Token Integer 	 Line: 1	Column: 6	Value: 4
+Token ; 		 Line: 1	Column: 7
+Token Identifier Line: 3	Column: 2	Lexem: y
+Token < 		 Line: 3	Column: 4
+Token := 		 Line: 3	Column: 5
+Token > 		 Line: 3	Column: 7
+Token Identifier Line: 3	Column: 9	Lexem: X
+Token / 		 Line: 3	Column: 11
+Token ( 		 Line: 3	Column: 13
+Token Identifier Line: 3	Column: 14	Lexem: X
+Token - 		 Line: 3	Column: 16
+Token Integer 	 Line: 3	Column: 18	Value: 4
+Token ) 		 Line: 3	Column: 19
+Token ; 		 Line: 3	Column: 20
+Token Identifier Line: 4	Column: 1	Lexem: Z
+Token := 		 Line: 4	Column: 3
+Token ( 		 Line: 4	Column: 5
+Token ( 		 Line: 4	Column: 6
+Token Integer 	 Line: 4	Column: 7	Value: 3
+Token + 		 Line: 4	Column: 9
+Token Integer 	 Line: 4	Column: 11	Value: 4
+Token - 		 Line: 4	Column: 13
+Token Integer 	 Line: 4	Column: 15	Value: 6
+Token ) 		 Line: 4	Column: 16
+Token ; 		 Line: 4	Column: 17
+Token Identifier Line: 5	Column: 1	Lexem: Resultat
+Token := 		 Line: 5	Column: 10
+Token / 		 Line: 5	Column: 13
+Token Identifier Line: 5	Column: 14	Lexem: X
+Token Identifier Line: 5	Column: 16	Lexem: y

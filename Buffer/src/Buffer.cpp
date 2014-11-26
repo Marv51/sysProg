@@ -14,7 +14,7 @@
 
 #define BLOCKSIZE 512 // Sollte wahrscheinlich ein vielfaches von 512 sein.
 
-Buffer::Buffer() {
+Buffer::Buffer(char* input) {
 	index = 0;
 	int result = posix_memalign((void**)&current_buffer, BLOCKSIZE, BLOCKSIZE);
 	if (result != 0){
@@ -26,7 +26,7 @@ Buffer::Buffer() {
 		printf("Konnte keinen Speicher für den Puffer bekommen.");
 		return;
 	}
-	fileHandle = open("testfile.txt", O_RDONLY | O_DIRECT);
+	fileHandle = open(input, O_RDONLY | O_DIRECT);
 	if (fileHandle < 0){
 		printf("Datei konnte nicht geöffnet werden.");
 		return;

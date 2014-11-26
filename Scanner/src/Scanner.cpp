@@ -8,8 +8,8 @@
 #include "Scanner.h"
 #include <stdio.h>
 
-Scanner::Scanner() {
-	buffer = new Buffer();
+Scanner::Scanner(char* input) {
+	buffer = new Buffer(input);
 	automat = new Automat();
 	symtable = new Symboltable();
 }

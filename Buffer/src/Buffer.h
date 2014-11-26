@@ -10,7 +10,7 @@
 
 class Buffer {
 public:
-	Buffer();
+	Buffer(char* input);
 	virtual ~Buffer();
 	char getChar();
 	void ungetChar(/*int wieviele -> nicht benötigt*/);

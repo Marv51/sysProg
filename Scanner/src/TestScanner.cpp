@@ -1,40 +1,50 @@
 #include "Scanner.h"
 #include <stdio.h>
+#include <fstream>
 
 int main(int argc, char **argv) {
 	printf("TestScanner:\n");
-
+	char* input;
+	char* output;
+	if (argc == 3) {
+		input = argv[1];
+		output = argv[2];
+	} else {
+		printf("Bitte Dateipfad als Argument übertragen.");
+	}
+	//printf("%s", input);
 	Scanner* scanner;
 
 	bool moreTokens;
 
-	scanner = new Scanner();
+	scanner = new Scanner(input);
 	Token* t = new Token();
-	// printf("TokTyp:\tValue:\tType:\tZeile:\tSpalte:\tInhalt:       \t\tTypString:\n");
+	std::fstream fs;
+	fs.open(output, std::fstream::out | std::fstream::trunc);
 	do {
 		delete t;
 		t = new Token();
 		moreTokens = scanner->nextToken(t);
-		/*printf("%i\t", t->getTokenType());
-		 printf("%i\t", scanner->getSymboltable()->getInfo(t->getKey())->getValue());
-		 printf("%i\t", scanner->getSymboltable()->getInfo(t->getKey())->getType());
-		 printf("%i\t", t->getZeile());
-		 printf("%i\t", t->getSpalte());
-		 printf("%s       \t\t", t->content->getString());
-		 printf("%s\n", t->getTokenTypeString());*/
 		if (t->getTokenType() == 2) { // Integer
-			printf("Token %s \t Line: %i\tColumn: %i\tValue: %i\n",
-					t->getTokenTypeString(), t->getZeile(), t->getSpalte(),
-					scanner->getSymboltable()->getInfo(t->getKey())->getValue());
+			fs << "Token " << t->getTokenTypeString() << " \t Line: "
+					<< t->getZeile() << "\tColumn: " << t->getSpalte()
+					<< "\tValue: "
+					<< scanner->getSymboltable()->getInfo(t->getKey())->getValue()
+					<< "\n";
 		} else if (t->getTokenType() == 3) { // Identifier
-			printf("Token %s Line: %i\tColumn: %i\tLexem: %s\n",
-					t->getTokenTypeString(), t->getZeile(), t->getSpalte(),
-					t->content->getString());
+			fs << "Token " << t->getTokenTypeString() << " Line: "
+					<< t->getZeile() << "\tColumn: " << t->getSpalte()
+					<< "\tLexem: " << t->content->getString() << "\n";
+		} else if (t->getTokenType() == Fehler) {
+			printf("Unknown Token: Line: %i\tColumn: %i\tSymbol: %s\n",
+					t->getZeile(), t->getSpalte(), t->content->getString());
 		} else {
-			printf("Token %s \t Line: %i\tColumn: %i\n", t->getTokenTypeString(),
-					t->getZeile(), t->getSpalte());
+			fs << "Token " << t->getTokenTypeString() << " \t\t Line: "
+					<< t->getZeile() << "\tColumn: " << t->getSpalte() << "\n";
 		}
 	} while (moreTokens);
+
+	fs.close();
 
 	// TODO evtl Ausgabe in Datei schreiben
 	printf("Ende\n");

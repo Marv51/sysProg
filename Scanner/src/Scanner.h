@@ -16,7 +16,7 @@
 
 class Scanner {
 public:
-	Scanner();
+	Scanner(char* input);
 	virtual ~Scanner();
 	bool nextToken(Token *);
 	Symboltable* getSymboltable();

@@ -48,7 +48,7 @@ void Token::setKey(uint16_t k){
 }
 
 const char* Token::getTokenTypeString() {
-	const char* tokennames[] = { "Undefined", "Start", "Number", "Identifier",
+	const char* tokennames[] = { "Undefined", "Start", "Integer", "Identifier",
 			"<", "{", "}",
 			"/", "[", "]",
 			"&", ">", "*", "!", "(",
