@@ -3,7 +3,6 @@
 #include <fstream>
 
 int main(int argc, char **argv) {
-	printf("TestScanner:\n");
 	char* input;
 	char* output;
 	if (argc == 3) {
@@ -12,7 +11,6 @@ int main(int argc, char **argv) {
 	} else {
 		printf("Bitte Dateipfad als Argument übertragen.");
 	}
-	//printf("%s", input);
 	Scanner* scanner;
 
 	bool moreTokens;
@@ -25,13 +23,13 @@ int main(int argc, char **argv) {
 		delete t;
 		t = new Token();
 		moreTokens = scanner->nextToken(t);
-		if (t->getTokenType() == 2) { // Integer
+		if (t->getTokenType() == Number) { // Integer
 			fs << "Token " << t->getTokenTypeString() << " \t Line: "
 					<< t->getZeile() << "\tColumn: " << t->getSpalte()
 					<< "\tValue: "
 					<< scanner->getSymboltable()->getInfo(t->getKey())->getValue()
 					<< "\n";
-		} else if (t->getTokenType() == 3) { // Identifier
+		} else if (t->getTokenType() == Identifier) { // Identifier
 			fs << "Token " << t->getTokenTypeString() << " Line: "
 					<< t->getZeile() << "\tColumn: " << t->getSpalte()
 					<< "\tLexem: " << t->content->getString() << "\n";
@@ -45,9 +43,6 @@ int main(int argc, char **argv) {
 	} while (moreTokens);
 
 	fs.close();
-
-	// TODO evtl Ausgabe in Datei schreiben
-	printf("Ende\n");
 
 }
 
