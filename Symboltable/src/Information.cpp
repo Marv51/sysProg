@@ -8,15 +8,26 @@
 #include "Information.h"
 #include <string.h>
 
-Information::Information(char* lex, int k) {
+Information::Information(char* lex, uint16_t k) {
 	lexem = lex;
 	nextInfo = '\0';
 	key = k;
 	value = '\0';
+	type = 0;
+	/*
+	 * Typen:
+	 * 0 = unknown
+	 * 1 = sign
+	 * 2 = integer
+	 * 3 = identifier
+	 * 4 = if
+	 * 5 = while
+	 * 6 = fehler
+	 */
 }
 
 Information::~Information() {
-	delete(nextInfo);
+	delete (nextInfo);
 }
 
 bool Information::compareLexem(char* lex) {
@@ -31,22 +42,30 @@ void Information::setLexem(char* lex) {
 	lexem = lex;
 }
 
-Information* Information::getNextInfo(){
+Information* Information::getNextInfo() {
 	return nextInfo;
 }
 
-void Information::setNextInfo(Information* info){
+void Information::setNextInfo(Information* info) {
 	nextInfo = info;
 }
 
-int Information::getKey(){
+uint16_t Information::getKey() {
 	return key;
 }
 
-int Information::getValue(){
+int Information::getValue() {
 	return value;
 }
 
-void Information::setValue(int i){
+void Information::setValue(int i) {
 	value = i;
+}
+
+uint8_t Information::getType() {
+	return type;
+}
+
+void Information::setType(uint8_t t) {
+	type = t;
 }

@@ -64,9 +64,8 @@ void Symboltable::keySizeBigger() {
 	}
 }
 
-uint16_t Symboltable::newInfo(char* lexem) {
-	// TODO Bei Typ Integer value bestimmen -> strtol(char*, '\0', 10); (evlt stdlib.h includen) (liefert long int -> casten zu int?)
-	// TODO Konzept für Typ ausdenken/nachschauen und implementieren (Typen nach Skript: sign, integer, identifier, if, while)
+uint16_t Symboltable::newInfo(char* lexem, uint8_t t) {
+	// TODO Bei Typ Integer value bestimmen -> strtol(char*, '\0', 10); (evlt stdlib.h includen) (liefert long int -> casten zu int?) (->errorcode 75)
 	uint16_t derHash = hash(lexem);
 	uint16_t key = keysize;
 	keys[key] = derHash;
@@ -74,6 +73,7 @@ uint16_t Symboltable::newInfo(char* lexem) {
 	Information* i_next = informations[derHash];
 	if (i_next == '\0') {
 		i_next = new Information(lexem, key);
+		i_next->setType(t);
 		informations[derHash] = i_next;
 	} else {
 		do {
@@ -93,8 +93,8 @@ uint16_t Symboltable::newInfo(char* lexem) {
 
 void Symboltable::initSymbols() {
 	// Keys für reservierte Ausdrücke:
-	newInfo("if");		// 0
-	newInfo("IF");		// 1
-	newInfo("while");	// 2
-	newInfo("WHILE");	// 3
+	newInfo("if", 4);		// 0
+	newInfo("IF", 4);		// 1
+	newInfo("while", 5);	// 2
+	newInfo("WHILE", 5);	// 3
 }

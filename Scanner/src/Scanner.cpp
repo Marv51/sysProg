@@ -11,11 +11,13 @@
 Scanner::Scanner() {
 	buffer = new Buffer();
 	automat = new Automat();
+	symtable = new Symboltable();
 }
 
 Scanner::~Scanner() {
 	delete buffer;
 	delete automat;
+	delete symtable;
 }
 
 bool Scanner::ignoreChar(char ch){
@@ -54,5 +56,26 @@ bool Scanner::nextToken(Token* t) {
 	}
 	t->setSpalte(automat->getSpalte());
 	t->setZeile(automat->getZeile());
+	makeInfo(t);
 	return buffer->hasCharLeft();
+}
+
+Symboltable* Scanner::getSymboltable(){
+	return symtable;
+}
+
+void Scanner::makeInfo(Token* t){
+	uint8_t type = 0;
+	int toktype = t->getTokenType();
+	if (toktype == 2){
+		type = 2;
+	}else if (toktype == 3){
+		type = 3;
+	}else if(toktype >= 4 && toktype <= 23){
+		type = 1;
+	}else if(toktype == 27){
+		type = 7;
+	}
+	uint16_t key = symtable->newInfo(t->getContent(), type);
+	t->setKey(key);
 }
