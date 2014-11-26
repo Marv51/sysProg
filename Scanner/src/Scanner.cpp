@@ -42,7 +42,7 @@ bool Scanner::nextToken(Token* t) {
 		if (lastFinal == Start){
 			lastFinal = Fehler;
 		}
-		t->setTokenType((State)(int)lastFinal);
+		t->setTokenType((int)lastFinal);
 		if (lastFinal != Fehler && lastFinal){
 			for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
 				if (!ignoreChar(ch)) {

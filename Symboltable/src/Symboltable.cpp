@@ -65,7 +65,6 @@ void Symboltable::keySizeBigger() {
 }
 
 uint16_t Symboltable::newInfo(char* lexem, uint8_t t) {
-	// TODO Bei Typ Integer value bestimmen -> strtol(char*, '\0', 10); (evlt stdlib.h includen) (liefert long int -> casten zu int?) (->errorcode 75)
 	uint16_t derHash = hash(lexem);
 	uint16_t key = keysize;
 	keys[key] = derHash;
@@ -86,6 +85,7 @@ uint16_t Symboltable::newInfo(char* lexem, uint8_t t) {
 			}
 		} while (i_next->getNextInfo() != '\0');
 		i_next->setNextInfo(new Information(lexem, key));
+		i_next->getNextInfo()->setType(t);
 	}
 
 	return key;

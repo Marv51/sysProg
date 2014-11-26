@@ -13,8 +13,8 @@ public:
 	int getSpalte();
 	void setZeile(int zeile);
 	void setSpalte(int spalte);
-	void setTokenType(State t);
-	State getTokenType();
+	void setTokenType(int t);
+	int getTokenType();
 	const char* getTokenTypeString();
 	char* getContent();
 	uint16_t getKey();
@@ -22,7 +22,7 @@ public:
 	myListe* content;
 
 private:
-	State tokentype;
+	int tokentype;
 	int zeile;
 	int spalte;
 	uint16_t key;

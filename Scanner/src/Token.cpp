@@ -28,10 +28,10 @@ int Token::getZeile() {
 	return zeile;
 }
 
-void Token::setTokenType(State t) {
+void Token::setTokenType(int t) {
 	tokentype = t;
 }
-State Token::getTokenType() {
+int Token::getTokenType() {
 	return tokentype;
 }
 
@@ -49,12 +49,12 @@ void Token::setKey(uint16_t k){
 
 const char* Token::getTokenTypeString() {
 	const char* tokennames[] = { "Undefined", "Start", "Number", "Identifier",
-			"KleinerAls", "GeschweifteKlammerAuf", "GeschweifteKlammerZu",
-			"VorwaertsSchraegstrich", "EckigeKlammerAuf", "EckigeKlammerZu",
-			"UndZeichen", "GroesserAls", "Stern", "Ausrufezeichen", "RundeKlammerAuf",
-			"RundeKlammerZu", "IstGleichZeichen", "Minus", "Plus", "Doppelpunkt",
-			"DoppelpunktIstGleich", "Semikolon", "KleinerDoppelpunkt",
-			"kleinerDoppelpunktGroesser", "SchraegStrichStern",
+			"<", "{", "}",
+			"/", "[", "]",
+			"&", ">", "*", "!", "(",
+			")", "=", "-", "+", ":",
+			":=", ";", "<:",
+			"<:>", "SchraegStrichStern",
 			"SchraegstrichSternStern", "SchraegstrichSternSternSchraegstrich", "Fehler" };
 	return tokennames[tokentype];
 }

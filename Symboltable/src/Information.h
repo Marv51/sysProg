@@ -9,6 +9,10 @@
 #define SYMBOLTABLE_SRC_INFORMATION_H_
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <error.h>
+#include <limits.h>
 
 class Information {
 public:
@@ -21,7 +25,6 @@ public:
 	void setNextInfo(Information* info);
 	uint16_t getKey();
 	int getValue();
-	void setValue(int i);
 	uint8_t getType();
 	void setType(uint8_t t);
 private:

@@ -9,7 +9,7 @@
 #include <string.h>
 
 Information::Information(char* lex, uint16_t k) {
-	lexem = lex;
+	setLexem(lex);
 	nextInfo = '\0';
 	key = k;
 	value = '\0';
@@ -55,11 +55,12 @@ uint16_t Information::getKey() {
 }
 
 int Information::getValue() {
+	long int longdongjohn = strtol(lexem, NULL, 10);
+	if (longdongjohn > INT_MAX || longdongjohn < INT_MIN) {
+		error(EXIT_FAILURE, EOVERFLOW, "Bereichsüberschreitung!");
+	}
+	value = (int) longdongjohn;
 	return value;
-}
-
-void Information::setValue(int i) {
-	value = i;
 }
 
 uint8_t Information::getType() {

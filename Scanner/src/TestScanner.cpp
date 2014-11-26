@@ -1,12 +1,8 @@
 #include "Scanner.h"
 #include <stdio.h>
 
-
-
 int main(int argc, char **argv) {
 	printf("TestScanner:\n");
-
-
 
 	Scanner* scanner;
 
@@ -14,16 +10,30 @@ int main(int argc, char **argv) {
 
 	scanner = new Scanner();
 	Token* t = new Token();
-	printf("Typ:\tZeile:\tSpalte:\tInhalt:       \t\tTypString:\n");
+	// printf("TokTyp:\tValue:\tType:\tZeile:\tSpalte:\tInhalt:       \t\tTypString:\n");
 	do {
 		delete t;
 		t = new Token();
 		moreTokens = scanner->nextToken(t);
-		printf("%i\t", t->getTokenType());
-		printf("%i\t", t->getZeile());
-		printf("%i\t", t->getSpalte());
-		printf("%s       \t\t", t->content->getString());
-		printf("%s\n", t->getTokenTypeString());
+		/*printf("%i\t", t->getTokenType());
+		 printf("%i\t", scanner->getSymboltable()->getInfo(t->getKey())->getValue());
+		 printf("%i\t", scanner->getSymboltable()->getInfo(t->getKey())->getType());
+		 printf("%i\t", t->getZeile());
+		 printf("%i\t", t->getSpalte());
+		 printf("%s       \t\t", t->content->getString());
+		 printf("%s\n", t->getTokenTypeString());*/
+		if (t->getTokenType() == 2) { // Integer
+			printf("Token %s \t Line: %i\tColumn: %i\tValue: %i\n",
+					t->getTokenTypeString(), t->getZeile(), t->getSpalte(),
+					scanner->getSymboltable()->getInfo(t->getKey())->getValue());
+		} else if (t->getTokenType() == 3) { // Identifier
+			printf("Token %s Line: %i\tColumn: %i\tLexem: %s\n",
+					t->getTokenTypeString(), t->getZeile(), t->getSpalte(),
+					t->content->getString());
+		} else {
+			printf("Token %s \t Line: %i\tColumn: %i\n", t->getTokenTypeString(),
+					t->getZeile(), t->getSpalte());
+		}
 	} while (moreTokens);
 
 	// TODO evtl Ausgabe in Datei schreiben
