@@ -67,13 +67,13 @@ Symboltable* Scanner::getSymboltable(){
 void Scanner::makeInfo(Token* t){
 	uint8_t type = 0;
 	int toktype = t->getTokenType();
-	if (toktype == 2){
+	if (toktype == Number){
 		type = 2;
-	}else if (toktype == 3){
+	}else if (toktype == Identifier){
 		type = 3;
-	}else if(toktype >= 4 && toktype <= 23){
+	}else if(toktype >= 4 && toktype <= 23){ // Sign
 		type = 1;
-	}else if(toktype == 27){
+	}else if(toktype == Fehler){
 		type = 7;
 	}
 	uint16_t key = symtable->newInfo(t->getContent(), type);

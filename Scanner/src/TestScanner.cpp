@@ -19,6 +19,7 @@ int main(int argc, char **argv) {
 	Token* t = new Token();
 	std::fstream fs;
 	fs.open(output, std::fstream::out | std::fstream::trunc);
+	printf("Processing ...\n");
 	do {
 		delete t;
 		t = new Token();
@@ -30,9 +31,12 @@ int main(int argc, char **argv) {
 					<< scanner->getSymboltable()->getInfo(t->getKey())->getValue()
 					<< "\n";
 		} else if (t->getTokenType() == Identifier) { // Identifier
-			fs << "Token " << t->getTokenTypeString() << " Line: "
-					<< t->getZeile() << "\tColumn: " << t->getSpalte()
-					<< "\tLexem: " << t->content->getString() << "\n";
+			char* ident[] = { "", "", "", "Identifier", "If\t\t", "While\t\t" };
+			fs << "Token "
+					<< ident[scanner->getSymboltable()->getInfo(t->getKey())->getType()]
+					<< " Line: " << t->getZeile() << "\tColumn: "
+					<< t->getSpalte() << "\tLexem: " << t->content->getString()
+					<< "\n";
 		} else if (t->getTokenType() == Fehler) {
 			printf("Unknown Token: Line: %i\tColumn: %i\tSymbol: %s\n",
 					t->getZeile(), t->getSpalte(), t->content->getString());
@@ -43,6 +47,7 @@ int main(int argc, char **argv) {
 	} while (moreTokens);
 
 	fs.close();
+	printf("stop\n");
 
 }
 

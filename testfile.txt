@@ -3,3 +3,4 @@ X:=3+4;
 ?y <:=> X / (X - 4);
 Z :=((3 + 4 - 6);
 Resultat := /X y %
+if while IF WHILE WhIlE
