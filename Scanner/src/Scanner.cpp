@@ -47,7 +47,7 @@ bool Scanner::nextToken(Token* t) {
 		if (lastFinal != Fehler && lastFinal) {
 			for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
 				if (!ignoreChar(ch)) {
-					automat->SpalteZurueck();
+					automat->spalteZurueck();
 					buffer->ungetChar();
 				}
 				t->content->pop();
@@ -67,7 +67,7 @@ Symboltable* Scanner::getSymboltable() {
 
 void Scanner::makeInfo(Token* t) {
 	uint8_t type = 0;
-	// TODO untersuchen ob es evtl noch einen Bug gibt bei dem der Typ 0 bleibt oder so
+	// TODO Bug bei dem der type 2 wird obwohl es ein identifier ist fixen
 	int toktype = t->getTokenType();
 	if (toktype == Number) {
 		type = 2;

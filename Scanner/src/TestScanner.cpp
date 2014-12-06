@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 			printf("Unknown Token: Line: %i\tColumn: %i\tSymbol: %s\n",
 					t->getZeile(), t->getSpalte(), t->content->getString());
 		} else if (t->getTokenType() == Identifier) { // Identifier
-			char* ident[] = { "", "", "", "Identifier", "If\t\t", "While\t\t" };
+			char* ident[] = { "1\t", "2\t", "3\t", "Identifier", "If\t\t", "While\t\t" };
 			fs << "Token "
 					<< ident[scanner->getSymboltable()->getInfo(t->getKey())->getType()]
 					<< " Line: " << t->getZeile() << "\tColumn: "

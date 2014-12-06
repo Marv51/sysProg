@@ -49,7 +49,7 @@ public:
 	int getZeile();
 	int getSpalte();
 	void clean();
-	void SpalteZurueck();
+	void spalteZurueck();
 private:
 	void addStateToMatrix(State s);
 	State lastFinalState;

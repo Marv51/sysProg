@@ -16,27 +16,27 @@
 
 Buffer::Buffer(char* input) {
 	index = 0;
-	int result = posix_memalign((void**)&current_buffer, BLOCKSIZE, BLOCKSIZE);
-	if (result != 0){
+	int result = posix_memalign((void**) &current_buffer, BLOCKSIZE, BLOCKSIZE);
+	if (result != 0) {
 		printf("Konnte keinen Speicher für den Puffer bekommen.");
 		return;
 	}
-	result = posix_memalign((void**)&prev_buffer, BLOCKSIZE, BLOCKSIZE);
-	if (result != 0){
+	result = posix_memalign((void**) &prev_buffer, BLOCKSIZE, BLOCKSIZE);
+	if (result != 0) {
 		printf("Konnte keinen Speicher für den Puffer bekommen.");
 		return;
 	}
 	fileHandle = open(input, O_RDONLY | O_DIRECT);
-	if (fileHandle < 0){
+	if (fileHandle < 0) {
 		printf("Datei konnte nicht geöffnet werden.");
 		return;
 	}
 	readFromFile(current_buffer);
 }
 
-void Buffer::readFromFile(char* where){
+void Buffer::readFromFile(char* where) {
 	ssize_t res = read(fileHandle, where, BLOCKSIZE);
-	if (res < 0){
+	if (res < 0) {
 		printf("Datei konnte nicht gelesen werden: %s\n", strerror(errno));
 		return;
 	}
@@ -47,20 +47,29 @@ Buffer::~Buffer() {
 	free(prev_buffer);
 
 	int res = close(fileHandle);
-	if (res < 0){
+	if (res < 0) {
 		printf("Datei konnte nicht geschlossen werden.");
 		return;
 	}
 }
 
 char Buffer::getChar() {
-	if (index < 0){
-		return prev_buffer[BLOCKSIZE + index];
+	// TODO Bug fixen bei dem Nicht in den vorigen Buffer zurückgegangen werden kann.
+	// D.h. folgende if Bedingung funktioniert nicht:
+	if (index < 0) {
+		index++;
+		return prev_buffer[BLOCKSIZE + index - 1];
 	}
-	if (index == (BLOCKSIZE - 1)){
+
+
+	if (index >= BLOCKSIZE) {
 		free(prev_buffer);
 		prev_buffer = current_buffer;
-		posix_memalign((void**)&current_buffer, BLOCKSIZE, BLOCKSIZE);
+		int result = posix_memalign((void**) &current_buffer, BLOCKSIZE,
+		BLOCKSIZE);
+		if (result != 0) {
+			printf("Konnte keinen Speicher für den Puffer bekommen.");
+		}
 		readFromFile(current_buffer);
 		index = 0;
 	}

@@ -116,7 +116,7 @@ State Automat::getLastFinalState(){
 	return lastFinalState;
 }
 
-void Automat::SpalteZurueck(){
+void Automat::spalteZurueck(){
 	spalte--;
 }
 
