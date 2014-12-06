@@ -7,12 +7,13 @@
 
 #include "Information.h"
 #include <string.h>
+#include <stdlib.h>
 
 Information::Information(char* lex, uint16_t k) {
 	setLexem(lex);
 	nextInfo = '\0';
 	key = k;
-	value = '\0';
+	value = -1;
 	type = 0;
 	/*
 	 * Typen:
@@ -55,11 +56,15 @@ uint16_t Information::getKey() {
 }
 
 int Information::getValue() {
-	long int longdongjohn = strtol(lexem, NULL, 10);
-	if (longdongjohn > INT_MAX || longdongjohn < INT_MIN) {
-		error(EXIT_FAILURE, EOVERFLOW, "Bereichsüberschreitung!");
+	if (value == -1) {
+		long int longInt = strtol(lexem, NULL, 10);
+		if (longInt > INT_MAX || longInt < 0) {
+			error(0, EOVERFLOW, "Bereichsüberschreitung!");
+			value = 0;
+			return -1;
+		}
+		value = (int) longInt;
 	}
-	value = (int) longdongjohn;
 	return value;
 }
 

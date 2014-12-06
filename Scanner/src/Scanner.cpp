@@ -20,14 +20,15 @@ Scanner::~Scanner() {
 	delete symtable;
 }
 
-bool Scanner::ignoreChar(char ch){
+bool Scanner::ignoreChar(char ch) {
 	return !(ch != ' ' && ch != '\n' && ch != '\t');
 }
 
 bool Scanner::nextToken(Token* t) {
 	bool cont;
 	char ch;
-	while (t->content->isEmpty() ||  t->getTokenType() == SchraegstrichSternSternSchraegstrich) {
+	while (t->content->isEmpty()
+			|| t->getTokenType() == SchraegstrichSternSternSchraegstrich) {
 		automat->clean();
 		t->content->clear();
 		do {
@@ -39,11 +40,11 @@ bool Scanner::nextToken(Token* t) {
 		} while (cont);
 
 		State lastFinal = automat->getLastFinalState();
-		if (lastFinal == Start){
+		if (lastFinal == Start) {
 			lastFinal = Fehler;
 		}
-		t->setTokenType((int)lastFinal);
-		if (lastFinal != Fehler && lastFinal){
+		t->setTokenType((int) lastFinal);
+		if (lastFinal != Fehler && lastFinal) {
 			for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
 				if (!ignoreChar(ch)) {
 					automat->SpalteZurueck();
@@ -60,22 +61,26 @@ bool Scanner::nextToken(Token* t) {
 	return buffer->hasCharLeft();
 }
 
-Symboltable* Scanner::getSymboltable(){
+Symboltable* Scanner::getSymboltable() {
 	return symtable;
 }
 
-void Scanner::makeInfo(Token* t){
+void Scanner::makeInfo(Token* t) {
 	uint8_t type = 0;
+	// TODO untersuchen ob es evtl noch einen Bug gibt bei dem der Typ 0 bleibt oder so
 	int toktype = t->getTokenType();
-	if (toktype == Number){
+	if (toktype == Number) {
 		type = 2;
-	}else if (toktype == Identifier){
+	} else if (toktype == Identifier) {
 		type = 3;
-	}else if(toktype >= 4 && toktype <= 23){ // Sign
+	} else if (toktype >= 4 && toktype <= 23) { // Sign
 		type = 1;
-	}else if(toktype == Fehler){
-		type = 7;
+	} else if (toktype == Fehler) {
+		type = 6;
 	}
 	uint16_t key = symtable->newInfo(t->getContent(), type);
+	if (symtable->getInfo(key)->getValue() == -1) {
+		symtable->getInfo(key)->setType(6);
+	}
 	t->setKey(key);
 }

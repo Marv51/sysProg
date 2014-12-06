@@ -31,3 +31,6 @@ debug/*
 *.out
 *.app
 /testfile.txt~
+/textfile1.txt
+/testfile.txt
+/out.txt
