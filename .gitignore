@@ -34,6 +34,7 @@ debug/*
 /textfile1.txt
 /testfile.txt
 /out.txt
+/out.txt~
 /scanner1.txt
 /scanner1.txt~
 /scanner2.txt
