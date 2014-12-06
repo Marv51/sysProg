@@ -55,12 +55,11 @@ Buffer::~Buffer() {
 
 char Buffer::getChar() {
 	// TODO Bug fixen bei dem Nicht in den vorigen Buffer zurückgegangen werden kann.
-	// D.h. folgende if Bedingung funktioniert nicht:
+	// D.h. folgende if Bedingung funktioniert nicht?:
 	if (index < 0) {
 		index++;
 		return prev_buffer[BLOCKSIZE + index - 1];
 	}
-
 
 	if (index >= BLOCKSIZE) {
 		free(prev_buffer);
@@ -86,5 +85,8 @@ int Buffer::getIndex() {
 }
 
 bool Buffer::hasCharLeft() {
+	if (index <= 0) {
+		return true;
+	}
 	return (current_buffer[index] != '\0');
 }

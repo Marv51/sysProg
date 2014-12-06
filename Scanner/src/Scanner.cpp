@@ -67,7 +67,7 @@ Symboltable* Scanner::getSymboltable() {
 
 void Scanner::makeInfo(Token* t) {
 	uint8_t type = 0;
-	// TODO Bug bei dem der type 2 wird obwohl es ein identifier ist fixen
+	// TODO Bug bei dem der type 2 oder 1 wird obwohl es ein Identifier ist fixen
 	int toktype = t->getTokenType();
 	if (toktype == Number) {
 		type = 2;
