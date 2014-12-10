@@ -55,7 +55,7 @@ Information* Symboltable::getInfo(uint16_t key) {
 
 void Symboltable::keySizeBigger() {
 	keysize++;
-	if (keysize > keysizemax) {
+	if (keysize >= keysizemax) {
 		keysizemax *= 2;
 		int* tempList = (int*) malloc(keysizemax * sizeof(int));
 		memcpy(tempList, keys, keysizemax / 2 * sizeof(int));

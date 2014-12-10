@@ -15,7 +15,7 @@
 #define BLOCKSIZE 512 // Sollte wahrscheinlich ein vielfaches von 512 sein.
 
 Buffer::Buffer(char* input) {
-	index = 0;
+	position = 0;
 	int result = posix_memalign((void**) &current_buffer, BLOCKSIZE, BLOCKSIZE);
 	if (result != 0) {
 		printf("Konnte keinen Speicher für den Puffer bekommen.");
@@ -54,14 +54,11 @@ Buffer::~Buffer() {
 }
 
 char Buffer::getChar() {
-	// TODO Bug fixen bei dem Nicht in den vorigen Buffer zurückgegangen werden kann.
-	// D.h. folgende if Bedingung funktioniert nicht?:
-	if (index < 0) {
-		index++;
-		return prev_buffer[BLOCKSIZE + index - 1];
+	if (position < 0) {
+		position++;
+		return prev_buffer[BLOCKSIZE + position - 1];
 	}
-
-	if (index >= BLOCKSIZE) {
+	if (position >= BLOCKSIZE) {
 		free(prev_buffer);
 		prev_buffer = current_buffer;
 		int result = posix_memalign((void**) &current_buffer, BLOCKSIZE,
@@ -70,23 +67,25 @@ char Buffer::getChar() {
 			printf("Konnte keinen Speicher für den Puffer bekommen.");
 		}
 		readFromFile(current_buffer);
-		index = 0;
+		position = 0;
 	}
-	index++;
-	return current_buffer[index - 1];
+	position++;
+	return current_buffer[position - 1];
 }
 
 void Buffer::ungetChar() {
-	index--;
+	position--;
 }
 
 int Buffer::getIndex() {
-	return index;
+	return position;
 }
 
 bool Buffer::hasCharLeft() {
-	if (index <= 0) {
+	if (position <= 0) {
 		return true;
 	}
-	return (current_buffer[index] != '\0');
+	char nextChar = getChar();
+	ungetChar();
+	return (nextChar != '\0');
 }

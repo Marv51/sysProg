@@ -10,6 +10,7 @@
 #include "Token.h"
 #include "../../Symboltable/src/Symboltable.h"
 #include <stdint.h>
+#include <string.h>
 
 #ifndef SCANNER_H_
 #define SCANNER_H_

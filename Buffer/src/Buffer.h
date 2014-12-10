@@ -17,7 +17,7 @@ public:
 	int getIndex(); // nur Debug
 	bool hasCharLeft();
 private: 
-	int index;
+	int position;
 	char *current_buffer;
 	char *prev_buffer;
 	int fileHandle;

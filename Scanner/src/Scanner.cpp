@@ -44,15 +44,16 @@ bool Scanner::nextToken(Token* t) {
 			lastFinal = Fehler;
 		}
 		t->setTokenType((int) lastFinal);
-		if (lastFinal != Fehler && lastFinal) {
-			for (int j = automat->getStepsSinceLastFinalState(); j > 0; j--) {
-				if (!ignoreChar(ch)) {
-					automat->spalteZurueck();
-					buffer->ungetChar();
-				}
-				t->content->pop();
-
+		int stepBack = automat->getStepsSinceLastFinalState();
+		if (lastFinal == Fehler) {
+			stepBack--;
+		}
+		for (int j = stepBack; j > 0; j--) {
+			if (!ignoreChar(ch)) {
+				automat->spalteZurueck();
+				buffer->ungetChar();
 			}
+			t->content->pop();
 		}
 	}
 	t->setSpalte(automat->getSpalte());
