@@ -62,6 +62,7 @@ bool Scanner::nextToken(Token* t) {
 	return buffer->hasCharLeft();
 }
 
+//TODO diese Methode sollten wir durch eine ernsthaft nützliche Funktion ersetzen, eventuell mal in der Anleitung schauen. (vlt. getInfoForToken, oder so?)
 Symboltable* Scanner::getSymboltable() {
 	return symtable;
 }
