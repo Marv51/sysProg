@@ -17,18 +17,18 @@ SHAREDLIB = ../sharedlib
 # Linken der Object-files
 
 makeTestBuffer: BufferTarget 	TestBufferTarget
-	g++ -std=c++11 -g $(OBJDIR)/Buffer.o 	$(OBJDIR)/TestBuffer.o  -o $(BINDIR)/BufferTest
+	g++ -Wall -Wextra -pedantic -std=c++11 -g $(OBJDIR)/Buffer.o 	$(OBJDIR)/TestBuffer.o  -o $(BINDIR)/BufferTest
 	
 
 # compilieren der Source-files
 # Buffer.o ist abhaengig von Buffer.cpp und Buffer.h
 BufferTarget :  $(SRCDIR)/Buffer.cpp $(SRCDIR)/Buffer.h 
-	g++ -std=c++11 -g  -c -Wall  -o $(OBJDIR)/Buffer.o  $(SRCDIR)/Buffer.cpp
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $(OBJDIR)/Buffer.o  $(SRCDIR)/Buffer.cpp
 
 #TestBuffer.o ist abhaengig von TestBuffer.cpp und Buffer.h
 TestBufferTarget :  $(SRCDIR)/TestBuffer.cpp $(SRCDIR)/Buffer.h
-	@echo "g++ -std=c++11 $*.cpp"
-	g++ -std=c++11 -g  -c -Wall  -o $(OBJDIR)/TestBuffer.o  $(SRCDIR)/TestBuffer.cpp
+	@echo "g++ -Wall -Wextra -pedantic -std=c++11 $*.cpp"
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $(OBJDIR)/TestBuffer.o  $(SRCDIR)/TestBuffer.cpp
 
 
 
@@ -46,10 +46,10 @@ cleanBuffer:
 #
 
 BufferLib: BufferLibTarget
-		g++ -std=c++11 -shared  -o $(SHAREDLIB)/libBuffer.so $(LIBDIR)/Buffer.o 
+		g++ -Wall -Wextra -pedantic -std=c++11 -shared  -o $(SHAREDLIB)/libBuffer.so $(LIBDIR)/Buffer.o 
 
 	
 BufferLibTarget :  $(SRCDIR)/Buffer.cpp $(SRCDIR)/Buffer.h
-	g++ -std=c++11 -g  -c -fPIC  -o $(LIBDIR)/Buffer.o  $(SRCDIR)/Buffer.cpp 
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -fPIC  -o $(LIBDIR)/Buffer.o  $(SRCDIR)/Buffer.cpp 
 
 	

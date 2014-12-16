@@ -5,13 +5,6 @@
 
 #include "Automat.h"
 
-void Automat::addStateToMatrix(State s){
-	//Initalisiert jeden Zustand mit nur undefinieren Übergängen
-	for (int i = 1; i <= 255; i++){
-		stateMatrix[(int)s][i] = State::Undefined;
-	}
-}
-
 Automat::Automat() {
 	lastFinalState = State::Start;
 	stepsSinceLastFinalState = 0;
@@ -22,8 +15,11 @@ Automat::Automat() {
 	TokenAnfangSpalte = 1;
 	TokenAnfangZeile = 1;
 
+	//Initalisiert jeden Zustand mit nur undefinieren Übergängen
 	for (int i = (int)State::Number; i != (int)State::SchraegstrichSternSternSchraegstrich; i++){
-		addStateToMatrix((State)i);
+		for (int a = 1; a <= 255; a++){
+			stateMatrix[i][a] = State::Undefined;
+		}
 	}
 
 	stateMatrix[(int)State::Start]['{'] = State::GeschweifteKlammerAuf;
@@ -70,7 +66,8 @@ Automat::Automat() {
 	stateMatrix[(int)State::SchraegStrichStern]['*'] = State::SchraegstrichSternStern;
 	stateMatrix[(int)State::SchraegstrichSternStern]['*'] = State::SchraegstrichSternStern;
 	stateMatrix[(int)State::SchraegstrichSternStern]['/'] = State::SchraegstrichSternSternSchraegstrich;
-
+	stateMatrix[(int)State::SchraegStrichStern][' '] = State::SchraegStrichStern;
+	stateMatrix[(int)State::SchraegStrichStern]['\n'] = State::SchraegStrichStern;
 
 
 	// Einstellen welche Zustaende Finale Zustaende sind.
@@ -108,22 +105,8 @@ Automat::Automat() {
 Automat::~Automat() {
 }
 
-
-//TODO: Diese Funktion wird nicht gebraucht, wenn Start ein finalerZustand ist, wie es sein sollte.
-//	Clean kann man einfach machen wenn man im Start Zustand ein Zeichen testet.
-void Automat::clean(){
-	stepsSinceLastFinalState = 0;
-	currentState = State::Start;
-	lastFinalState = State::Start;
-}
-
 State Automat::getLastFinalState(){
 	return lastFinalState;
-}
-
-//TODO: reicht hier wirklich die Spalte zurück Methode? Was passiert wenn wir Zeilen zurüück gehen sollten?
-void Automat::spalteZurueck(){
-	spalte--;
 }
 
 int Automat::getStepsSinceLastFinalState(){
@@ -142,35 +125,39 @@ bool Automat::testChar(char c){
 	if (currentState == State::Start){
 			TokenAnfangSpalte = spalte;
 			TokenAnfangZeile = zeile;
+			stepsSinceLastFinalState = 0;
+			lastFinalState = State::Start;
 	}
-	if (c != '\n'){
-		spalte++;
-	} else {
+
+
+	if (c == '\n' && currentState == State::Start){
 		spalte = 1;
 		zeile++;
 	}
-	
-	// TODO: hier könnte man doch auch einfach die Übergänge entsprechend definieren, oder?
-	if (currentState != State::SchraegStrichStern && (c == ' ' || c == '\n')){
-		return false;
-	}
-	//TODO: Man könnte hier stepsSinceLastFinalState auch einfach immer erhöhen, außerhalb von all den ifs
-	
+
+	stepsSinceLastFinalState++;
+
 	if (stateMatrix[(int)currentState][(unsigned short)c] != State::Undefined){
+
 		currentState = stateMatrix[(int)currentState][(unsigned short)c];
+
 		if (finaleStates[(int)currentState]){
+			spalte += stepsSinceLastFinalState;
 			stepsSinceLastFinalState = 0;
 			lastFinalState = currentState;
-		} else {
-			stepsSinceLastFinalState++;
 		}
 		return true;
 	}
 	else{
+		if (lastFinalState == State::Start && (c == ' ')){
+			spalte++;
+		}
+		else if (lastFinalState == State::Start && (c != '\n')){
+			lastFinalState = State::Fehler;
+			spalte++;
+		}
+
 		currentState = State::Start;
-		stepsSinceLastFinalState++;
 		return false;
 	}
-
-	return true;
 }

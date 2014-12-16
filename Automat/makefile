@@ -18,12 +18,12 @@ makeTestAutomat: AutomatTarget TestAutomatTarget
 # -Wall --> alle meldungen erzeugen
 
 AutomatTarget :  src/Automat.cpp src/Automat.h 
-	g++ -std=c++0x -g  -c -Wall src/Automat.cpp -o debug/Automat.o  
+	g++  -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall src/Automat.cpp -o debug/Automat.o  
 
 
 # TestAutomat.o ist abhängig von src/TestAutomat.cpp und src/Automat.h
 TestAutomatTarget :  src/TestAutomat.cpp src/Automat.h
-	g++ -std=c++11 -g  -c -Wall src/TestAutomat.cpp  -o debug/TestAutomat.o  
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall src/TestAutomat.cpp  -o debug/TestAutomat.o  
 
 
 
@@ -41,12 +41,12 @@ cleanAutomat:
 #
 
 AutomatLib: AutomatLibTarget
-		g++ -std=c++11 -shared lib/Automat.o  -o ../sharedlib/libAutomat.so 
+		g++ -Wall -Wextra -pedantic -std=c++11 -shared lib/Automat.o  -o ../sharedlib/libAutomat.so 
 
 	
 # compilieren des Files Automat.cpp zu Automat.o mit dem Flag -fPIC (Position Independant Code)
 AutomatLibTarget :  src/Automat.cpp src/Automat.h
-	g++ -std=c++0x -g  -c -fPIC  src/Automat.cpp -o lib/Automat.o   
+	g++ -Wall -Wextra -pedantic -std=c++0x -g  -c -fPIC  src/Automat.cpp -o lib/Automat.o   
 
 
 

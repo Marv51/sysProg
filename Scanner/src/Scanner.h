@@ -20,7 +20,7 @@ public:
 	Scanner(char* input);
 	virtual ~Scanner();
 	bool nextToken(Token *);
-	Symboltable* getSymboltable();
+	Information* getInfo(uint16_t key);
 
 private:
 	bool ignoreChar(char ch);

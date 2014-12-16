@@ -33,26 +33,26 @@ OBJSFORSCANNERLIB =  \
 # linken der Object-files under shared libraries
 
 makeTestScanner: $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o $(OBJDIR)/myListe.o
-	g++ -std=c++11 -g $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o $(OBJDIR)/myListe.o  -L../sharedlib  -lAutomat  -lBuffer -lSymboltable -o $(BINDIR)/ScannerTest
+	g++ -Wall -Wextra -pedantic -std=c++11 -g $(OBJDIR)/Token.o $(OBJDIR)/Scanner.o $(OBJDIR)/TestScanner.o $(OBJDIR)/myListe.o  -L../sharedlib  -lAutomat  -lBuffer -lSymboltable -o $(BINDIR)/ScannerTest
 #	
 #	
 #	
 ## compilieren der source-files
 $(OBJDIR)/Token.o :  $(SRCDIR)/Token.cpp 
 	@echo "g++ $*.cpp"
-	g++ -std=c++11 -g  -c -Wall  -o $(OBJDIR)/Token.o  $(SRCDIR)/Token.cpp
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $(OBJDIR)/Token.o  $(SRCDIR)/Token.cpp
 	
 $(OBJDIR)/myListe.o :  $(SRCDIR)/myListe.cpp 
 	@echo "g++ $*.cpp"
-	g++ -std=c++11 -g  -c -Wall  -o $(OBJDIR)/myListe.o  $(SRCDIR)/myListe.cpp
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $(OBJDIR)/myListe.o  $(SRCDIR)/myListe.cpp
 
 $(OBJDIR)/Scanner.o :  $(SRCDIR)/Scanner.cpp 
 	@echo "g++ $*.cpp"
-	g++ -std=c++11 -g  -c -Wall  -o $(OBJDIR)/Scanner.o  $(SRCDIR)/Scanner.cpp
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $(OBJDIR)/Scanner.o  $(SRCDIR)/Scanner.cpp
 
 $(OBJDIR)/TestScanner.o :  $(SRCDIR)/TestScanner.cpp 
 	@echo "g++ $*.cpp"
-	g++ -std=c++11 -g  -c -Wall  -o $(OBJDIR)/TestScanner.o  $(SRCDIR)/TestScanner.cpp
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $(OBJDIR)/TestScanner.o  $(SRCDIR)/TestScanner.cpp
 		
 
 

@@ -52,14 +52,14 @@ makeTestSymboltable: SymboltableTest
 
 
 SymboltableTest: $(OBJS)
-	g++ -std=c++11 -g $^ -o $(BINDIR)/SymboltableTest
+	g++ -Wall -Wextra -pedantic -std=c++11 -g $^ -o $(BINDIR)/SymboltableTest
 	
 # $^ liste der abhaengigkeiten
 
 
 $(OBJDIR)/%.o :  $(SRCDIR)/%.cpp 
-	@echo "g++ -std=c++11 $*.cpp"
-	g++ -std=c++11 -g  -c -Wall  -o $@  $<
+	@echo "g++ -Wall -Wextra -pedantic -std=c++11 $*.cpp"
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $@  $<
 
 # 
 # $@ name des object files
@@ -89,11 +89,11 @@ cleanSymboltable:
 
 
 SymboltableLib:$(OBJSFORSYMBOLTABLELIB)
-		g++ -std=c++11 -shared  -o $(SHAREDLIB)/libSymboltable.so $^ 
+		g++ -Wall -Wextra -pedantic -std=c++11 -shared  -o $(SHAREDLIB)/libSymboltable.so $^ 
 
 	
 $(LIBDIR)/%.o :  $(SRCDIR)/%.cpp 
 #	@mkdir -p `dirname $(OBJDIR)/$*.o`
-	@echo "g++ -std=c++11 $*.cpp"
-	g++ -std=c++11 -g  -c -fPIC  -o $@  $<
+	@echo "g++ -Wall -Wextra -pedantic -std=c++11 $*.cpp"
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -fPIC  -o $@  $<
 

@@ -49,10 +49,7 @@ public:
 	bool testChar(char c);
 	int getZeile();
 	int getSpalte();
-	void clean();
-	void spalteZurueck();
 private:
-	void addStateToMatrix(State s);
 	State lastFinalState;
 	State currentState;
 	int stepsSinceLastFinalState;
