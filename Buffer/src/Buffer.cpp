@@ -13,21 +13,40 @@
 #include <errno.h>
 
 #define BLOCKSIZE 512 // Sollte wahrscheinlich ein vielfaches von 512 sein.
+	// alignment to the logical block - The logical block size can be determined using the ioctl(2) BLKSSZGET operation or from the shell using the command: blockdev --getss
 
 Buffer::Buffer(char* input) {
 	position = 0;
 	int result = posix_memalign((void**) &current_buffer, BLOCKSIZE, BLOCKSIZE);
 	if (result != 0) {
 		printf("Konnte keinen Speicher für den Puffer bekommen.");
+		/*
+		TODO: Hier hilfreichere Fehlermeldung und Programm beenden.
+		 EINVAL The alignment argument was not a power of two, or was not a multiple of sizeof(void *).
+		 ENOMEM There was insufficient memory to fulfill the allocation request.
+		*/
 		return;
 	}
 	result = posix_memalign((void**) &prev_buffer, BLOCKSIZE, BLOCKSIZE);
 	if (result != 0) {
 		printf("Konnte keinen Speicher für den Puffer bekommen.");
+		// TODO: siehe Oben.
 		return;
 	}
 	fileHandle = open(input, O_RDONLY | O_DIRECT);
-	if (fileHandle < 0) {
+	if (fileHandle == -1) {
+		// TODO: bessere Fehlermeldungen: errno 
+		/*  EACCES keine Rechte
+		    EINVAL The filesystem does not support the O_DIRECT flag.
+		    EINVAL Invalid value in flags.
+		    ELOOP  Too many symbolic links were encountered in resolving pathname.
+		    EMFILE The process already has the maximum number of files open.
+		    ENAMETOOLONG pathname was too long.
+		    ENFILE The system limit on the total number of open files has been reached.
+ 		    ENOENT O_CREAT is not set and the named file does not exist. 
+ 		    ENOMEM Insufficient kernel memory was available.
+ 		    EOVERFLOW pathname refers to a regular file that is too large to be opened.
+		*/
 		printf("Datei konnte nicht geöffnet werden.");
 		return;
 	}
