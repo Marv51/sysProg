@@ -116,6 +116,7 @@ State Automat::getLastFinalState(){
 	return lastFinalState;
 }
 
+//TODO: reicht hier wirklich die Spalte zurück Methode? Was passiert wenn wir Zeilen zurüück gehen sollten?
 void Automat::spalteZurueck(){
 	spalte--;
 }
