@@ -59,7 +59,7 @@ char Buffer::getChar() {
 		return prev_buffer[BLOCKSIZE + position - 1];
 	}
 	if (position >= BLOCKSIZE) {
-		free(prev_buffer);
+		free(prev_buffer);	//TODO: Hier sollten wir den Speicher nur mit memset leeren und nicht jedes mal neuen Speicher anfordern.
 		prev_buffer = current_buffer;
 		int result = posix_memalign((void**) &current_buffer, BLOCKSIZE,
 		BLOCKSIZE);
