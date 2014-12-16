@@ -12,6 +12,13 @@
 #include <string.h>
 #include <errno.h>
 
+/*
+              "The thing that has always disturbed me about O_DIRECT is that
+              the whole interface is just stupid, and was probably designed
+              by a deranged monkey on some serious mind-controlling
+              substances."—Linus
+*/
+
 #define BLOCKSIZE 512 // Sollte wahrscheinlich ein vielfaches von 512 sein.
 	// alignment to the logical block - The logical block size can be determined using the ioctl(2) BLKSSZGET operation or from the shell using the command: blockdev --getss
 
