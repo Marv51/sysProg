@@ -106,6 +106,9 @@ Automat::Automat() {
 Automat::~Automat() {
 }
 
+
+//TODO: Diese Funktion wird nicht gebraucht, wenn Start ein finalerZustand ist, wie es sein sollte.
+//	Clean kann man einfach machen wenn man im Start Zustand ein Zeichen testet.
 void Automat::clean(){
 	stepsSinceLastFinalState = 0;
 	currentState = Start;
