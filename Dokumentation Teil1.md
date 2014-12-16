@@ -1,4 +1,4 @@
-Dokumentation "systemnahmes Programmieren" Teil 1: Der Scanner
+Dokumentation "systemnahes Programmieren" Teil 1: Der Scanner
 ==============================================================
 Buffer
 ------
@@ -113,3 +113,9 @@ Ein zweites Array finalStates ordnet jedem Zustand zu, ob dieser ein finaler Zus
 
 Mit dieser Information kann man jetzt für jedes Zeichen das man testet der Übergang Undefined ist, oder ob es einen Folgezustand gibt.
 Wenn der Übergang Undefined ist, wird false zurückgegeben, dies ist dann das Ende des Tokens. Ist der Folgezustand aber nicht undefined, wird der Aktuelle Zustand verändert und true zurückgegeben.
+
+Scanner
+-------
+Der Scanner hat die Methode nextToken und die Methode ?
+
+Die Methode Next Token ließt solange Zeichen aus dem Buffer bis ein Token zusammengebaut werden kann. Und Verknüpft dieses Token dann mit der Symboltabelle.
