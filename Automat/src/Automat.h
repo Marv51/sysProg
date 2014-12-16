@@ -36,7 +36,8 @@ enum State {
 	SchraegStrichStern,
 	SchraegstrichSternStern,
 	SchraegstrichSternSternSchraegstrich,
-	Fehler
+	Fehler,
+	Length // Zustand um die Anzahl der definierten Zustände zu erkennen muss immer der letzte Zustand sein.
 };
 
 class Automat {
@@ -55,8 +56,8 @@ private:
 	State lastFinalState;
 	State currentState;
 	int stepsSinceLastFinalState;
-	State stateMatrix[50][256];
-	bool finaleStates[50];
+	State stateMatrix[50][256]; //TODO 50 sollte durch State.Length ersetzt werden
+	bool finaleStates[50]; //TODO 50 sollte durch State.Length ersetzt werden
 	int zeile;
 	int spalte;
 	int TokenAnfangZeile;
