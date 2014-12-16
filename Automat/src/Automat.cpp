@@ -147,11 +147,13 @@ bool Automat::testChar(char c){
 		spalte = 1;
 		zeile++;
 	}
-
+	
+	// TODO: hier könnte man doch auch einfach die Übergänge entsprechend definieren, oder?
 	if (currentState != SchraegStrichStern && (c == ' ' || c == '\n')){
 		return false;
 	}
-
+	//TODO: Man könnte hier stepsSinceLastFinalState auch einfach immer erhöhen, außerhalb von all den ifs
+	
 	if (stateMatrix[currentState][(unsigned short)c] != Undefined){
 		currentState = stateMatrix[currentState][(unsigned short)c];
 		if (finaleStates[currentState]){
