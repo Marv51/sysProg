@@ -3,6 +3,7 @@ Dokumentation "systemnahmes Programmieren" Teil 1: Der Scanner
 Buffer
 ------
 Anforderung: Der Buffer wird zum einlesen von Dateien in unser Programm verwendet. Er verwendet die systemnahe Funktion open um Dateien von der Festplatte zu lesen. Um die Aufgabe zusätzlich kompliziert zu machen verwenden wir das Flag "O_Direct". 
+
 ### public
 Der Konstruktor der Buffer-Klasse erwartet einen char* auf den Pfad an dem sich die Datei die gelesen werden soll befindet. 
 
@@ -46,5 +47,69 @@ Wenn also direkt nachdem wir neue Daten gelesen haben ein `ungetChar()` kommt st
 
 In der Klasse Buffer können Fehler auftreten.
 
+Automat
+------
+Wenn man dem Automaten ein Zeichen übergibt, ändert er seinen internen Zustand und zählt Zeilen und Spalten.
+### public
+Es wird ein enum mit allen Zuständen die der Automat einnehmen kann definiert, `State`
 
- 
+    enum State {
+    	Undefined,
+    	Start,
+    	Number,
+    	Identifier,
+    	KleinerAls,
+    	GeschweifteKlammerAuf,
+    	GeschweifteKlammerZu,
+    	VorwaertsSchraegstrich,
+    	EckigeKlammerAuf,
+    	EckigeKlammerZu,
+    	UndZeichen,
+    	GroesserAls,
+    	Stern,
+    	Ausrufezeichen,
+    	RundeKlammerAuf,
+    	RundeKlammerZu,
+    	IstGleichZeichen,
+    	Minus,
+    	Plus,
+    	Doppelpunkt,
+    	DoppelpunktIstGleich,
+    	Semikolon,
+    	KleinerDoppelpunkt,
+    	kleinerDoppelpunktGroesser,
+    	SchraegStrichStern,
+    	SchraegstrichSternStern,
+    	SchraegstrichSternSternSchraegstrich,
+    	Fehler
+    };
+
+Seine öffentlichen Methoden sind:
+
+1. `State getlastFinalState();`
+2. `int getStepsSinceLastFinalState();`
+3. `bool testChar(char c)`
+4. `int getZeile();`
+5. `int getSpalte();`
+6. `void clean();`
+7. `void spalteZurueck();`
+
+zu 1.) Gibt den letzten finalen Zustand des Automaten zurück. Wenn noch kein Finaler Zustand erreicht wurde wird der Zustand `Start` zurückgegeben.
+
+zu 2.) Gibt die Zeichen die getestet (`testChar()`) wurden seit dem letzten finalen Zustand des Automaten zurück.
+
+zu 3.) Die wichtigste Methode des Automaten: Sie führe die Übergänge der Zustände mit einem eingegeben Zeichen aus. Außerdem sorgt Sie dafür, dass Zeile und Spalte gezählt wurden.
+
+zu 4. und 5.) Geben die Zeile und Spalte vom Anfang des Tokens zurück. (Ein neues Token beginnt wenn der Automat im Start Zustand ist und ein Zeichen getestet werden soll.
+
+zu 6.) Die Methode wird wahrscheinlich entfernt.
+
+zu 7.) Wenn wir ein Zeichen mehr eingelesen haben als wir sollten, kann man hiermit den Spalten-Zähler wieder zurücksetzen. Warum brauchen wir diese Methode?
+
+### Implementierung
+Unser Automat basiert auf einer großen Übergangsmatrix (28x256), die aus die aus dem aktuellen Zustand und einem bliebigen char einen Folgezustand zurückgibt.
+Anfangs sind alle Übergänge mit Undefined als Folgezustand definiert, außer den Übergängen die bewusst im Konstruktor gesetzt wurden.
+Ein zweites Array finalStates ordnet jedem Zustand zu, ob dieser ein finaler Zustand ist.
+
+Mit dieser Information kann man jetzt für jedes Zeichen das man testet der Übergang Undefined ist, oder ob es einen Folgezustand gibt.
+Wenn der Übergang Undefined ist, wird false zurückgegeben, dies ist dann das Ende des Tokens. Ist der Folgezustand aber nicht undefined, wird der Aktuelle Zustand verändert und true zurückgegeben.
