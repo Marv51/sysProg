@@ -72,7 +72,6 @@ Automat::Automat() {
 
 	// Einstellen welche Zustaende Finale Zustaende sind.
 	
-	//TODO: setzte alle finaleStates auf false und dann nur die auf true die final sind.
 	finaleStates[(int)State::Start] = false;
 	finaleStates[(int)State::Undefined] = false;
 	finaleStates[(int)State::Number] = true;
@@ -153,7 +152,7 @@ bool Automat::testChar(char c){
 			if (c != '\n'){
 				spalte++;
 			}
-			if ((c != '\n') && (c != ' ')){
+			if ((c != '\n') && (c != ' ') && (c != '\r')){
 				lastFinalState = State::Fehler;
 			}
 		}

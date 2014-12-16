@@ -43,6 +43,7 @@ private:
 	uint16_t key;
 	int value;
 	InfoTyp type;
+
 };
 
 #endif /* SYMBOLTABLE_SRC_INFORMATION_H_ */

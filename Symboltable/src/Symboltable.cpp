@@ -25,6 +25,7 @@ Symboltable::~Symboltable() {
 			delete (informations[i]);
 		}
 	}
+	//TODO Memory Leak informations[i].nextInformation werden nicht gelöscht.
 	free(informations);
 	free(keys);
 }
@@ -67,25 +68,26 @@ void Symboltable::keySizeBigger() {
 uint16_t Symboltable::newInfo(char* lexem, InfoTyp t) {
 	uint16_t derHash = hash(lexem);
 	uint16_t key = keysize;
+	Information* newInfo = new Information(lexem, key );
+	newInfo->setType(t);
 	keys[key] = derHash;
 	keySizeBigger();
 	Information* i_next = informations[derHash];
 	if (i_next == '\0') {
-		i_next = new Information(lexem, key);
-		i_next->setType(t);
+		i_next = newInfo;
 		informations[derHash] = i_next;
 	} else {
 		do {
-			if (strcmp(lexem, i_next->getLexem()) == 0) {
+			if (t == i_next->getType() && strcmp(lexem, i_next->getLexem()) == 0) {
 				keysize--;
+				delete newInfo;
 				return i_next->getKey();
 			}
 			if (i_next->getNextInfo() != '\0') {
 				i_next = i_next->getNextInfo();
 			}
 		} while (i_next->getNextInfo() != '\0');
-		i_next->setNextInfo(new Information(lexem, key));
-		i_next->getNextInfo()->setType(t);
+		i_next->setNextInfo(newInfo);
 	}
 
 	return key;

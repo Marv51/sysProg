@@ -25,13 +25,13 @@ int main(int argc, char **argv) {
 		delete t;
 		t = new Token();
 		moreTokens = scanner->nextToken(t);
-		if ((t->getTokenType() == State::Fehler	|| scanner->getInfo(t->getKey())->getType() == InfoTyp::Fehler)
-			&& (strcmp(t->content->getString(), "\r") != 0)) { // "\r" darf nicht als Fehler gesehen werden, falls die Testfile unter Win erstellt wurde
+		if (t->getTokenType() == State::Fehler	|| scanner->getInfo(t->getKey())->getType() == InfoTyp::Fehler) {
 			printf("Unknown Token: Line: %i\tColumn: %i\tSymbol: %s\n",
 					t->getZeile(), t->getSpalte(), t->content->getString());
 		} else if (t->getTokenType() == State::Identifier) { // Identifier
 			const char* ident[] = { "1Unk\t", "2Sig\t", "3Num\t", "Identifier", "If\t\t",
 					"While\t\t" };
+
 			fs << "Token "
 					<< ident[(int)scanner->getInfo(t->getKey())->getType()]
 					<< " Line: " << t->getZeile() << "\tColumn: "

@@ -15,16 +15,6 @@ Information::Information(char* lex, uint16_t k) {
 	key = k;
 	value = -1;
 	type = InfoTyp::Unknown;
-	/*
-	 * Typen:
-	 * 0 = unknown
-	 * 1 = sign
-	 * 2 = integer
-	 * 3 = identifier
-	 * 4 = if
-	 * 5 = while
-	 * 6 = fehler
-	 */
 }
 
 Information::~Information() {

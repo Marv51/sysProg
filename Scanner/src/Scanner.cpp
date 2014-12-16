@@ -59,7 +59,6 @@ Information* Scanner::getInfo(uint16_t key) {
 
 void Scanner::makeInfo(Token* t) {
 	InfoTyp type = InfoTyp::Unknown;
-	// TODO Bug bei dem der type 2 oder 1 wird obwohl es ein Identifier ist fixen
 	State toktype = t->getTokenType();
 	if (toktype == State::Number) {
 		type = InfoTyp::Integer;
