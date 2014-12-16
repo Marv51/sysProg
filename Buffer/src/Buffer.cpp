@@ -56,7 +56,7 @@ Buffer::~Buffer() {
 char Buffer::getChar() {
 	if (position < 0) {
 		position++;
-		return prev_buffer[BLOCKSIZE + position - 1];
+		return prev_buffer[BLOCKSIZE + position - 1]; // TODO hier kann unser Programm abstürzen wenn position < 511 ist.
 	}
 	if (position >= BLOCKSIZE) {
 		free(prev_buffer);	//TODO: Hier sollten wir den Speicher nur mit memset leeren und nicht jedes mal neuen Speicher anfordern.
