@@ -5,7 +5,7 @@ Token::Token() {
 	content = new myListe();
 	spalte = 1;
 	zeile = 1;
-	tokentype = Undefined;
+	tokentype = State::Undefined;
 }
 
 Token::~Token() {
@@ -28,10 +28,10 @@ int Token::getZeile() {
 	return zeile;
 }
 
-void Token::setTokenType(int t) {
+void Token::setTokenType(State t) {
 	tokentype = t;
 }
-int Token::getTokenType() {
+State Token::getTokenType() {
 	return tokentype;
 }
 
@@ -56,6 +56,6 @@ const char* Token::getTokenTypeString() {
 			":=", ";", "<:",
 			"<:>", "SchraegStrichStern",
 			"SchraegstrichSternStern", "SchraegstrichSternSternSchraegstrich", "Fehler" };
-	return tokennames[tokentype];
+	return tokennames[(int)tokentype];
 }
 

@@ -28,7 +28,7 @@ bool Scanner::nextToken(Token* t) {
 	bool cont;
 	char ch;
 	while (t->content->isEmpty()
-			|| t->getTokenType() == SchraegstrichSternSternSchraegstrich) {
+			|| t->getTokenType() == State::SchraegstrichSternSternSchraegstrich) {
 		automat->clean();
 		t->content->clear();
 		do {
@@ -40,12 +40,12 @@ bool Scanner::nextToken(Token* t) {
 		} while (cont);
 
 		State lastFinal = automat->getLastFinalState();
-		if (lastFinal == Start) {
-			lastFinal = Fehler;
+		if (lastFinal == State::Start) {
+			lastFinal = State::Fehler;
 		}
-		t->setTokenType((int) lastFinal);
+		t->setTokenType(lastFinal);
 		int stepBack = automat->getStepsSinceLastFinalState();
-		if (lastFinal == Fehler) {
+		if (lastFinal == State::Fehler) {
 			stepBack--;
 		}
 		for (int j = stepBack; j > 0; j--) {
@@ -68,21 +68,21 @@ Symboltable* Scanner::getSymboltable() {
 }
 
 void Scanner::makeInfo(Token* t) {
-	uint8_t type = 0;
+	InfoTyp type = InfoTyp::Unknown;
 	// TODO Bug bei dem der type 2 oder 1 wird obwohl es ein Identifier ist fixen
-	int toktype = t->getTokenType();
-	if (toktype == Number) {
-		type = 2;
-	} else if (toktype == Identifier) {
-		type = 3;
-	} else if (toktype >= 4 && toktype <= 23) { // Sign
-		type = 1;
-	} else if (toktype == Fehler) {
-		type = 6;
+	State toktype = t->getTokenType();
+	if (toktype == State::Number) {
+		type = InfoTyp::Integer;
+	} else if (toktype == State::Identifier) {
+		type = InfoTyp::Identifier;
+	} else if ((int)toktype >= 4 && (int)toktype <= 23) { // Sign
+		type = InfoTyp::Sign;
+	} else if (toktype == State::Fehler) {
+		type = InfoTyp::Fehler;
 	}
 	uint16_t key = symtable->newInfo(t->getContent(), type);
 	if (symtable->getInfo(key)->getValue() == -1) {
-		symtable->getInfo(key)->setType(6);
+		symtable->getInfo(key)->setType(InfoTyp::Fehler);
 	}
 	t->setKey(key);
 }

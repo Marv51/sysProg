@@ -8,7 +8,7 @@
 #ifndef Automat_H_
 #define Automat_H_
 
-enum State {
+enum class State {
 	Undefined,
 	Start,
 	Number,
@@ -56,8 +56,8 @@ private:
 	State lastFinalState;
 	State currentState;
 	int stepsSinceLastFinalState;
-	State stateMatrix[50][256]; //TODO 50 sollte durch State.Length ersetzt werden
-	bool finaleStates[50]; //TODO 50 sollte durch State.Length ersetzt werden
+	State stateMatrix[(int)State::Length][256];
+	bool finaleStates[(int)State::Length];
 	int zeile;
 	int spalte;
 	int TokenAnfangZeile;

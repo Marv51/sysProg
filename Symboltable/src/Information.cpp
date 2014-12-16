@@ -14,7 +14,7 @@ Information::Information(char* lex, uint16_t k) {
 	nextInfo = '\0';
 	key = k;
 	value = -1;
-	type = 0;
+	type = InfoTyp::Unknown;
 	/*
 	 * Typen:
 	 * 0 = unknown
@@ -68,10 +68,10 @@ int Information::getValue() {
 	return value;
 }
 
-uint8_t Information::getType() {
+InfoTyp Information::getType() {
 	return type;
 }
 
-void Information::setType(uint8_t t) {
+void Information::setType(InfoTyp t) {
 	type = t;
 }

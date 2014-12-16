@@ -64,7 +64,7 @@ void Symboltable::keySizeBigger() {
 	}
 }
 
-uint16_t Symboltable::newInfo(char* lexem, uint8_t t) {
+uint16_t Symboltable::newInfo(char* lexem, InfoTyp t) {
 	uint16_t derHash = hash(lexem);
 	uint16_t key = keysize;
 	keys[key] = derHash;
@@ -93,8 +93,8 @@ uint16_t Symboltable::newInfo(char* lexem, uint8_t t) {
 
 void Symboltable::initSymbols() {
 	// Keys für reservierte Ausdrücke:
-	newInfo("if", 4);		// 0
-	newInfo("IF", 4);		// 1
-	newInfo("while", 5);	// 2
-	newInfo("WHILE", 5);	// 3
+	newInfo((char *)"if", InfoTyp::iftyp);		// 0
+	newInfo((char *)"IF", InfoTyp::iftyp);		// 1
+	newInfo((char *)"while", InfoTyp::whiletyp);	// 2
+	newInfo((char *)"WHILE", InfoTyp::whiletyp);	// 3
 }

@@ -14,6 +14,16 @@
 #include <error.h>
 #include <limits.h>
 
+enum class InfoTyp{
+	Unknown,
+	Sign,
+	Integer,
+	Identifier,
+	iftyp,
+	whiletyp,
+	Fehler
+};
+
 class Information {
 public:
 	Information(char* lex, uint16_t k);
@@ -25,14 +35,14 @@ public:
 	void setNextInfo(Information* info);
 	uint16_t getKey();
 	int getValue();
-	uint8_t getType();
-	void setType(uint8_t t);
+	InfoTyp getType();
+	void setType(InfoTyp t);
 private:
 	char* lexem;
 	Information* nextInfo;
 	uint16_t key;
 	int value;
-	uint8_t type;
+	InfoTyp type;
 };
 
 #endif /* SYMBOLTABLE_SRC_INFORMATION_H_ */
