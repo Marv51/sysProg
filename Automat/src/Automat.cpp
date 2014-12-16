@@ -149,14 +149,14 @@ bool Automat::testChar(char c){
 		return true;
 	}
 	else{
-		if (lastFinalState == State::Start && (c == ' ')){
-			spalte++;
+		if (lastFinalState == State::Start){
+			if (c != '\n'){
+				spalte++;
+			}
+			if ((c != '\n') && (c != ' ')){
+				lastFinalState = State::Fehler;
+			}
 		}
-		else if (lastFinalState == State::Start && (c != '\n')){
-			lastFinalState = State::Fehler;
-			spalte++;
-		}
-
 		currentState = State::Start;
 		return false;
 	}
