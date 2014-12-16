@@ -74,6 +74,8 @@ Automat::Automat() {
 
 
 	// Einstellen welche Zustaende Finale Zustaende sind.
+	
+	//TODO: setzte alle finaleStates auf false und dann nur die auf true die final sind.
 	finaleStates[Start] = false;
 	finaleStates[Undefined] = false;
 	finaleStates[Number] = true;
