@@ -62,7 +62,7 @@ Buffer::Buffer(char* input) {
 
 void Buffer::readFromFile(char* where) {
 	ssize_t res = read(fileHandle, where, BLOCKSIZE);
-	if (res < 0) {
+	if (res == -1) {
 		printf("Datei konnte nicht gelesen werden: %s\n", strerror(errno));
 		return;
 	}
@@ -73,7 +73,7 @@ Buffer::~Buffer() {
 	free(prev_buffer);
 
 	int res = close(fileHandle);
-	if (res < 0) {
+	if (res == -1) {
 		printf("Datei konnte nicht geschlossen werden.");
 		return;
 	}
