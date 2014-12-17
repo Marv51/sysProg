@@ -95,8 +95,13 @@ uint16_t Symboltable::newInfo(char* lexem, InfoTyp t) {
 
 void Symboltable::initSymbols() {
 	// Keys für reservierte Ausdrücke:
-	newInfo((char *)"if", InfoTyp::iftyp);		// 0
-	newInfo((char *)"IF", InfoTyp::iftyp);		// 1
-	newInfo((char *)"while", InfoTyp::whiletyp);	// 2
-	newInfo((char *)"WHILE", InfoTyp::whiletyp);	// 3
+	newInfo((char *)"if", InfoTyp::iftyp);
+	newInfo((char *)"IF", InfoTyp::iftyp);
+	newInfo((char *)"while", InfoTyp::whiletyp);
+	newInfo((char *)"WHILE", InfoTyp::whiletyp);
+	newInfo((char *)"else", InfoTyp::elsetyp);
+	newInfo((char *)"ELSE", InfoTyp::elsetyp);
+	newInfo((char *)"int", InfoTyp::inttyp);
+	newInfo((char *)"write", InfoTyp::writetyp);
+	newInfo((char *)"read", InfoTyp::readtyp);
 }

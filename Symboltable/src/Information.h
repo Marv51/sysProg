@@ -21,6 +21,10 @@ enum class InfoTyp{
 	Identifier,
 	iftyp,
 	whiletyp,
+	elsetyp,
+	inttyp,
+	writetyp,
+	readtyp,
 	Fehler
 };
 

@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
 					t->getZeile(), t->getSpalte(), t->content->getString());
 		} else if (t->getTokenType() == State::Identifier) { // Identifier
 			const char* ident[] = { "1Unk\t", "2Sig\t", "3Num\t", "Identifier", "If\t\t",
-					"While\t\t" };
+					"While\t\t", "Else\t\t", "Int\t\t", "Write\t\t", "Read\t\t" };
 
 			fs << "Token "
 					<< ident[(int)scanner->getInfo(t->getKey())->getType()]
