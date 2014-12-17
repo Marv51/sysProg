@@ -21,11 +21,11 @@ OBJS = $(OBJDIR)/Parser.o \
 #$(OBJDIR)/xxn.o
 
 OBJSFORPARSERLIB = $(LIBDIR)/Parser.o \
-				$(LBDIR)/ParseTree.o
+				$(LIBDIR)/ParseTree.o
 
-makeParserTest: ParserTest
 
-ParserTest: $(OBJS)
+
+makeParserTest: $(OBJS)
 	g++ -g $^ -L../sharedlib  -lAutomat  -lBuffer -lSymboltable -lScanner -o $(BINDIR)/ParserTest
 	
 	
@@ -33,9 +33,9 @@ ParserTest: $(OBJS)
 # $^ liste der abhaengigkeiten
 
 
-$(OBJDIR)/%.o :  $(SRCDIR)/%.cpp 
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp 
 	@echo "g++ -Wall -Wextra -pedantic -std=c++11 $*.cpp"
-	g++ -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $@  $<
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -Wall  -o $@  $<
 
  
  #$@ name des object files

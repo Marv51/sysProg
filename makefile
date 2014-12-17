@@ -1,5 +1,5 @@
 #
-#	baut das komplette Scanner Projekt
+#	baut das komplette Projekt
 #
 
 
@@ -16,7 +16,7 @@ SHAREDLIB = sharedlib
 PARSERDIR = Parser
 
 
-all:	automatLib bufferLib symboltableLib scannerLib parser  
+all: automatLib bufferLib symboltableLib scannerLib parser  
 	@echo "target all"
 
 	
@@ -26,7 +26,6 @@ clean:
 	rm -rf $(BUFFERDIR)/lib/*
 	rm -rf $(SYMBOLTABLEDIR)/lib/*
 	rm -rf $(SCANNERDIR)/lib/*
-	rm -rf $(PARSERDIR)/lib/*
 	rm -rf $(SHAREDLIB)/*
 	rm -rf $(SCANNERDIR)/debug/*
 	rm -rf $(PARSERDIR)/debug/*

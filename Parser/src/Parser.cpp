@@ -8,19 +8,19 @@
 #include "Parser.h"
 
 Parser::Parser(char* input) {
-	scanner = new Scanner(input);
+	// scanner = new Scanner(input);
 	tree = new ParseTree();
 }
 
 Parser::~Parser() {
-delete(scanner);
+// delete(scanner);
 }
 
 ParseTree* Parser::parse(){
-	Token* t = new Token();
-	while(scanner->nextToken(t)){
+	// Token* t = new Token();
+	/*while(scanner->nextToken(t)){
 		t = new Token();
-	}
+	}*/
 
 return tree;
 }

@@ -5,12 +5,12 @@
  *      Author: marvin
  */
 
+//#include "../../Scanner/src/Token.h"
+//#include "../../Scanner/src/Scanner.h"
+#include "ParseTree.h"
+
 #ifndef PARSER_SRC_PARSER_H_
 #define PARSER_SRC_PARSER_H_
-
-#include "../../Scanner/src/Token.h"
-#include "../../Scanner/src/Scanner.h"
-#include "ParseTree.h"
 
 class Parser {
 public:
@@ -18,7 +18,7 @@ public:
 	virtual ~Parser();
 	ParseTree* parse();
 private:
-	Scanner* scanner;
+	//Scanner* scanner;
 	ParseTree* tree;
 
 };
