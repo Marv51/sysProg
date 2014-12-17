@@ -1,6 +1,7 @@
 Scanner/debug/ScannerTest
 debug/*
 !debug/.gittouch
+Parser/debug/ParserTest
 
 # Compiled Object files
 *.slo

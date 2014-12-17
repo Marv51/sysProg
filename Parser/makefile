@@ -14,12 +14,14 @@ SHAREDLIB = ../sharedlib
 ## darauf achten, dass letzte Zeile ohne "\" eingetragen wird
 
 OBJS = $(OBJDIR)/Parser.o \
-	$(OBJDIR)/ParserTest.o
+	$(OBJDIR)/ParserTest.o \
+	$(OBJDIR)/ParseTree.o
 
 #$(OBJDIR)/xx1.o \
 #$(OBJDIR)/xxn.o
 
-OBJSFORPARSERLIB = $(LIBDIR)/Parser.o
+OBJSFORPARSERLIB = $(LIBDIR)/Parser.o \
+				$(LBDIR)/ParseTree.o
 
 makeParserTest: ParserTest
 

@@ -7,12 +7,20 @@
 
 #include "Parser.h"
 
-Parser::Parser() {
-	// TODO Auto-generated constructor stub
-
+Parser::Parser(char* input) {
+	scanner = new Scanner(input);
+	tree = new ParseTree();
 }
 
 Parser::~Parser() {
-	// TODO Auto-generated destructor stub
+delete(scanner);
 }
 
+ParseTree* Parser::parse(){
+	Token* t = new Token();
+	while(scanner->nextToken(t)){
+		t = new Token();
+	}
+
+return tree;
+}
