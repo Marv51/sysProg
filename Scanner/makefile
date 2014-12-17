@@ -87,13 +87,13 @@ cleanScanner:
 
 # erst wichtig fuer den Parser Teil
 #
-#ScannerLib:$(OBJSFORSCANNERLIB)
-#		g++ -shared  -o $(SHAREDLIB)/libScanner.so $^ 
+ScannerLib:$(OBJSFORSCANNERLIB)
+		g++ -shared  -o $(SHAREDLIB)/libScanner.so $^ 
 #
 #	
-#$(LIBDIR)/%.o :  $(SRCDIR)/%.cpp 
-##	@mkdir -p `dirname $(OBJDIR)/$*.o`
-#	@echo "g++ $*.cpp"
-#	g++ -g  -c -fPIC  -o $@  $<
+$(LIBDIR)/%.o :  $(SRCDIR)/%.cpp 
+	@mkdir -p `dirname $(OBJDIR)/$*.o`
+	@echo "g++ -Wall -Wextra -pedantic -std=c++11 $*.cpp"
+	g++ -Wall -Wextra -pedantic -std=c++11 -g  -c -fPIC  -o $@  $<
 
 	
