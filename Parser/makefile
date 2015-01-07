@@ -13,14 +13,14 @@ SHAREDLIB = ../sharedlib
 ## hier alle Object Files eintragen
 ## darauf achten, dass letzte Zeile ohne "\" eingetragen wird
 
-OBJS = $(OBJDIR)/Parser.o \
+OBJS = $(OBJDIR)/Node.o \
 	$(OBJDIR)/ParserTest.o \
 	$(OBJDIR)/ParseTree.o
 
 #$(OBJDIR)/xx1.o \
 #$(OBJDIR)/xxn.o
 
-OBJSFORPARSERLIB = $(LIBDIR)/Parser.o \
+OBJSFORPARSERLIB = $(LIBDIR)/Node.o \
 				$(LIBDIR)/ParseTree.o
 
 

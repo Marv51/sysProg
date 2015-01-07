@@ -7,12 +7,16 @@
 
 #include "ParseTree.h"
 
-ParseTree::ParseTree() {
-	// TODO Auto-generated constructor stub
-
+ParseTree::ParseTree(Scanner* scan) {
+	scanner = scan;
+	root = new Node(Nodetypes::PROG, scanner);
 }
 
 ParseTree::~ParseTree() {
-	// TODO Auto-generated destructor stub
 }
 
+void ParseTree::parse() {
+	Token* t = new Token();
+	scanner->nextToken(t);
+
+}
