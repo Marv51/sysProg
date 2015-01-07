@@ -18,5 +18,5 @@ ParseTree::~ParseTree() {
 void ParseTree::parse() {
 	Token* t = new Token();
 	scanner->nextToken(t);
-
+	root->insert(t);
 }

@@ -26,7 +26,7 @@ OBJSFORPARSERLIB = $(LIBDIR)/Node.o \
 
 
 makeParserTest: $(OBJS)
-	g++ -g $^ -L../sharedlib  -lAutomat  -lBuffer -lSymboltable -lScanner -o $(BINDIR)/ParserTest
+	g++ -g $^ -L../sharedlib -lScanner  -lAutomat  -lBuffer -lSymboltable -o $(BINDIR)/ParserTest
 	
 	
 	
