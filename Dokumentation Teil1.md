@@ -131,7 +131,10 @@ Die Methode `getInfo` gibt zu einem übergebenen Schlüssel die entsprechende In
 ### Implementierung
 Im Konstruktor des Scanners wird ein neuer Buffer mit dem Übergebenen Dateipfad hergestellt, außerdem wird ein neuer Automat und eine neue Symboltabelle erstellt.
 Solange das eingegebene Token noch leer ist, und kein Kommentar, wird nach dem nächsten Token gesucht:
-Es wird immer ein Zeichen aus dem Buffer geladen, dieses Zeichen wird in einer Liste gespeichert, dann wird es in den Automaten gegeben. Das wird solange getan bis der Buffer zurückgibt, dass er kein weiteres Zeichen möchte. 
+Es wird immer ein Zeichen aus dem Buffer geladen, dieses Zeichen wird in einer Liste gespeichert, dann wird es in den Automaten gegeben. 
+Die Liste wird weiter unten dokumentiert.
+
+Das wird solange getan bis der Buffer zurückgibt, dass er kein weiteres Zeichen möchte. 
 Dann wird der letzten Finale Zustand des Automaten im Token gespeichert. Und so viele Zeichen wieder zurück gesprungen werden wie seit dem letzten Finalen Zustand in den Automaten gegeben wurden.
 Danach wird im Token die Zeile und Spalte die der Automat gezählt hat gespeichert.
 Jetzt wird noch  mit Hilfe der privaten Methode `makeInfo(Token* t)` das Token in die Symboltabelle eingefügt.
@@ -147,4 +150,25 @@ Zur Kontrolle wird dann überprüft ob der Wert des Tokens ungleich -1 ist, dass
 
 Abschließend wird noch der Key im Token gespeichert.
 
+### Die Liste
+Idee: Um Buchstaben bequem in einer Liste speichern zu können, von deren Ende man Buchstaben auch wieder entfernen kann. , haben wir unsere Liste gebaut. Das macht natürlich nur Sinn wenn man weiß, dass wir keine fertigen Datenstrukturen verwenden dürfen.
 
+Die Öffentlichen Methoden unserer Liste sind:
+1. `void push(char ch)`
+2. `char pop()`
+3. `char* getString()`
+4. `bool isEmpty()`
+5. `void clear()`
+
+Die Liste ist eigentlich nicht als Liste implementiert, sondern als automatisch wachsendes Array.
+
+Mit `push` wird an die Stelle des internen Zählers ein neues Zeichen geschreiben. Der Zähler wird um eins erhöht und an die Stelle an der, der Zähler dann steht wird `\0`eingefügt. Probleme gibt es nur wenn das aktuelle Array nicht groß genug ist:
+in diesem Fall wird doppelt so viel Speicher wie das Array im Moment belegt angefordert und der Inhalt des aktuellen Arrays in das neue Array kopiert. Dann wird das alte Array gelöscht und durch das neue Array ersetzt.
+
+Die Methode `pop()` gibt das letzte Zeichen zurück und überschreibt seine Position vorher mit `\0`. Die Liste schrumpft nicht wieder.
+
+Die Methode `getString` gibt einfach einen Pointer auf das erste Element zurück, da wir immer am Ende des benutzenBereichs des Arrays ein `\0` einfügen. `isEmpty()` ist ebenfalls trivial wir verwenden einen internen Zähler der einfach mit 0 verglichen wird.
+`clear` setzt den internen Zähler wieder auf 0 und fügt an der ersten Stelle im Array ein `\0` ein.
+
+Im Konstruktor wird eine leere Liste angelegt mit Platz für 8 Zeichen.
+Im Destruktor wird der Speicherplatz der Liste immer wieder freigegeben.
