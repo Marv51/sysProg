@@ -116,6 +116,35 @@ Wenn der Übergang Undefined ist, wird false zurückgegeben, dies ist dann das E
 
 Scanner
 -------
-Der Scanner hat die Methode nextToken und die Methode ?
 
-Die Methode Next Token ließt solange Zeichen aus dem Buffer bis ein Token zusammengebaut werden kann. Und Verknüpft dieses Token dann mit der Symboltabelle.
+### Anforderung
+Der Scanner baut die einzelnen Teile zusammen und steuert den Datenaustausch.
+Der Scanner bekommt im Konstruktor den Pfad einer Eingabedatei. Diese Datei wird mit jedem aufruf von nextToken um ein Token ausgelesen und dieses Token zurückgegeben.
+
+###public
+Der Scanner hat die Methode `bool nextToken(Token* t)` und die Methode `Information* getInfo(uint16_t key)`
+
+Die Methode `nextToken` ließt solange Zeichen aus dem Buffer bis ein Token zusammengebaut werden kann. Und Verknüpft dieses Token dann mit der Symboltabelle. Wenn man am Ende der Datei ist und also kein Token mehr gebaut werden kann, wird false zurückgegeben.
+
+Die Methode `getInfo` gibt zu einem übergebenen Schlüssel die entsprechende Information aus der Symboltabelle zurück.
+
+### Implementierung
+Im Konstruktor des Scanners wird ein neuer Buffer mit dem Übergebenen Dateipfad hergestellt, außerdem wird ein neuer Automat und eine neue Symboltabelle erstellt.
+Solange das eingegebene Token noch leer ist, und kein Kommentar, wird nach dem nächsten Token gesucht:
+Es wird immer ein Zeichen aus dem Buffer geladen, dieses Zeichen wird in einer Liste gespeichert, dann wird es in den Automaten gegeben. Das wird solange getan bis der Buffer zurückgibt, dass er kein weiteres Zeichen möchte. 
+Dann wird der letzten Finale Zustand des Automaten im Token gespeichert. Und so viele Zeichen wieder zurück gesprungen werden wie seit dem letzten Finalen Zustand in den Automaten gegeben wurden.
+Danach wird im Token die Zeile und Spalte die der Automat gezählt hat gespeichert.
+Jetzt wird noch  mit Hilfe der privaten Methode `makeInfo(Token* t)` das Token in die Symboltabelle eingefügt.
+Am Ende zurückgegeben wird, ob der Buffer noch weitere Zeichen hat.
+
+Die Methode `getInfo` ruft einfach nur den Methode `getInfo`  der Symboltabelle mit dem Übergebenen Schlüssel  auf und gibt deren Resultat zurück.
+
+### Die Methode `makeInfo`
+Wandelt den TokenTyp im Token ein einen InfoTyp um. State::Number wird zu InfoTyp::Integer State::Identifier wird zu InfoTyp::Identifier, State::Fehler wird zu InfoTyp::Fehler, und die Zustände die ein Zeichen sind werden zu InfoTyp::Sign.
+
+Mit der newInfo Methode der Symboltabelle wird jetzt der Inhalt des Tokens und dessen InfoTyp gespeichert und zurück wird ein Key gegeben mit dem man später wieder auf die Information zugreifen kann. 
+Zur Kontrolle wird dann überprüft ob der Wert des Tokens ungleich -1 ist, dass würde eine Bereichsüberschreitung hinweisen., dann wird der Typ auf Fehler gesetzt.
+
+Abschließend wird noch der Key im Token gespeichert.
+
+
