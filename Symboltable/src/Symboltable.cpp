@@ -25,7 +25,7 @@ Symboltable::~Symboltable() {
 			delete (informations[i]);
 		}
 	}
-	//TODO Memory Leak informations[i].nextInformation werden nicht gelöscht.
+	//informations[i].nextInformation werden im Destruktor der "obersten" Informationen gelöscht.
 	free(informations);
 	free(keys);
 }
