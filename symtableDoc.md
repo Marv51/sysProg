@@ -25,6 +25,56 @@ zu 3. ) Der Hashwert der Informationen wird hier mithilfe des Lexems berechnet i
 
 Als Speicher der Keys und der Informationen dienen die Arrays `Information** informations` und `int* keys`. Das Attribut `memsize` legt die Größe der Hashmap `informations` fest und `keysizemax` die momentane Größe des Speichers des `keys` Arrays. Das Attribut `keysize` zählt die tatsächliche Größe des `keys` Arrays mit.
 
-### Fehlerbehandlung
 
-In der Klasse Symboltable können Fehler auftreten.
+Information
+------
+
+Anforderung: Die Klasse `Information` dient zum speichern der Informationen in der Symboltabelle. Sie speichert das Lexem, den Key in der Symboltabelle, ihren `InfoTyp` und ihren Wert für Zahlen.
+
+## Public
+
+Der Konstruktor der Klasse erwartet als Parameter das Lexem der Information und den Key. Diese werden abgespeichert und alle anderen Attribute werden auf ihre Standartwerte gesetzt.
+
+`char* getLexem()`: Liefert das Lexem der Information zurück.
+
+`void setLexem(char* lex)`: Ändert das Lexem zu dem Wert des Parameters.
+
+`bool compareLexem(char* lex)`: Liefert true zurück, wenn das übergebene Lexem das gleiche ist wie das gespeicherte.
+
+`Information* getNextInfo()`: Liefert das Attribut `nextInfo` zurück.
+
+`void setNextInfo(Information* info)`: Ändert das Attribut nextInfo zu dem Wert des Parameters.
+
+`uint16_t getKey()`: Liefert den Key der Information zurück.
+
+`int getValue()`: Liefert den Inhalt des Tokens als Integer konvertiert zurück. Beim ersten Aufruf wird dieser Berechnet. Wenn eine Berechsüberschreitung (x < 0 oder x > `INT_MAX`) vorliegt, dann wird der Wert -1 zurückgegeben.
+
+`InfoTyp getType()`: Liefert den Typ der Information als `InfoTyp`-enum zurück.
+
+`void setType(InfoTyp t)`: Ändert den Wert des Typs der Information.
+
+## Attribute
+
+`InfoTyp type`: Der Typ der Information: (Standartwert Unknown)
+
+`enum class InfoTyp{
+	Unknown,
+	Sign,
+	Integer,
+	Identifier,
+	iftyp,
+	whiletyp,
+	elsetyp,
+	inttyp,
+	writetyp,
+	readtyp,
+	Fehler
+};`
+
+`char* lexem`: Das Lexem der Information.
+
+`Information* nextInfo`: Bei doppeltem Hashwert in der Symboltabelle wird hiermit die Linked List realisiert. (Standartwert NULL)
+
+`uint16_t key`: Der Key der Information in der Symboltabelle.
+
+`int value`: Das Lexem als Integer. (Standartwert -1)
