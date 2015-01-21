@@ -172,3 +172,15 @@ Die Methode `getString` gibt einfach einen Pointer auf das erste Element zurück
 
 Im Konstruktor wird eine leere Liste angelegt mit Platz für 8 Zeichen.
 Im Destruktor wird der Speicherplatz der Liste immer wieder freigegeben.
+
+
+Token
+-----
+Der Quelltext der vom Buffer eingelesen wird, soll im Scanner in Tokens aufgespalten werden. Diese Tokens haben Zeilen un Spalten Information, sowie einen Typen, einen Inhalt und einen Key. Mit dem Key kann man dann die Information die mit diesem Token verbunden ist in der Symboltabelle abrufen.
+
+Für Zeile und Spalte gibt es Getter und Setter (`int getZeile(), int getSpalte(), void setZeile(int Zeile), void setSpalte(int Spalte)`).
+Für TokenTyp und Key ebenso (`State getTokenTyp(), void setTokenTyp(State t), void setKey(uint16_t key) und uint16_t getKey()`)
+
+Der Inhalt wird in einer Liste gespeichert, diese Liste wird im Konstruktor angelegt und ist über die content Variable öffentlich Zugänglich. Die Methode `char* getContent()` liefert die Liste als Zeichenkette zurück.
+
+Zusätzlich hat ein Token noch die Methode `const char* getTokenTypeString()` das den aktuellen TokenTyp als Zeichenkettte für die Ausgabe zurückgibt. Ein TokenTyp ist ein enum, und kann damit in ein Integer umgewandelt werden. Dieser Wird als Index für ein Array mit den Namen der TokenTypen verwendet und der String zurückgegeben.
