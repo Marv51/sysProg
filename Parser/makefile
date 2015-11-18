@@ -15,13 +15,13 @@ SHAREDLIB = ../sharedlib
 
 OBJS = $(OBJDIR)/Node.o \
 	$(OBJDIR)/ParserTest.o \
-	$(OBJDIR)/ParseTree.o
+	$(OBJDIR)/Parser.o
 
 #$(OBJDIR)/xx1.o \
 #$(OBJDIR)/xxn.o
 
 OBJSFORPARSERLIB = $(LIBDIR)/Node.o \
-				$(LIBDIR)/ParseTree.o
+				$(LIBDIR)/Parser.o
 
 
 
