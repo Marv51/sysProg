@@ -20,6 +20,7 @@ public:
 	Information* getInfo(uint16_t key);
 	uint16_t newInfo(char* lexem, InfoTyp t);
 	uint16_t hash(char* ch);
+	Information* searchInfo(char* lexem);
 private:
 	uint16_t memsize;
 	Information** informations;

@@ -54,6 +54,15 @@ Information* Symboltable::getInfo(uint16_t key) {
 	return i;
 }
 
+Information* Symboltable::searchInfo(char* lexem) {
+	uint16_t derHash = hash(lexem);
+	Information* info = informations[derHash];
+	while (info != '\0' && strcmp(info->getLexem(), lexem) != 0) {
+		info = info->getNextInfo();
+	}
+	return info;
+}
+
 void Symboltable::keySizeBigger() {
 	keysize++;
 	if (keysize >= keysizemax) {
@@ -68,7 +77,7 @@ void Symboltable::keySizeBigger() {
 uint16_t Symboltable::newInfo(char* lexem, InfoTyp t) {
 	uint16_t derHash = hash(lexem);
 	uint16_t key = keysize;
-	Information* newInfo = new Information(lexem, key );
+	Information* newInfo = new Information(lexem, key);
 	newInfo->setType(t);
 	keys[key] = derHash;
 	keySizeBigger();
@@ -78,7 +87,8 @@ uint16_t Symboltable::newInfo(char* lexem, InfoTyp t) {
 		informations[derHash] = i_next;
 	} else {
 		do {
-			if (t == i_next->getType() && strcmp(lexem, i_next->getLexem()) == 0) {
+			if (t == i_next->getType()
+					&& strcmp(lexem, i_next->getLexem()) == 0) {
 				keysize--;
 				delete newInfo;
 				return i_next->getKey();
@@ -95,13 +105,13 @@ uint16_t Symboltable::newInfo(char* lexem, InfoTyp t) {
 
 void Symboltable::initSymbols() {
 	// Keys für reservierte Ausdrücke:
-	newInfo((char *)"if", InfoTyp::iftyp);
-	newInfo((char *)"IF", InfoTyp::iftyp);
-	newInfo((char *)"while", InfoTyp::whiletyp);
-	newInfo((char *)"WHILE", InfoTyp::whiletyp);
-	newInfo((char *)"else", InfoTyp::elsetyp);
-	newInfo((char *)"ELSE", InfoTyp::elsetyp);
-	newInfo((char *)"int", InfoTyp::inttyp);
-	newInfo((char *)"write", InfoTyp::writetyp);
-	newInfo((char *)"read", InfoTyp::readtyp);
+	newInfo((char *) "if", InfoTyp::iftyp);
+	newInfo((char *) "IF", InfoTyp::iftyp);
+	newInfo((char *) "while", InfoTyp::whiletyp);
+	newInfo((char *) "WHILE", InfoTyp::whiletyp);
+	newInfo((char *) "else", InfoTyp::elsetyp);
+	newInfo((char *) "ELSE", InfoTyp::elsetyp);
+	newInfo((char *) "int", InfoTyp::inttyp);
+	newInfo((char *) "write", InfoTyp::writetyp);
+	newInfo((char *) "read", InfoTyp::readtyp);
 }

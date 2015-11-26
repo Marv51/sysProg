@@ -38,7 +38,7 @@ bool Scanner::nextToken(Token* t) {
 		if (lastFinal == State::Fehler) {
 			stepBack--; //Bei einem Fehler muss das fehlerhafte Zeichen beim nächsten mal übersprungen werden
 		}
-		if (lastFinal == State::Start){
+		if (lastFinal == State::Start) {
 			t->content->pop();
 			stepBack--;
 		}
@@ -58,20 +58,26 @@ Information* Scanner::getInfo(uint16_t key) {
 }
 
 void Scanner::makeInfo(Token* t) {
-	InfoTyp type = InfoTyp::Unknown;
-	State toktype = t->getTokenType();
-	if (toktype == State::Number) {
-		type = InfoTyp::Integer;
-	} else if (toktype == State::Identifier) {
-		type = InfoTyp::Identifier;
-	} else if ((int)toktype >= 4 && (int)toktype <= 23) { // Sign
-		type = InfoTyp::Sign;
-	} else if (toktype == State::Fehler) {
-		type = InfoTyp::Fehler;
+	// Prüfen ob Information schon existiert:
+	Information* info = symtable->searchInfo(t->getContent());
+	if (info != '\0') {
+		t->setKey(info->getKey());
+	} else { // Sonst neu anlegen
+		InfoTyp type = InfoTyp::Unknown;
+		State toktype = t->getTokenType();
+		if (toktype == State::Number) {
+			type = InfoTyp::Integer;
+		} else if (toktype == State::Identifier) {
+			type = InfoTyp::Identifier;
+		} else if ((int) toktype >= 4 && (int) toktype <= 23) { // Sign
+			type = InfoTyp::Sign;
+		} else if (toktype == State::Fehler) {
+			type = InfoTyp::Fehler;
+		}
+		uint16_t key = symtable->newInfo(t->getContent(), type);
+		if (symtable->getInfo(key)->getValue() == -1) {
+			symtable->getInfo(key)->setType(InfoTyp::Fehler);
+		}
+		t->setKey(key);
 	}
-	uint16_t key = symtable->newInfo(t->getContent(), type);
-	if (symtable->getInfo(key)->getValue() == -1) {
-		symtable->getInfo(key)->setType(InfoTyp::Fehler);
-	}
-	t->setKey(key);
 }
