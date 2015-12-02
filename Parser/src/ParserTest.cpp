@@ -29,7 +29,8 @@ int main(int argc, char** argv) {
 	fs.open(output, std::fstream::out | std::fstream::trunc);
 	printf("Processing ...\n");
 	auto parser = new Parser(scanner);
-	parser->parse();
+	auto root = parser->parse();
+	root->print(0);
 	/*
 	 do {
 	 delete t;

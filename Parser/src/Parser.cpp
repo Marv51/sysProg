@@ -16,131 +16,151 @@ Parser::Parser(Scanner* s) {
 Parser::~Parser() {
 }
 
-void Parser::parse() {
-	parseProg();
+Node* Parser::parse() {
+	return parseProg();
 }
 
-void Parser::parseProg() {
-	createNode();
-	parseDecls();
-	parseStatements();
+Node* Parser::parseProg() {
+	auto prog = createNode(NodeType::PROG);
+	auto decls = parseDecls();
+	prog->addNode(decls);
+	auto statements = parseStatements();
+	prog->addNode(statements);
+	return prog;
 }
 
-void Parser::parseDecls() {
+Node* Parser::parseDecls() {
+	auto decls = createNode(NodeType::DECLS);
 	auto info = scanner->getInfo(token->getKey());
 	if (info->getType() == InfoTyp::inttyp) {
-		parseDecl();
-		match(State::Semikolon);
-		parseDecls();
+		decls->addNode(parseDecl());
+		decls->addNode(match(State::Semikolon));
+		decls->addNode(parseDecls());
 	}
+	return decls;
 }
 
-void Parser::parseDecl() {
-	match(InfoTyp::inttyp);
-	parseArray();
-	match(InfoTyp::Identifier);
+Node* Parser::parseDecl() {
+	auto decl = createNode(NodeType::DECL);
+	decl->addNode(match(InfoTyp::inttyp));
+	decl->addNode(parseArray());
+	decl->addNode(match(InfoTyp::Identifier));
+	return decl;
 }
 
-void Parser::parseArray() {
+Node* Parser::parseArray() {
+	auto array = createNode(NodeType::ARRAY);
 	if (token->getTokenType() == State::EckigeKlammerAuf) {
-		match(State::EckigeKlammerAuf);
-		match(State::Number);
-		match(State::EckigeKlammerZu);
+		array->addNode(match(State::EckigeKlammerAuf));
+		array->addNode(match(State::Number));
+		array->addNode(match(State::EckigeKlammerZu));
 	}
+	return array;
 }
 
-void Parser::parseStatements() {
+Node* Parser::parseStatements() {
+	auto statements = createNode(NodeType::STATEMENTS);
 	auto infoType = scanner->getInfo(token->getKey())->getType();
 	auto tokenType = token->getTokenType();
 	if (infoType == InfoTyp::Identifier || infoType == InfoTyp::writetyp
 			|| infoType == InfoTyp::readtyp
 			|| tokenType == State::GeschweifteKlammerAuf
 			|| infoType == InfoTyp::iftyp || infoType == InfoTyp::whiletyp) {
-		parseStatement();
-		match(State::Semikolon);
-		parseStatements();
+		statements->addNode(parseStatement());
+		statements->addNode(match(State::Semikolon));
+		statements->addNode(parseStatements());
 	}
+	return statements;
 }
 
-void Parser::parseStatement() {
+Node* Parser::parseStatement() {
+	auto statement = createNode(NodeType::STATEMENT);
 	auto infoType = scanner->getInfo(token->getKey())->getType();
 	auto tokenType = token->getTokenType();
 	if (infoType == InfoTyp::Identifier) {
-		match(InfoTyp::Identifier);
-		parseIndex();
-		match(State::DoppelpunktIstGleich);
-		parseExp();
+		statement->addNode(match(InfoTyp::Identifier));
+		statement->addNode(parseIndex());
+		statement->addNode(match(State::DoppelpunktIstGleich));
+		statement->addNode(parseExp());
 	} else if (infoType == InfoTyp::writetyp) {
-		match(InfoTyp::writetyp);
-		match(State::RundeKlammerAuf);
-		parseExp();
-		match(State::RundeKlammerZu);
+		statement->addNode(match(InfoTyp::writetyp));
+		statement->addNode(match(State::RundeKlammerAuf));
+		statement->addNode(parseExp());
+		statement->addNode(match(State::RundeKlammerZu));
 	} else if (infoType == InfoTyp::readtyp) {
-		match(InfoTyp::readtyp);
-		match(State::RundeKlammerAuf);
-		match(InfoTyp::Identifier);
-		parseIndex();
-		match(State::RundeKlammerZu);
+		statement->addNode(match(InfoTyp::readtyp));
+		statement->addNode(match(State::RundeKlammerAuf));
+		statement->addNode(match(InfoTyp::Identifier));
+		statement->addNode(parseIndex());
+		statement->addNode(match(State::RundeKlammerZu));
 	} else if (tokenType == State::GeschweifteKlammerAuf) {
-		match(State::GeschweifteKlammerAuf);
-		parseStatements();
-		match(State::GeschweifteKlammerZu);
+		statement->addNode(match(State::GeschweifteKlammerAuf));
+		statement->addNode(parseStatements());
+		statement->addNode(match(State::GeschweifteKlammerZu));
 	} else if (infoType == InfoTyp::iftyp) {
-		match(InfoTyp::iftyp);
-		match(State::RundeKlammerAuf);
-		parseExp();
-		match(State::RundeKlammerZu);
-		parseStatement();
-		match(InfoTyp::elsetyp);
-		parseStatement();
+		statement->addNode(match(InfoTyp::iftyp));
+		statement->addNode(match(State::RundeKlammerAuf));
+		statement->addNode(parseExp());
+		statement->addNode(match(State::RundeKlammerZu));
+		statement->addNode(parseStatement());
+		statement->addNode(match(InfoTyp::elsetyp));
+		statement->addNode(parseStatement());
 	} else if (infoType == InfoTyp::whiletyp) {
-		match(InfoTyp::whiletyp);
-		match(State::RundeKlammerAuf);
-		parseExp();
-		match(State::RundeKlammerZu);
-		parseStatement();
+		statement->addNode(match(InfoTyp::whiletyp));
+		statement->addNode(match(State::RundeKlammerAuf));
+		statement->addNode(parseExp());
+		statement->addNode(match(State::RundeKlammerZu));
+		statement->addNode(parseStatement());
 	} else {
 		error();
 	}
+	return statement;
 }
 
-void Parser::parseExp() {
-	parseExp2();
-	parseOpExp();
+Node* Parser::parseExp() {
+	auto exp = createNode(NodeType::EXP);
+	exp->addNode(parseExp2());
+	exp->addNode(parseOpExp());
+	return exp;
 }
 
-void Parser::parseExp2() {
+Node* Parser::parseExp2() {
+	auto exp2 = createNode(NodeType::EXP2);
 	auto infoType = scanner->getInfo(token->getKey())->getType();
 	auto tokenType = token->getTokenType();
 	if (tokenType == State::RundeKlammerAuf) {
-		match(State::RundeKlammerAuf);
-		parseExp();
-		match(State::RundeKlammerZu);
+		exp2->addNode(match(State::RundeKlammerAuf));
+		exp2->addNode(parseExp());
+		exp2->addNode(match(State::RundeKlammerZu));
 	} else if (infoType == InfoTyp::Identifier) {
-		match(InfoTyp::Identifier);
-		parseIndex();
+		exp2->addNode(match(InfoTyp::Identifier));
+		exp2->addNode(parseIndex());
 	} else if (infoType == InfoTyp::Integer) {
-		match(InfoTyp::Integer);
+		exp2->addNode(match(InfoTyp::Integer));
 	} else if (tokenType == State::Minus) {
-		match(State::Minus);
-		parseExp2();
+		exp2->addNode(match(State::Minus));
+		exp2->addNode(parseExp2());
 	} else if (tokenType == State::Ausrufezeichen) {
-		match(State::Ausrufezeichen);
-		parseExp2();
+		exp2->addNode(match(State::Ausrufezeichen));
+		exp2->addNode(parseExp2());
 	} else {
 		error();
 	}
+	return exp2;
 }
 
-void Parser::parseIndex() {
+Node* Parser::parseIndex() {
+	auto index = createNode(NodeType::INDEX);
 	if (token->getTokenType() == State::EckigeKlammerAuf) {
-		match(State::EckigeKlammerAuf);
-		parseExp();
-		match(State::EckigeKlammerZu);
+		index->addNode(match(State::EckigeKlammerAuf));
+		index->addNode(parseExp());
+		index->addNode(match(State::EckigeKlammerZu));
 	}
+	return index;
 }
 
-void Parser::parseOpExp() {
+Node* Parser::parseOpExp() {
+	auto op_exp = createNode(NodeType::OP_EXP);
 	auto tokenType = token->getTokenType();
 	if (tokenType == State::Plus || tokenType == State::Minus
 			|| tokenType == State::Stern
@@ -148,34 +168,37 @@ void Parser::parseOpExp() {
 			|| tokenType == State::KleinerAls || tokenType == State::GroesserAls
 			|| tokenType == State::kleinerDoppelpunktGroesser
 			|| tokenType == State::UndZeichen) {
-		parseOp();
-		parseExp();
+		op_exp->addNode(parseOp());
+		op_exp->addNode(parseExp());
 	}
+	return op_exp;
 }
 
-void Parser::parseOp() {
+Node* Parser::parseOp() {
+	auto op = createNode(NodeType::OP);
 	auto tokenType = token->getTokenType();
 	if (tokenType == State::Plus) {
-		match(State::Plus);
+		op->addNode(match(State::Plus));
 	} else if (tokenType == State::Minus) {
-		match(State::Minus);
+		op->addNode(match(State::Minus));
 	} else if (tokenType == State::Stern) {
-		match(State::Stern);
+		op->addNode(match(State::Stern));
 	} else if (tokenType == State::VorwaertsSchraegstrich) {
-		match(State::VorwaertsSchraegstrich);
+		op->addNode(match(State::VorwaertsSchraegstrich));
 	} else if (tokenType == State::KleinerAls) {
-		match(State::KleinerAls);
+		op->addNode(match(State::KleinerAls));
 	} else if (tokenType == State::GroesserAls) {
-		match(State::GroesserAls);
+		op->addNode(match(State::GroesserAls));
 	} else if (tokenType == State::IstGleichZeichen) {
-		match(State::IstGleichZeichen);
+		op->addNode(match(State::IstGleichZeichen));
 	} else if (tokenType == State::kleinerDoppelpunktGroesser) {
-		match(State::kleinerDoppelpunktGroesser);
+		op->addNode(match(State::kleinerDoppelpunktGroesser));
 	} else if (tokenType == State::UndZeichen) {
-		match(State::UndZeichen);
+		op->addNode(match(State::UndZeichen));
 	} else {
 		error();
 	}
+	return op;
 }
 
 void Parser::nextToken() {
@@ -183,20 +206,24 @@ void Parser::nextToken() {
 	scanner->nextToken(token);
 }
 
-void Parser::match(State typ) {
+Node* Parser::match(State typ) {
 	if (token->getTokenType() != typ) {
 		error();
 	}
-	delete token;
+	auto leaf = createNode(NodeType::LEAF);
+	leaf->setKey(token->getKey(), token->getContent());
 	nextToken();
+	return leaf;
 }
 
-void Parser::match(InfoTyp typ) {
+Node* Parser::match(InfoTyp typ) {
 	if (scanner->getInfo(token->getKey())->getType() != typ) {
 		error();
 	}
-	delete token;
+	auto leaf = createNode(NodeType::LEAF);
+	leaf->setKey(token->getKey(), token->getContent());
 	nextToken();
+	return leaf;
 }
 
 void Parser::error() {
@@ -204,4 +231,8 @@ void Parser::error() {
 			token->getContent(), token->getZeile(), token->getSpalte());
 	printf("Typ: '%s'", token->getTokenTypeString());
 	exit(1);
+}
+
+Node* Parser::createNode(NodeType ntype) {
+	return new Node(ntype);
 }
