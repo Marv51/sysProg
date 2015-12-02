@@ -21,6 +21,7 @@ void Parser::parse() {
 }
 
 void Parser::parseProg() {
+	createNode();
 	parseDecls();
 	parseStatements();
 }
@@ -29,22 +30,22 @@ void Parser::parseDecls() {
 	auto info = scanner->getInfo(token->getKey());
 	if (info->getType() == InfoTyp::inttyp) {
 		parseDecl();
-		accept(State::Semikolon);
+		match(State::Semikolon);
 		parseDecls();
 	}
 }
 
 void Parser::parseDecl() {
-	accept(InfoTyp::inttyp);
+	match(InfoTyp::inttyp);
 	parseArray();
-	accept(InfoTyp::Identifier);
+	match(InfoTyp::Identifier);
 }
 
 void Parser::parseArray() {
 	if (token->getTokenType() == State::EckigeKlammerAuf) {
-		accept(State::EckigeKlammerAuf);
-		accept(State::Number);
-		accept(State::EckigeKlammerZu);
+		match(State::EckigeKlammerAuf);
+		match(State::Number);
+		match(State::EckigeKlammerZu);
 	}
 }
 
@@ -56,7 +57,7 @@ void Parser::parseStatements() {
 			|| tokenType == State::GeschweifteKlammerAuf
 			|| infoType == InfoTyp::iftyp || infoType == InfoTyp::whiletyp) {
 		parseStatement();
-		accept(State::Semikolon);
+		match(State::Semikolon);
 		parseStatements();
 	}
 }
@@ -65,38 +66,38 @@ void Parser::parseStatement() {
 	auto infoType = scanner->getInfo(token->getKey())->getType();
 	auto tokenType = token->getTokenType();
 	if (infoType == InfoTyp::Identifier) {
-		accept(InfoTyp::Identifier);
+		match(InfoTyp::Identifier);
 		parseIndex();
-		accept(State::DoppelpunktIstGleich);
+		match(State::DoppelpunktIstGleich);
 		parseExp();
 	} else if (infoType == InfoTyp::writetyp) {
-		accept(InfoTyp::writetyp);
-		accept(State::RundeKlammerAuf);
+		match(InfoTyp::writetyp);
+		match(State::RundeKlammerAuf);
 		parseExp();
-		accept(State::RundeKlammerZu);
+		match(State::RundeKlammerZu);
 	} else if (infoType == InfoTyp::readtyp) {
-		accept(InfoTyp::readtyp);
-		accept(State::RundeKlammerAuf);
-		accept(InfoTyp::Identifier);
+		match(InfoTyp::readtyp);
+		match(State::RundeKlammerAuf);
+		match(InfoTyp::Identifier);
 		parseIndex();
-		accept(State::RundeKlammerZu);
+		match(State::RundeKlammerZu);
 	} else if (tokenType == State::GeschweifteKlammerAuf) {
-		accept(State::GeschweifteKlammerAuf);
+		match(State::GeschweifteKlammerAuf);
 		parseStatements();
-		accept(State::GeschweifteKlammerZu);
+		match(State::GeschweifteKlammerZu);
 	} else if (infoType == InfoTyp::iftyp) {
-		accept(InfoTyp::iftyp);
-		accept(State::RundeKlammerAuf);
+		match(InfoTyp::iftyp);
+		match(State::RundeKlammerAuf);
 		parseExp();
-		accept(State::RundeKlammerZu);
+		match(State::RundeKlammerZu);
 		parseStatement();
-		accept(InfoTyp::elsetyp);
+		match(InfoTyp::elsetyp);
 		parseStatement();
 	} else if (infoType == InfoTyp::whiletyp) {
-		accept(InfoTyp::whiletyp);
-		accept(State::RundeKlammerAuf);
+		match(InfoTyp::whiletyp);
+		match(State::RundeKlammerAuf);
 		parseExp();
-		accept(State::RundeKlammerZu);
+		match(State::RundeKlammerZu);
 		parseStatement();
 	} else {
 		error();
@@ -112,19 +113,19 @@ void Parser::parseExp2() {
 	auto infoType = scanner->getInfo(token->getKey())->getType();
 	auto tokenType = token->getTokenType();
 	if (tokenType == State::RundeKlammerAuf) {
-		accept(State::RundeKlammerAuf);
+		match(State::RundeKlammerAuf);
 		parseExp();
-		accept(State::RundeKlammerZu);
+		match(State::RundeKlammerZu);
 	} else if (infoType == InfoTyp::Identifier) {
-		accept(InfoTyp::Identifier);
+		match(InfoTyp::Identifier);
 		parseIndex();
 	} else if (infoType == InfoTyp::Integer) {
-		accept(InfoTyp::Integer);
+		match(InfoTyp::Integer);
 	} else if (tokenType == State::Minus) {
-		accept(State::Minus);
+		match(State::Minus);
 		parseExp2();
 	} else if (tokenType == State::Ausrufezeichen) {
-		accept(State::Ausrufezeichen);
+		match(State::Ausrufezeichen);
 		parseExp2();
 	} else {
 		error();
@@ -133,9 +134,9 @@ void Parser::parseExp2() {
 
 void Parser::parseIndex() {
 	if (token->getTokenType() == State::EckigeKlammerAuf) {
-		accept(State::EckigeKlammerAuf);
+		match(State::EckigeKlammerAuf);
 		parseExp();
-		accept(State::EckigeKlammerZu);
+		match(State::EckigeKlammerZu);
 	}
 }
 
@@ -155,23 +156,23 @@ void Parser::parseOpExp() {
 void Parser::parseOp() {
 	auto tokenType = token->getTokenType();
 	if (tokenType == State::Plus) {
-		accept(State::Plus);
+		match(State::Plus);
 	} else if (tokenType == State::Minus) {
-		accept(State::Minus);
+		match(State::Minus);
 	} else if (tokenType == State::Stern) {
-		accept(State::Stern);
+		match(State::Stern);
 	} else if (tokenType == State::VorwaertsSchraegstrich) {
-		accept(State::VorwaertsSchraegstrich);
+		match(State::VorwaertsSchraegstrich);
 	} else if (tokenType == State::KleinerAls) {
-		accept(State::KleinerAls);
+		match(State::KleinerAls);
 	} else if (tokenType == State::GroesserAls) {
-		accept(State::GroesserAls);
+		match(State::GroesserAls);
 	} else if (tokenType == State::IstGleichZeichen) {
-		accept(State::IstGleichZeichen);
+		match(State::IstGleichZeichen);
 	} else if (tokenType == State::kleinerDoppelpunktGroesser) {
-		accept(State::kleinerDoppelpunktGroesser);
+		match(State::kleinerDoppelpunktGroesser);
 	} else if (tokenType == State::UndZeichen) {
-		accept(State::UndZeichen);
+		match(State::UndZeichen);
 	} else {
 		error();
 	}
@@ -182,7 +183,7 @@ void Parser::nextToken() {
 	scanner->nextToken(token);
 }
 
-void Parser::accept(State typ) {
+void Parser::match(State typ) {
 	if (token->getTokenType() != typ) {
 		error();
 	}
@@ -190,7 +191,7 @@ void Parser::accept(State typ) {
 	nextToken();
 }
 
-void Parser::accept(InfoTyp typ) {
+void Parser::match(InfoTyp typ) {
 	if (scanner->getInfo(token->getKey())->getType() != typ) {
 		error();
 	}

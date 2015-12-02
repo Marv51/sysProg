@@ -13,13 +13,27 @@
 #ifndef PARSER_SRC_PARSER_H_
 #define PARSER_SRC_PARSER_H_
 
+enum class NodeType {
+	PROG,
+	DECLS,
+	DECL,
+	ARRAY,
+	STATEMENT,
+	STATEMENTS,
+	EXP,
+	EXP2,
+	INDEX,
+	OP_EXP,
+	OP
+};
+
 class Parser {
 public:
 	Parser(Scanner* s);
 	virtual ~Parser();
 	void parse();
-	void accept(InfoTyp typ);
-	void accept(State typ);
+	void match(InfoTyp typ);
+	void match(State typ);
 	void nextToken();
 	void error();
 	void parseProg();
