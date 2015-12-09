@@ -152,7 +152,7 @@ bool Automat::testChar(char c){
 			if (c != '\n'){
 				spalte++;
 			}
-			if ((c != '\n') && (c != ' ') && (c != '\r')){
+			if ((c != '\n') && (c != ' ') && (c != '\r') && (c != '\t')){
 				lastFinalState = State::Fehler;
 			}
 		}

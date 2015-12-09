@@ -26,6 +26,24 @@ enum class NodeType {
 	LEAF
 };
 
+enum class CheckType {
+	emptyType,
+	intType,
+	intArrayType,
+	arrayType,
+	noType,
+	errorType,
+	opPlus,
+	opMinus,
+	opMult,
+	opDiv,
+	opLess,
+	opGreater,
+	opEqual,
+	opUnequal,
+	opAnd
+};
+
 class Node {
 public:
 	Node(NodeType type);
@@ -33,12 +51,20 @@ public:
 	void addNode(Node* node);
 	void setKey(uint16_t, char* lexem);
 	void print(uint16_t level);
+	NodeType getType();
+	Node* getNode(uint16_t index);
+	CheckType getCheckType() const;
+	void setCheckType(CheckType checkType);
+	uint16_t getSubnodesCount() const;
+	uint16_t getKey() const;
+
 private:
 	NodeType type;
 	uint16_t infoKey;
 	uint16_t subnodes_count;
 	Node* subnodes[7];
 	char* infoLexem;
+	CheckType checkType;
 };
 
 #endif /* PARSER_SRC_NODE_H_ */

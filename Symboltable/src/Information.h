@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <error.h>
 #include <limits.h>
+#include "../../Parser/src/Node.h"
 
 enum class InfoTyp{
 	Unknown,
@@ -41,13 +42,16 @@ public:
 	int getValue();
 	InfoTyp getType();
 	void setType(InfoTyp t);
+	CheckType getCheckType() const;
+	void setCheckType(CheckType checkType);
+
 private:
 	char* lexem;
 	Information* nextInfo;
 	uint16_t key;
 	int value;
 	InfoTyp type;
-
+	CheckType checkType;
 };
 
 #endif /* SYMBOLTABLE_SRC_INFORMATION_H_ */

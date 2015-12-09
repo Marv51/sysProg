@@ -35,6 +35,8 @@ public:
 	Node* parseOpExp();
 	Node* parseOp();
 	Node* createNode(NodeType ntype);
+	void typeCheck(Node* node);
+	void errorTypeCheck(const char* message);
 private:
 	Scanner* scanner;
 	Token* token;

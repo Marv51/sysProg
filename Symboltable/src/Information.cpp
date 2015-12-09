@@ -15,6 +15,7 @@ Information::Information(char* lex, uint16_t k) {
 	key = k;
 	value = -1;
 	type = InfoTyp::Unknown;
+	checkType = CheckType::noType;
 }
 
 Information::~Information() {
@@ -64,4 +65,12 @@ InfoTyp Information::getType() {
 
 void Information::setType(InfoTyp t) {
 	type = t;
+}
+
+CheckType Information::getCheckType() const {
+	return checkType;
+}
+
+void Information::setCheckType(CheckType checkType) {
+	this->checkType = checkType;
 }

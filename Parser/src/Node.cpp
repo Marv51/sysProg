@@ -10,6 +10,7 @@
 Node::Node(NodeType type) :
 		infoKey(0), subnodes_count(0), infoLexem() {
 	this->type = type;
+	this->checkType = CheckType::emptyType;
 }
 
 Node::~Node() {
@@ -33,8 +34,32 @@ void Node::print(uint16_t level) {
 	if (infoKey != 0) {
 		printf("\t %s", infoLexem);
 	}
-	printf("\n");
+	printf(" - CheckType: %i\n", checkType);
 	for (int i = 0; i < subnodes_count; i++) {
 		subnodes[i]->print(level + 1);
 	}
+}
+
+NodeType Node::getType() {
+	return this->type;
+}
+
+Node* Node::getNode(uint16_t index) {
+	return subnodes[index];
+}
+
+CheckType Node::getCheckType() const {
+	return checkType;
+}
+
+void Node::setCheckType(CheckType checkType) {
+	this->checkType = checkType;
+}
+
+uint16_t Node::getSubnodesCount() const {
+	return subnodes_count;
+}
+
+uint16_t Node::getKey() const {
+	return infoKey;
 }

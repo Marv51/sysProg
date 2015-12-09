@@ -30,6 +30,7 @@ int main(int argc, char** argv) {
 	printf("Processing ...\n");
 	auto parser = new Parser(scanner);
 	auto root = parser->parse();
+	parser->typeCheck(root);
 	root->print(0);
 	/*
 	 do {

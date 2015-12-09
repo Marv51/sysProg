@@ -236,3 +236,205 @@ void Parser::error() {
 Node* Parser::createNode(NodeType ntype) {
 	return new Node(ntype);
 }
+
+void Parser::errorTypeCheck(const char* message) {
+	printf("%s \n", message);
+}
+
+void Parser::typeCheck(Node* node) {
+	if (node->getType() == NodeType::PROG) {
+		typeCheck(node->getNode(0));
+		typeCheck(node->getNode(1));
+		node->setCheckType(CheckType::noType);
+	} else if (node->getType() == NodeType::DECLS) {
+		if (node->getSubnodesCount() > 0) {
+			typeCheck(node->getNode(0));
+			typeCheck(node->getNode(2));
+		}
+		node->setCheckType(CheckType::noType);
+	} else if (node->getType() == NodeType::DECL) {
+		typeCheck(node->getNode(1));
+		if (scanner->getInfo(node->getNode(2)->getKey())->getCheckType()
+				!= CheckType::noType) {
+			errorTypeCheck("identifier already defined");
+			node->setCheckType(CheckType::errorType);
+		} else if (node->getNode(1)->getCheckType() == CheckType::errorType) {
+			node->setCheckType(CheckType::errorType);
+		} else {
+			node->setCheckType(CheckType::noType);
+			if (node->getNode(1)->getCheckType() == CheckType::arrayType) {
+				scanner->getInfo(node->getNode(2)->getKey())->setCheckType(
+						CheckType::intArrayType);
+			} else {
+				scanner->getInfo(node->getNode(2)->getKey())->setCheckType(
+						CheckType::intType);
+			}
+		}
+	} else if (node->getType() == NodeType::ARRAY) {
+		if (node->getSubnodesCount() == 0) {
+			node->setCheckType(CheckType::noType);
+		} else {
+			if (scanner->getInfo(node->getNode(1)->getKey())->getValue() > 0) {
+				node->setCheckType(CheckType::arrayType);
+			} else {
+				errorTypeCheck("no valid dimension");
+				node->setCheckType(CheckType::errorType);
+			}
+		}
+	} else if (node->getType() == NodeType::STATEMENTS) {
+		if (node->getSubnodesCount() > 0) {
+			typeCheck(node->getNode(0));
+			typeCheck(node->getNode(2));
+		}
+		node->setCheckType(CheckType::noType);
+	} else if (node->getType() == NodeType::STATEMENT) {
+		auto infotype = scanner->getInfo(node->getNode(0)->getKey())->getType();
+		if (infotype == InfoTyp::writetyp) {
+			typeCheck(node->getNode(2));
+			node->setCheckType(CheckType::noType);
+		} else if (infotype == InfoTyp::readtyp) {
+			typeCheck(node->getNode(3)); // INDEX
+			auto identCheckType =
+					scanner->getInfo(node->getNode(2)->getKey())->getCheckType();
+			auto indexCheckType =
+					scanner->getInfo(node->getNode(3)->getKey())->getCheckType();
+			if (identCheckType == CheckType::noType) {
+				errorTypeCheck("identifier not defined");
+				node->setCheckType(CheckType::errorType);
+			} else if ((identCheckType == CheckType::intType
+					&& indexCheckType == CheckType::noType)
+					|| (identCheckType == CheckType::intArrayType
+							&& indexCheckType == CheckType::arrayType)) {
+				node->setCheckType(CheckType::noType);
+			} else {
+				errorTypeCheck("incompatible types");
+				node->setCheckType(CheckType::errorType);
+			}
+		} else if (infotype == InfoTyp::Sign) { // Geschweifte Klammer auf
+			typeCheck(node->getNode(1));
+			node->setCheckType(CheckType::noType);
+		} else if (infotype == InfoTyp::iftyp) {
+			typeCheck(node->getNode(2)); // exp
+			typeCheck(node->getNode(4)); // statement
+			typeCheck(node->getNode(6)); // statement
+			if (node->getNode(2)->getCheckType() == CheckType::errorType) {
+				node->setCheckType(CheckType::errorType);
+			} else {
+				node->setCheckType(CheckType::noType);
+			}
+		} else if (infotype == InfoTyp::whiletyp) {
+			typeCheck(node->getNode(2)); // exp
+			typeCheck(node->getNode(4)); // statement
+			if (node->getNode(2)->getCheckType() == CheckType::errorType) {
+				node->setCheckType(CheckType::errorType);
+			} else {
+				node->setCheckType(CheckType::noType);
+			}
+		} else if (infotype == InfoTyp::Identifier) {
+			typeCheck(node->getNode(1)); // index
+			typeCheck(node->getNode(3)); // exp
+			auto identCheckType =
+					scanner->getInfo(node->getNode(0)->getKey())->getCheckType();
+			if (identCheckType == CheckType::noType) {
+				errorTypeCheck("identifier not defined");
+				node->setCheckType(CheckType::errorType);
+			} else if (node->getNode(3)->getCheckType() == CheckType::intType
+					&& ((identCheckType == CheckType::intType
+							&& node->getNode(1)->getCheckType()
+									== CheckType::noType)
+							|| (identCheckType == CheckType::intArrayType
+									&& node->getNode(1)->getCheckType()
+											== CheckType::arrayType))) {
+				node->setCheckType(CheckType::noType);
+			} else {
+				errorTypeCheck("incompatible types");
+				node->setCheckType(CheckType::errorType);
+			}
+		}
+	} else if (node->getType() == NodeType::INDEX) {
+		if (node->getSubnodesCount() == 0) {
+			node->setCheckType(CheckType::noType);
+		} else {
+			typeCheck(node->getNode(1)); // index
+			if (node->getNode(1)->getCheckType() == CheckType::errorType) {
+				node->setCheckType(CheckType::errorType);
+			} else {
+				node->setCheckType(CheckType::arrayType);
+			}
+		}
+	} else if (node->getType() == NodeType::EXP) {
+		typeCheck(node->getNode(0)); // EXP2
+		typeCheck(node->getNode(1)); // OP_EXP
+		if (node->getNode(1)->getCheckType() == CheckType::noType) {
+			node->setCheckType(node->getNode(0)->getCheckType());
+		} else if (node->getNode(0)->getCheckType()
+				!= node->getNode(1)->getCheckType()) {
+			node->setCheckType(CheckType::errorType);
+		} else {
+			node->setCheckType(node->getNode(0)->getCheckType());
+		}
+	} else if (node->getType() == NodeType::EXP2) {
+		auto firstNode = scanner->getInfo(node->getNode(0)->getKey());
+		if (*(firstNode->getLexem()) == '(' || *(firstNode->getLexem()) == '-') {
+			typeCheck(node->getNode(1));
+			node->setCheckType(node->getNode(1)->getCheckType());
+		} else if (*(firstNode->getLexem()) == '!') {
+			typeCheck(node->getNode(1));
+			if (node->getNode(1)->getCheckType() != CheckType::intType) {
+				node->setCheckType(CheckType::errorType);
+			} else {
+				node->setCheckType(CheckType::intType);
+			}
+		} else if (firstNode->getType() == InfoTyp::Integer) {
+			node->setCheckType(CheckType::intType);
+		} else if (firstNode->getType() == InfoTyp::Identifier) {
+			typeCheck(node->getNode(1));
+			auto identInfo = scanner->getInfo(node->getNode(0)->getKey());
+			if (identInfo->getCheckType() == CheckType::noType) {
+				errorTypeCheck("identifier not defined");
+				node->setCheckType(CheckType::errorType);
+			} else if (identInfo->getCheckType() == CheckType::intType
+					&& node->getNode(1)->getCheckType() == CheckType::noType) {
+				node->setCheckType(identInfo->getCheckType());
+			} else if (identInfo->getCheckType() == CheckType::intArrayType
+					&& node->getNode(1)->getCheckType()
+							== CheckType::arrayType) {
+				node->setCheckType(CheckType::intType);
+			} else{
+				errorTypeCheck("no primitive Type");
+				node->setCheckType(CheckType::errorType);
+			}
+		} else if (node->getType() == NodeType::OP_EXP){
+			if (node->getSubnodesCount() == 0){
+				node->setCheckType(CheckType::noType);
+			} else {
+				typeCheck(node->getNode(0)); //OP
+				typeCheck(node->getNode(1)); //EXP
+				node->setCheckType(node->getNode(1)->getCheckType());
+			}
+		} else if (node->getType() == NodeType::OP){
+			auto lexem = scanner->getInfo(node->getNode(0)->getKey())->getLexem();
+			if (*lexem == '+'){
+				node->setCheckType(CheckType::opPlus);
+			} else if (*lexem == '-'){
+				node->setCheckType(CheckType::opMinus);
+			} else if (*lexem == '*'){
+				node->setCheckType(CheckType::opMult);
+			} else if (*lexem == '/'){
+				node->setCheckType(CheckType::opDiv);
+			} else if (*lexem == '<'){
+				node->setCheckType(CheckType::opLess);
+			} else if (*lexem == '>'){
+				node->setCheckType(CheckType::opGreater);
+			} else if (*lexem == '='){
+				node->setCheckType(CheckType::opEqual);
+			} else if (strcmp(lexem,"<:>") == 0){
+				node->setCheckType(CheckType::opUnequal);
+			} else if (*lexem == '&'){
+				node->setCheckType(CheckType::opAnd);
+			}
+		} else {
+			auto a = 17;
+		}
+	}
+}
