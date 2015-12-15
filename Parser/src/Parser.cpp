@@ -375,10 +375,11 @@ void Parser::typeCheck(Node* node) {
 		}
 	} else if (node->getType() == NodeType::EXP2) {
 		auto firstNode = scanner->getInfo(node->getNode(0)->getKey());
-		if (*(firstNode->getLexem()) == '(' || *(firstNode->getLexem()) == '-') {
+		if (strcmp(firstNode->getLexem(), "(") == 0
+				|| strcmp(firstNode->getLexem(), "-") == 0) {
 			typeCheck(node->getNode(1));
 			node->setCheckType(node->getNode(1)->getCheckType());
-		} else if (*(firstNode->getLexem()) == '!') {
+		} else if (strcmp(firstNode->getLexem(), "!") == 0) {
 			typeCheck(node->getNode(1));
 			if (node->getNode(1)->getCheckType() != CheckType::intType) {
 				node->setCheckType(CheckType::errorType);
@@ -400,41 +401,39 @@ void Parser::typeCheck(Node* node) {
 					&& node->getNode(1)->getCheckType()
 							== CheckType::arrayType) {
 				node->setCheckType(CheckType::intType);
-			} else{
+			} else {
 				errorTypeCheck("no primitive Type");
 				node->setCheckType(CheckType::errorType);
 			}
-		} else if (node->getType() == NodeType::OP_EXP){
-			if (node->getSubnodesCount() == 0){
-				node->setCheckType(CheckType::noType);
-			} else {
-				typeCheck(node->getNode(0)); //OP
-				typeCheck(node->getNode(1)); //EXP
-				node->setCheckType(node->getNode(1)->getCheckType());
-			}
-		} else if (node->getType() == NodeType::OP){
-			auto lexem = scanner->getInfo(node->getNode(0)->getKey())->getLexem();
-			if (*lexem == '+'){
-				node->setCheckType(CheckType::opPlus);
-			} else if (*lexem == '-'){
-				node->setCheckType(CheckType::opMinus);
-			} else if (*lexem == '*'){
-				node->setCheckType(CheckType::opMult);
-			} else if (*lexem == '/'){
-				node->setCheckType(CheckType::opDiv);
-			} else if (*lexem == '<'){
-				node->setCheckType(CheckType::opLess);
-			} else if (*lexem == '>'){
-				node->setCheckType(CheckType::opGreater);
-			} else if (*lexem == '='){
-				node->setCheckType(CheckType::opEqual);
-			} else if (strcmp(lexem,"<:>") == 0){
-				node->setCheckType(CheckType::opUnequal);
-			} else if (*lexem == '&'){
-				node->setCheckType(CheckType::opAnd);
-			}
+		}
+	} else if (node->getType() == NodeType::OP_EXP) {
+		if (node->getSubnodesCount() == 0) {
+			node->setCheckType(CheckType::noType);
 		} else {
-			auto a = 17;
+			typeCheck(node->getNode(0)); //OP
+			typeCheck(node->getNode(1)); //EXP
+			node->setCheckType(node->getNode(1)->getCheckType());
+		}
+	} else if (node->getType() == NodeType::OP) {
+		auto lexem = scanner->getInfo(node->getNode(0)->getKey())->getLexem();
+		if (strcmp(lexem, "+") == 0) {
+			node->setCheckType(CheckType::opPlus);
+		} else if (strcmp(lexem, "-") == 0) {
+			node->setCheckType(CheckType::opMinus);
+		} else if (strcmp(lexem, "*") == 0) {
+			node->setCheckType(CheckType::opMult);
+		} else if (strcmp(lexem, "/") == 0) {
+			node->setCheckType(CheckType::opDiv);
+		} else if (strcmp(lexem, "<") == 0) {
+			node->setCheckType(CheckType::opLess);
+		} else if (strcmp(lexem, ">") == 0) {
+			node->setCheckType(CheckType::opGreater);
+		} else if (strcmp(lexem, "=") == 0) {
+			node->setCheckType(CheckType::opEqual);
+		} else if (strcmp(lexem, "<:>") == 0) {
+			node->setCheckType(CheckType::opUnequal);
+		} else if (strcmp(lexem, "&") == 0) {
+			node->setCheckType(CheckType::opAnd);
 		}
 	}
 }
