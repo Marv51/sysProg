@@ -31,6 +31,7 @@ int main(int argc, char** argv) {
 	auto parser = new Parser(scanner);
 	auto root = parser->parse();
 	parser->typeCheck(root);
+	parser->makeCode(root);
 	root->print(0);
 	/*
 	 do {

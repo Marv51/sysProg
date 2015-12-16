@@ -10,6 +10,9 @@
 #include "../../Symboltable/src/Information.h"
 #include <stdio.h>
 #include "Node.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
 
 #ifndef PARSER_SRC_PARSER_H_
 #define PARSER_SRC_PARSER_H_
@@ -36,10 +39,13 @@ public:
 	Node* parseOp();
 	Node* createNode(NodeType ntype);
 	void typeCheck(Node* node);
+	void makeCode(Node* node);
 	void errorTypeCheck(const char* message);
 private:
 	Scanner* scanner;
 	Token* token;
+	ofstream code;
+	uint16_t labelcounter;
 };
 
 #endif /* PARSER_SRC_PARSER_H_ */

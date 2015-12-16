@@ -11,9 +11,12 @@ Parser::Parser(Scanner* s) {
 	scanner = s;
 	token = new Token();
 	scanner->nextToken(token);
+	code.open("codefile.code");
+	labelcounter = 0;
 }
 
 Parser::~Parser() {
+	code.close();
 }
 
 Node* Parser::parse() {
@@ -434,6 +437,139 @@ void Parser::typeCheck(Node* node) {
 			node->setCheckType(CheckType::opUnequal);
 		} else if (strcmp(lexem, "&") == 0) {
 			node->setCheckType(CheckType::opAnd);
+		}
+	}
+}
+
+void Parser::makeCode(Node* node) {
+	if (node->getType() == NodeType::PROG) {
+		makeCode(node->getNode(0)); // DECLS
+		makeCode(node->getNode(1)); // STATEMENTS
+		code << " STP " << endl;
+	} else if (node->getType() == NodeType::DECLS) {
+		if (node->getSubnodesCount() > 0) {
+			makeCode(node->getNode(0)); // DECL
+			makeCode(node->getNode(2)); // DECLS
+		}
+	} else if (node->getType() == NodeType::DECL) {
+		code << " DS " << "$"
+				<< scanner->getInfo(node->getNode(2)->getKey())->getLexem();
+		makeCode(node->getNode(1)); // ARRAY
+	} else if (node->getType() == NodeType::ARRAY) {
+		if (node->getSubnodesCount() > 0) {
+			code << " "
+					<< scanner->getInfo(node->getNode(1)->getKey())->getValue()
+					<< endl;
+		} else {
+			code << " 1" << endl;
+		}
+	} else if (node->getType() == NodeType::STATEMENTS) {
+		if (node->getSubnodesCount() > 0) {
+			makeCode(node->getNode(0)); // STATEMENT
+			makeCode(node->getNode(2)); // STATEMENTS
+		} else {
+			code << " NOP " << endl;
+		}
+	} else if (node->getType() == NodeType::STATEMENT) {
+		auto firstNodeInfo = scanner->getInfo(node->getNode(0)->getKey());
+		if (firstNodeInfo->getType() == InfoTyp::Identifier) {
+			makeCode(node->getNode(3)); // EXP
+			code << " LA $" << firstNodeInfo->getLexem();
+			makeCode(node->getNode(1)); // INDEX
+			code << " STR " << endl;
+		} else if (firstNodeInfo->getType() == InfoTyp::writetyp) {
+			makeCode(node->getNode(2)); // EXP
+			code << " PRI " << endl;
+		} else if (firstNodeInfo->getType() == InfoTyp::readtyp) {
+			code << " REA " << endl;
+			code << " LA $"
+					<< scanner->getInfo(node->getNode(2)->getKey())->getLexem();
+			makeCode(node->getNode(3)); // INDEX
+			code << " STR " << endl;
+		} else if (firstNodeInfo->getType() == InfoTyp::Sign) {
+			makeCode(node->getNode(1)); // STATEMENTS
+		} else if (firstNodeInfo->getType() == InfoTyp::iftyp) {
+
+			makeCode(node->getNode(2)); // EXP
+			code << " JIN #m" << labelcounter << endl;
+			makeCode(node->getNode(4)); // STATEMENT
+			code << " JMP #n" << labelcounter << endl;
+			code << "#m" << labelcounter << " NOP " << endl;
+			makeCode(node->getNode(6)); // STEATEMENT
+			code << "#n" << labelcounter << " NOP " << endl;
+			labelcounter++;
+		} else if (firstNodeInfo->getType() == InfoTyp::whiletyp) {
+			code << "#m" << labelcounter << " NOP " << endl;
+			makeCode(node->getNode(2)); // EXP
+			code << " JIN #n" << labelcounter << endl;
+			makeCode(node->getNode(4)); // STATEMENT
+			code << " JMP #m" << labelcounter << endl;
+			code << "#n" << labelcounter << " NOP " << endl;
+		}
+	} else if (node->getType() == NodeType::EXP) {
+		if (node->getNode(1)->getCheckType() == CheckType::noType) {
+			makeCode(node->getNode(0)); // EXP2
+		} else if (node->getNode(1)->getNode(0)->getCheckType()
+				== CheckType::opGreater) {
+			makeCode(node->getNode(1)); // OP_EXP
+			makeCode(node->getNode(0)); // EXP2
+			code << "LES" << endl;
+		} else if (node->getNode(1)->getNode(0)->getCheckType()
+				== CheckType::opUnequal) {
+			makeCode(node->getNode(0)); // EXP2
+			makeCode(node->getNode(1)); // OP_EXP
+			code << "NOT" << endl;
+		} else {
+			makeCode(node->getNode(0)); // EXP2
+			makeCode(node->getNode(1)); // OP_EXP
+		}
+	} else if (node->getType() == NodeType::INDEX) {
+		if (node->getSubnodesCount() > 0) {
+			makeCode(node->getNode(1)); // EXP
+			code << " ADD " << endl;
+		}
+	} else if (node->getType() == NodeType::EXP2) {
+		auto firstNodeInfo = scanner->getInfo(node->getNode(0)->getKey());
+		if (strcmp(firstNodeInfo->getLexem(), "(") == 0) {
+			makeCode(node->getNode(1)); // EXP
+		} else if (firstNodeInfo->getType() == InfoTyp::Identifier) {
+			code << " LA $" << firstNodeInfo->getLexem() << endl;
+			makeCode(node->getNode(1)); // INDEX
+			code << " LV " << endl;
+		} else if (firstNodeInfo->getType() == InfoTyp::Integer) {
+			code << " LC " << firstNodeInfo->getValue() << endl;
+		} else if (strcmp(firstNodeInfo->getLexem(), "-") == 0) {
+			code << " LC 0" << endl;
+			makeCode(node->getNode(1)); // EXP2
+			code << " SUB " << endl;
+		} else if (strcmp(firstNodeInfo->getLexem(), "!") == 0) {
+			makeCode(node->getNode(1)); // EXP2
+			code << " NOT " << endl;
+		}
+	} else if (node->getType() == NodeType::OP_EXP) {
+		if (node->getSubnodesCount() > 0) {
+			makeCode(node->getNode(1)); // EXP
+			makeCode(node->getNode(0)); // OP
+		}
+	} else if (node->getType() == NodeType::OP) {
+		auto lexem = scanner->getInfo(node->getNode(0)->getKey())->getLexem();
+		if (strcmp(lexem, "+") == 0) {
+			code << "ADD" << endl;
+		} else if (strcmp(lexem, "-") == 0) {
+			code << "SUB" << endl;
+		} else if (strcmp(lexem, "*") == 0) {
+			code << "MUL" << endl;
+		} else if (strcmp(lexem, "/") == 0) {
+			code << "DIV" << endl;
+		} else if (strcmp(lexem, "<") == 0) {
+			code << "LES" << endl;
+		} else if (strcmp(lexem, ">") == 0) {
+		} else if (strcmp(lexem, "=") == 0) {
+			code << "EQU" << endl;
+		} else if (strcmp(lexem, "<:>") == 0) {
+			code << "EQU" << endl;
+		} else if (strcmp(lexem, "&") == 0) {
+			code << "AND" << endl;
 		}
 	}
 }
