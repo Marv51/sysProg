@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "../../Scanner/src/Token.h"
 
 enum class NodeType {
 	PROG,
@@ -57,6 +58,8 @@ public:
 	void setCheckType(CheckType checkType);
 	uint16_t getSubnodesCount() const;
 	uint16_t getKey() const;
+	Token* getToken();
+	void setToken(Token* token);
 
 private:
 	NodeType type;
@@ -65,6 +68,7 @@ private:
 	Node* subnodes[7];
 	char* infoLexem;
 	CheckType checkType;
+	Token* token;
 };
 
 #endif /* PARSER_SRC_NODE_H_ */

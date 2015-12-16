@@ -19,7 +19,7 @@ using namespace std;
 
 class Parser {
 public:
-	Parser(Scanner* s);
+	Parser(Scanner* s, char* output);
 	virtual ~Parser();
 	Node* parse();
 	Node* match(InfoTyp typ);
@@ -40,7 +40,7 @@ public:
 	Node* createNode(NodeType ntype);
 	void typeCheck(Node* node);
 	void makeCode(Node* node);
-	void errorTypeCheck(const char* message);
+	void errorTypeCheck(const char* message, Token* token);
 private:
 	Scanner* scanner;
 	Token* token;

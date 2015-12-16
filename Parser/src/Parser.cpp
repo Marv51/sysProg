@@ -7,11 +7,11 @@
 
 #include "Parser.h"
 
-Parser::Parser(Scanner* s) {
+Parser::Parser(Scanner* s, char* output) {
 	scanner = s;
 	token = new Token();
 	scanner->nextToken(token);
-	code.open("codefile.code");
+	code.open(output);
 	labelcounter = 0;
 }
 
@@ -214,6 +214,7 @@ Node* Parser::match(State typ) {
 		error();
 	}
 	auto leaf = createNode(NodeType::LEAF);
+	leaf->setToken(token);
 	leaf->setKey(token->getKey(), token->getContent());
 	nextToken();
 	return leaf;
@@ -224,15 +225,16 @@ Node* Parser::match(InfoTyp typ) {
 		error();
 	}
 	auto leaf = createNode(NodeType::LEAF);
+	leaf->setToken(token);
 	leaf->setKey(token->getKey(), token->getContent());
 	nextToken();
 	return leaf;
 }
 
 void Parser::error() {
-	printf("unexpected token '%s' at line '%d', column '%d'\n",
+	fprintf(stderr, "unexpected token '%s' at line '%d', column '%d'\n",
 			token->getContent(), token->getZeile(), token->getSpalte());
-	printf("Typ: '%s'", token->getTokenTypeString());
+	printf("stop\n");
 	exit(1);
 }
 
@@ -240,8 +242,10 @@ Node* Parser::createNode(NodeType ntype) {
 	return new Node(ntype);
 }
 
-void Parser::errorTypeCheck(const char* message) {
-	printf("%s \n", message);
+void Parser::errorTypeCheck(const char* message, Token* token) {
+	fprintf(stderr, "error Line: %i Column: %i %s \n",token->getZeile(), token->getSpalte(), message);
+	printf("stop\n");
+	exit(1);
 }
 
 void Parser::typeCheck(Node* node) {
@@ -259,7 +263,7 @@ void Parser::typeCheck(Node* node) {
 		typeCheck(node->getNode(1));
 		if (scanner->getInfo(node->getNode(2)->getKey())->getCheckType()
 				!= CheckType::noType) {
-			errorTypeCheck("identifier already defined");
+			errorTypeCheck("identifier already defined", node->getNode(2)->getToken());
 			node->setCheckType(CheckType::errorType);
 		} else if (node->getNode(1)->getCheckType() == CheckType::errorType) {
 			node->setCheckType(CheckType::errorType);
@@ -280,7 +284,7 @@ void Parser::typeCheck(Node* node) {
 			if (scanner->getInfo(node->getNode(1)->getKey())->getValue() > 0) {
 				node->setCheckType(CheckType::arrayType);
 			} else {
-				errorTypeCheck("no valid dimension");
+				errorTypeCheck("no valid dimension", node->getNode(1)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		}
@@ -302,7 +306,7 @@ void Parser::typeCheck(Node* node) {
 			auto indexCheckType =
 					scanner->getInfo(node->getNode(3)->getKey())->getCheckType();
 			if (identCheckType == CheckType::noType) {
-				errorTypeCheck("identifier not defined");
+				errorTypeCheck("identifier not defined", node->getNode(2)->getToken());
 				node->setCheckType(CheckType::errorType);
 			} else if ((identCheckType == CheckType::intType
 					&& indexCheckType == CheckType::noType)
@@ -310,7 +314,7 @@ void Parser::typeCheck(Node* node) {
 							&& indexCheckType == CheckType::arrayType)) {
 				node->setCheckType(CheckType::noType);
 			} else {
-				errorTypeCheck("incompatible types");
+				errorTypeCheck("incompatible types", node->getNode(2)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		} else if (infotype == InfoTyp::Sign) { // Geschweifte Klammer auf
@@ -339,7 +343,7 @@ void Parser::typeCheck(Node* node) {
 			auto identCheckType =
 					scanner->getInfo(node->getNode(0)->getKey())->getCheckType();
 			if (identCheckType == CheckType::noType) {
-				errorTypeCheck("identifier not defined");
+				errorTypeCheck("identifier not defined", node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			} else if (node->getNode(3)->getCheckType() == CheckType::intType
 					&& ((identCheckType == CheckType::intType
@@ -350,7 +354,7 @@ void Parser::typeCheck(Node* node) {
 											== CheckType::arrayType))) {
 				node->setCheckType(CheckType::noType);
 			} else {
-				errorTypeCheck("incompatible types");
+				errorTypeCheck("incompatible types", node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		}
@@ -395,7 +399,7 @@ void Parser::typeCheck(Node* node) {
 			typeCheck(node->getNode(1));
 			auto identInfo = scanner->getInfo(node->getNode(0)->getKey());
 			if (identInfo->getCheckType() == CheckType::noType) {
-				errorTypeCheck("identifier not defined");
+				errorTypeCheck("identifier not defined", node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			} else if (identInfo->getCheckType() == CheckType::intType
 					&& node->getNode(1)->getCheckType() == CheckType::noType) {
@@ -405,7 +409,7 @@ void Parser::typeCheck(Node* node) {
 							== CheckType::arrayType) {
 				node->setCheckType(CheckType::intType);
 			} else {
-				errorTypeCheck("no primitive Type");
+				errorTypeCheck("no primitive Type", node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		}

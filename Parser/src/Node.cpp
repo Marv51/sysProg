@@ -8,7 +8,7 @@
 #include "Node.h"
 
 Node::Node(NodeType type) :
-		infoKey(0), subnodes_count(0), infoLexem() {
+		infoKey(0), subnodes_count(0), infoLexem(), token() {
 	this->type = type;
 	this->checkType = CheckType::emptyType;
 }
@@ -62,4 +62,12 @@ uint16_t Node::getSubnodesCount() const {
 
 uint16_t Node::getKey() const {
 	return infoKey;
+}
+
+Token* Node::getToken() {
+	return token;
+}
+
+void Node::setToken(Token* token) {
+	this->token = token;
 }

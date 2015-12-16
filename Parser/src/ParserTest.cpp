@@ -21,19 +21,24 @@ int main(int argc, char** argv) {
 	}
 	Scanner* scanner;
 
-	bool moreTokens;
 
 	scanner = new Scanner(input);
 	// Token* t = new Token();
 	std::fstream fs;
 	fs.open(output, std::fstream::out | std::fstream::trunc);
-	printf("Processing ...\n");
-	auto parser = new Parser(scanner);
+	auto parser = new Parser(scanner, output);
+	printf("parsing ...\n");
 	auto root = parser->parse();
+	printf("type checking ...\n");
 	parser->typeCheck(root);
+	printf("generating code ...\n");
 	parser->makeCode(root);
-	root->print(0);
+	// root->print(0);
+
+
+
 	/*
+	 bool moreTokens;
 	 do {
 	 delete t;
 	 t = new Token();
