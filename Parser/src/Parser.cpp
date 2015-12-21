@@ -457,14 +457,14 @@ void Parser::makeCode(Node* node) {
 	if (node->getType() == NodeType::PROG) {
 		makeCode(node->getNode(0)); // DECLS
 		makeCode(node->getNode(1)); // STATEMENTS
-		code << " STP " << endl;
+		code << "STP " << endl;
 	} else if (node->getType() == NodeType::DECLS) {
 		if (node->getSubnodesCount() > 0) {
 			makeCode(node->getNode(0)); // DECL
 			makeCode(node->getNode(2)); // DECLS
 		}
 	} else if (node->getType() == NodeType::DECL) {
-		code << " DS " << "$"
+		code << "DS " << "$"
 				<< scanner->getInfo(node->getNode(2)->getKey())->getLexem();
 		makeCode(node->getNode(1)); // ARRAY
 	} else if (node->getType() == NodeType::ARRAY) {
@@ -480,32 +480,32 @@ void Parser::makeCode(Node* node) {
 			makeCode(node->getNode(0)); // STATEMENT
 			makeCode(node->getNode(2)); // STATEMENTS
 		} else {
-			code << " NOP " << endl;
+			code << "NOP " << endl;
 		}
 	} else if (node->getType() == NodeType::STATEMENT) {
 		auto firstNodeInfo = scanner->getInfo(node->getNode(0)->getKey());
 		if (firstNodeInfo->getType() == InfoTyp::Identifier) {
 			makeCode(node->getNode(3)); // EXP
-			code << " LA $" << firstNodeInfo->getLexem();
+			code << "LA $" << firstNodeInfo->getLexem() << endl;
 			makeCode(node->getNode(1)); // INDEX
-			code << endl << " STR " << endl;
+			code << "STR " << endl;
 		} else if (firstNodeInfo->getType() == InfoTyp::writetyp) {
 			makeCode(node->getNode(2)); // EXP
-			code << " PRI " << endl;
+			code << "PRI " << endl;
 		} else if (firstNodeInfo->getType() == InfoTyp::readtyp) {
-			code << " REA " << endl;
-			code << " LA $"
-					<< scanner->getInfo(node->getNode(2)->getKey())->getLexem();
+			code << "REA " << endl;
+			code << "LA $"
+					<< scanner->getInfo(node->getNode(2)->getKey())->getLexem() << endl;
 			makeCode(node->getNode(3)); // INDEX
-			code << endl << " STR " << endl;
+			code << "STR " << endl;
 		} else if (firstNodeInfo->getType() == InfoTyp::Sign) {
 			makeCode(node->getNode(1)); // STATEMENTS
 		} else if (firstNodeInfo->getType() == InfoTyp::iftyp) {
 
 			makeCode(node->getNode(2)); // EXP
-			code << " JIN #m" << labelcounter << endl;
+			code << "JIN #m" << labelcounter << endl;
 			makeCode(node->getNode(4)); // STATEMENT
-			code << " JMP #n" << labelcounter << endl;
+			code << "JMP #n" << labelcounter << endl;
 			code << "#m" << labelcounter << " NOP " << endl;
 			makeCode(node->getNode(6)); // STEATEMENT
 			code << "#n" << labelcounter << " NOP " << endl;
@@ -513,9 +513,9 @@ void Parser::makeCode(Node* node) {
 		} else if (firstNodeInfo->getType() == InfoTyp::whiletyp) {
 			code << "#m" << labelcounter << " NOP " << endl;
 			makeCode(node->getNode(2)); // EXP
-			code << " JIN #n" << labelcounter << endl;
+			code << "JIN #n" << labelcounter << endl;
 			makeCode(node->getNode(4)); // STATEMENT
-			code << " JMP #m" << labelcounter << endl;
+			code << "JMP #m" << labelcounter << endl;
 			code << "#n" << labelcounter << " NOP " << endl;
 		}
 	} else if (node->getType() == NodeType::EXP) {
@@ -538,25 +538,25 @@ void Parser::makeCode(Node* node) {
 	} else if (node->getType() == NodeType::INDEX) {
 		if (node->getSubnodesCount() > 0) {
 			makeCode(node->getNode(1)); // EXP
-			code << " ADD " << endl;
+			code << "ADD " << endl;
 		}
 	} else if (node->getType() == NodeType::EXP2) {
 		auto firstNodeInfo = scanner->getInfo(node->getNode(0)->getKey());
 		if (strcmp(firstNodeInfo->getLexem(), "(") == 0) {
 			makeCode(node->getNode(1)); // EXP
 		} else if (firstNodeInfo->getType() == InfoTyp::Identifier) {
-			code << " LA $" << firstNodeInfo->getLexem() << endl;
+			code << "LA $" << firstNodeInfo->getLexem() << endl;
 			makeCode(node->getNode(1)); // INDEX
-			code << " LV " << endl;
+			code << "LV " << endl;
 		} else if (firstNodeInfo->getType() == InfoTyp::Integer) {
-			code << " LC " << firstNodeInfo->getValue() << endl;
+			code << "LC " << firstNodeInfo->getValue() << endl;
 		} else if (strcmp(firstNodeInfo->getLexem(), "-") == 0) {
-			code << " LC 0" << endl;
+			code << "LC 0" << endl;
 			makeCode(node->getNode(1)); // EXP2
-			code << " SUB " << endl;
+			code << "SUB " << endl;
 		} else if (strcmp(firstNodeInfo->getLexem(), "!") == 0) {
 			makeCode(node->getNode(1)); // EXP2
-			code << " NOT " << endl;
+			code << "NOT " << endl;
 		}
 	} else if (node->getType() == NodeType::OP_EXP) {
 		if (node->getSubnodesCount() > 0) {
