@@ -243,7 +243,8 @@ Node* Parser::createNode(NodeType ntype) {
 }
 
 void Parser::errorTypeCheck(const char* message, Token* token) {
-	fprintf(stderr, "error Line: %i Column: %i %s \n",token->getZeile(), token->getSpalte(), message);
+	fprintf(stderr, "error Line: %i Column: %i %s \n", token->getZeile(),
+			token->getSpalte(), message);
 	printf("stop\n");
 	exit(1);
 }
@@ -263,7 +264,8 @@ void Parser::typeCheck(Node* node) {
 		typeCheck(node->getNode(1));
 		if (scanner->getInfo(node->getNode(2)->getKey())->getCheckType()
 				!= CheckType::noType) {
-			errorTypeCheck("identifier already defined", node->getNode(2)->getToken());
+			errorTypeCheck("identifier already defined",
+					node->getNode(2)->getToken());
 			node->setCheckType(CheckType::errorType);
 		} else if (node->getNode(1)->getCheckType() == CheckType::errorType) {
 			node->setCheckType(CheckType::errorType);
@@ -284,7 +286,8 @@ void Parser::typeCheck(Node* node) {
 			if (scanner->getInfo(node->getNode(1)->getKey())->getValue() > 0) {
 				node->setCheckType(CheckType::arrayType);
 			} else {
-				errorTypeCheck("no valid dimension", node->getNode(1)->getToken());
+				errorTypeCheck("no valid dimension",
+						node->getNode(1)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		}
@@ -303,10 +306,10 @@ void Parser::typeCheck(Node* node) {
 			typeCheck(node->getNode(3)); // INDEX
 			auto identCheckType =
 					scanner->getInfo(node->getNode(2)->getKey())->getCheckType();
-			auto indexCheckType =
-					scanner->getInfo(node->getNode(3)->getKey())->getCheckType();
+			auto indexCheckType = node->getNode(3)->getCheckType();
 			if (identCheckType == CheckType::noType) {
-				errorTypeCheck("identifier not defined", node->getNode(2)->getToken());
+				errorTypeCheck("identifier not defined",
+						node->getNode(2)->getToken());
 				node->setCheckType(CheckType::errorType);
 			} else if ((identCheckType == CheckType::intType
 					&& indexCheckType == CheckType::noType)
@@ -314,7 +317,8 @@ void Parser::typeCheck(Node* node) {
 							&& indexCheckType == CheckType::arrayType)) {
 				node->setCheckType(CheckType::noType);
 			} else {
-				errorTypeCheck("incompatible types", node->getNode(2)->getToken());
+				errorTypeCheck("incompatible types",
+						node->getNode(2)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		} else if (infotype == InfoTyp::Sign) { // Geschweifte Klammer auf
@@ -343,7 +347,8 @@ void Parser::typeCheck(Node* node) {
 			auto identCheckType =
 					scanner->getInfo(node->getNode(0)->getKey())->getCheckType();
 			if (identCheckType == CheckType::noType) {
-				errorTypeCheck("identifier not defined", node->getNode(0)->getToken());
+				errorTypeCheck("identifier not defined",
+						node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			} else if (node->getNode(3)->getCheckType() == CheckType::intType
 					&& ((identCheckType == CheckType::intType
@@ -354,7 +359,8 @@ void Parser::typeCheck(Node* node) {
 											== CheckType::arrayType))) {
 				node->setCheckType(CheckType::noType);
 			} else {
-				errorTypeCheck("incompatible types", node->getNode(0)->getToken());
+				errorTypeCheck("incompatible types",
+						node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		}
@@ -399,7 +405,8 @@ void Parser::typeCheck(Node* node) {
 			typeCheck(node->getNode(1));
 			auto identInfo = scanner->getInfo(node->getNode(0)->getKey());
 			if (identInfo->getCheckType() == CheckType::noType) {
-				errorTypeCheck("identifier not defined", node->getNode(0)->getToken());
+				errorTypeCheck("identifier not defined",
+						node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			} else if (identInfo->getCheckType() == CheckType::intType
 					&& node->getNode(1)->getCheckType() == CheckType::noType) {
@@ -409,7 +416,8 @@ void Parser::typeCheck(Node* node) {
 							== CheckType::arrayType) {
 				node->setCheckType(CheckType::intType);
 			} else {
-				errorTypeCheck("no primitive Type", node->getNode(0)->getToken());
+				errorTypeCheck("no primitive Type",
+						node->getNode(0)->getToken());
 				node->setCheckType(CheckType::errorType);
 			}
 		}
@@ -480,7 +488,7 @@ void Parser::makeCode(Node* node) {
 			makeCode(node->getNode(3)); // EXP
 			code << " LA $" << firstNodeInfo->getLexem();
 			makeCode(node->getNode(1)); // INDEX
-			code << " STR " << endl;
+			code << endl << " STR " << endl;
 		} else if (firstNodeInfo->getType() == InfoTyp::writetyp) {
 			makeCode(node->getNode(2)); // EXP
 			code << " PRI " << endl;
@@ -489,7 +497,7 @@ void Parser::makeCode(Node* node) {
 			code << " LA $"
 					<< scanner->getInfo(node->getNode(2)->getKey())->getLexem();
 			makeCode(node->getNode(3)); // INDEX
-			code << " STR " << endl;
+			code << endl << " STR " << endl;
 		} else if (firstNodeInfo->getType() == InfoTyp::Sign) {
 			makeCode(node->getNode(1)); // STATEMENTS
 		} else if (firstNodeInfo->getType() == InfoTyp::iftyp) {
