@@ -50,7 +50,7 @@ public:
 	Node(NodeType type);
 	virtual ~Node();
 	void addNode(Node* node);
-	void setKey(uint16_t, char* lexem);
+	void setKey(uint16_t key, char* lexem);
 	void print(uint16_t level);
 	NodeType getType();
 	Node* getNode(uint16_t index);
