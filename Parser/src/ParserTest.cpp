@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
 
 	scanner = new Scanner(input);
 	// Token* t = new Token();
-	std::fstream fs;
-	fs.open(output, std::fstream::out | std::fstream::trunc);
+	// std::fstream fs;
+	// fs.open(output, std::fstream::out | std::fstream::trunc);
 	auto parser = new Parser(scanner, output);
 	printf("parsing ...\n");
 	auto root = parser->parse();
@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
 	 } while (moreTokens);
 	 */
 
-	fs.close();
+	// fs.close();
 	printf("stop\n");
 
 	/*printf("test");
