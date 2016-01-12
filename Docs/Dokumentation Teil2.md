@@ -54,12 +54,36 @@ Die Klasse Node hat folgende öffentliche Methoden:
 1.  `void addNode(Node*)`
 2.  `void setKey(uint16_t key, char* lexem)`
 3.  `void print(uint16_t level)`
+4.  `NodeType getType()`
+5.  `Node* getNode(uint16_t index)`
+6.  `CheckType getCheckType()`
+7.  `void setCheckType(CheckType)`
+8.  `uint16_t getSubnodesCount()`
+9.  `uint16_t getKey()`
+10. `Token* getToken()`
+11. `void setToken(Token*)`
 
 zu 1.) Die Methode `void addNode(Node*)` hängt den übergebenen Node an dieses Node an, indem es zur Liste `subnodes` hinzugefügt wird.
 
 zu 2.) Die Methode `void setKey(uint16_t key, char* lexem)` setzt den Information Key und zu debugging Zwecken das Lexem des zugehöringen Tokens (wird in der `void print(uint16_t level)` Methode benötigt).
 
 zu 3.) Die Methode `void print(uint16_t level)` gibt den Strukturbaum auf der Konsole aus. Sie funktioniert Rekursiv(?). Dies wird nur zu Debugging Zwecken benötigt. Das Argument `uint16_t level` wird zur Formatierung der Ausgabe verwendet.
+
+zu 4.) Die Methode `NodeType getType()` gibt den NodeType des Node Objekts zurück.
+
+zu 5.) Die Methode `Node* getNode(uint16_t index)` gibt den angehängten Node mit dem angegebenen Index zurück. Dieser Index muss kleiner 7 sein.
+
+zu 6.) Die Methode `CheckType getCheckType()` gibt den CheckType des Node Objekts zurück.
+
+zu 7.) Die Methode `void setCheckType(CheckType)` setzt den CheckType des Node Objekts auf den angegebenen Wert.
+
+zu 8.) Die Methode `uint16_t getSubnodesCount()` liefert die Anzahl der angehängten Nodes zurück.
+
+zu 9.) Die Methode `uint16_t getKey()` liefert den Information Key des Node Objekts zurück.
+
+zu 10.) Die Methode `Token* getToken()` liefert den Token des Node Objekts zurück.
+
+zu 11.) Die Methode `void setToken(Token*)` setzt den Token des Node Objekts auf den angegebenen Wert.
 
 Verwendung von Scanner und Parser
 ------
