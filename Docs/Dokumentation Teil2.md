@@ -89,3 +89,5 @@ Verwendung von Scanner und Parser
 ------
 
 ### ParserTest
+
+Durch Aufrufargumente werden die Ein- und Ausgabedateien eingelesen und gespeichert als char\*. Es wird ein neuer Scanner erzeugt mit der Eingabedatei als Konstruktor Argument. Es wird ein neuer Parser mit dem Scanner und der Ausgabedatei als Konstruktor Argumente erzeugt. Auf dem Parser wird die Methode `Node* parse()` aufgerufen und der Rückgabewert wird gespeichert. Auf dem Parser werden nacheinander die Methoden `void checkType(Node*)` und `void makeCode(Node*)` mit dem Rückgabewert des `Node* parse()` Aufrufs als Argumente.
