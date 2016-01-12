@@ -3,7 +3,7 @@ Dokumentation "systemnahes Programmieren" Teil 2: Der Parser
 Parser
 ------
 
-### public
+### Public
 Der Konstruktor der Parser Klasse erhält das Scanner Objekt und eine char\*, die den Pfad zur Ausgabe (\*.code) Datei enthält.
 
 Die Klasse Parser enthält folgende öffentliche Methoden:
@@ -39,11 +39,27 @@ zu 9.) Die Methode `void makeCode(Node*)` funktioniert Rekursiv, indem sie sich 
 Node
 ------
 
-### public
+### Enums
 
-### Implementierung
+NodeType: `PROG, DECLS, DECL, ARRAY, STATEMENT, STATEMENTS, EXP, EXP2, INDEX, OP_EXP, OP, LEAF`
 
-### Fehlerbehandlung
+CheckType: `emptyType, intType, intArrayType, arrayType, noType, errorType, opPlus, opMinus, opMult, opDiv, opLess, opGreater, opEqual, opUnequal, opAnd`
+
+### Public
+
+Der Konstruktor der Klasse Node bekommt den NodeType übergeben und speichert ihn und setzt den CheckType auf `emptyType`.
+
+Die Klasse Node hat folgende öffentliche Methoden:
+
+1.  `void addNode(Node*)`
+2.  `void setKey(uint16_t key, char* lexem)`
+3.  `void print(uint16_t level)`
+
+zu 1.) Die Methode `void addNode(Node*)` hängt den übergebenen Node an dieses Node an, indem es zur Liste `subnodes` hinzugefügt wird.
+
+zu 2.) Die Methode `void setKey(uint16_t key, char* lexem)` setzt den Information Key und zu debugging Zwecken das Lexem des zugehöringen Tokens (wird in der `void print(uint16_t level)` Methode benötigt).
+
+zu 3.) Die Methode `void print(uint16_t level)` gibt den Strukturbaum auf der Konsole aus. Sie funktioniert Rekursiv(?). Dies wird nur zu Debugging Zwecken benötigt. Das Argument `uint16_t level` wird zur Formatierung der Ausgabe verwendet.
 
 Verwendung von Scanner und Parser
 ------
