@@ -170,6 +170,7 @@ Node* Parser::parseOpExp() {
 			|| tokenType == State::VorwaertsSchraegstrich
 			|| tokenType == State::KleinerAls || tokenType == State::GroesserAls
 			|| tokenType == State::kleinerDoppelpunktGroesser
+			|| tokenType == State::IstGleichZeichen
 			|| tokenType == State::UndZeichen) {
 		op_exp->addNode(parseOp());
 		op_exp->addNode(parseExp());
@@ -503,20 +504,24 @@ void Parser::makeCode(Node* node) {
 		} else if (firstNodeInfo->getType() == InfoTyp::iftyp) {
 
 			makeCode(node->getNode(2)); // EXP
-			code << "JIN #m" << labelcounter << endl;
-			makeCode(node->getNode(4)); // STATEMENT
-			code << "JMP #n" << labelcounter << endl;
-			code << "#m" << labelcounter << " NOP " << endl;
-			makeCode(node->getNode(6)); // STEATEMENT
-			code << "#n" << labelcounter << " NOP " << endl;
+			int thisLabel = labelcounter;
 			labelcounter++;
-		} else if (firstNodeInfo->getType() == InfoTyp::whiletyp) {
-			code << "#m" << labelcounter << " NOP " << endl;
-			makeCode(node->getNode(2)); // EXP
-			code << "JIN #n" << labelcounter << endl;
+			code << "JIN #m" << thisLabel << endl;
 			makeCode(node->getNode(4)); // STATEMENT
-			code << "JMP #m" << labelcounter << endl;
-			code << "#n" << labelcounter << " NOP " << endl;
+			code << "JMP #n" << thisLabel << endl;
+			code << "#m" << thisLabel << " NOP " << endl;
+			makeCode(node->getNode(6)); // STEATEMENT
+			code << "#n" << thisLabel << " NOP " << endl;
+
+		} else if (firstNodeInfo->getType() == InfoTyp::whiletyp) {
+			int thisLabel = labelcounter;
+			labelcounter++;
+			code << "#m" << thisLabel << " NOP " << endl;
+			makeCode(node->getNode(2)); // EXP
+			code << "JIN #n" << thisLabel << endl;
+			makeCode(node->getNode(4)); // STATEMENT
+			code << "JMP #m" << thisLabel << endl;
+			code << "#n" << thisLabel << " NOP " << endl;
 		}
 	} else if (node->getType() == NodeType::EXP) {
 		if (node->getNode(1)->getCheckType() == CheckType::noType) {
