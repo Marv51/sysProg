@@ -2,9 +2,15 @@ Dokumentation "systemnahes Programmieren" Teil 2: Der Parser
 ==============================================================
 Parser
 ------
+### Anforderung
+Der Parser überprüft die Syntax und Semantik der Token aus dem Scanner (Teil 1) und erzeugt daraus Pseudo-Assembler Code.
+Dies wird in 3 Schritten ausgeführt: 
+1. Parse: überprüft ob der Quellcode den Regeln der Grammatik entspricht.
+2. TypeCheck: Überprüft Logik des Programms.
+3. MakeCode: Generiert den Assembler Code.
 
-### Public
-Der Konstruktor der Parser Klasse erhält das Scanner Objekt und eine char\*, die den Pfad zur Ausgabe (\*.code) Datei enthält.
+### Implementierung
+Der Konstruktor der Parser Klasse erhält das Scanner Objekt und den Pfad zur Ausgabe als `char*`.
 
 Die Klasse Parser enthält folgende öffentliche Methoden:
 
@@ -30,22 +36,24 @@ zu 5.) Die Methode `Node* createNode(NodeType)` erstellt ein Neues Node Objekt m
 
 zu 6.) Die Methode `void error()` erzeugt eine Fehlermeldung (`stderr`) mit Angabe von Token, Zeile und Spalte und beendet das Programm (`exit(1);`).
 
-zu 7.) Die Methode `void typeCheck(Node*)` funktioniert Rekursiv, indem sie sich immer wieder selbst aufruft mit dem Nächsten Node im Strukturbaum und prüft dabei auf Fehler im geparsten Programmcode. Dazu wird den Nodes ein Wert aus dem Enum CheckType zugeordnet. Die Möglichen Werte dieses Enums sind: `emptyType, intType, intArrayType, arrayType, noType, errorType, opPlus, opMinus, opMult, opDiv, opLess, opGreater, opEqual, opUnequal, opAnd`. Fehler werden mit der Methode `void errorTypeCheck(char* message, Token*)` ausgegeben.
+zu 7.) Die Methode `void typeCheck(Node*)` funktioniert Rekursiv, indem sie sich immer wieder selbst aufruft mit der nächsten Node im Strukturbaum und prüft dabei auf Fehler im geparsten Programmcode. Dazu wird den Nodes ein Wert aus dem Enum CheckType zugeordnet. Die Möglichen Werte dieses Enums sind: `emptyType, intType, intArrayType, arrayType, noType, errorType, opPlus, opMinus, opMult, opDiv, opLess, opGreater, opEqual, opUnequal, opAnd`. Fehler werden mit der Methode `void errorTypeCheck(char* message, Token*)` ausgegeben.
 
-zu 8.) Die Methode`void errorTypeCheck(char* message, Token*)` erzeugt eine Fehlermeldung (`stderr`) mit Angabe von Zeile Spalte und `message` und beendet das Programm (`exit(1);`).
+zu 8.) Die Methode`void errorTypeCheck(char* message, Token*)` erzeugt eine Fehlermeldung (`stderr`) mit Angabe von Zeile, Spalte, und `message` und beendet das Programm (`exit(1);`).
 
 zu 9.) Die Methode `void makeCode(Node*)` funktioniert Rekursiv, indem sie sich immer wieder selbst aufruft mit dem nächsten Node im Strukturbaum und erzeugt dabei den Assembler ähnlichen Code und schreibt ihn in die im Konstruktor spezifizierte Datei.
 
 Node
 ------
 
-### Enums
+### Anforderungen
+Node-Objekte bilden den Struktur-Baum der in der Parse-Methode erstellt wird. Dieser Baum wird dann in typeCheck und makeCode rekursiv abgearbeitet.
 
-NodeType: `PROG, DECLS, DECL, ARRAY, STATEMENT, STATEMENTS, EXP, EXP2, INDEX, OP_EXP, OP, LEAF`
+###Implementierung
 
-CheckType: `emptyType, intType, intArrayType, arrayType, noType, errorType, opPlus, opMinus, opMult, opDiv, opLess, opGreater, opEqual, opUnequal, opAnd`
+Eine Node hat einen Typen aus der Grammatik, den NodeType: `PROG, DECLS, DECL, ARRAY, STATEMENT, STATEMENTS, EXP, EXP2, INDEX, OP_EXP, OP, LEAF`
 
-### Public
+Während dem TypeCheck wird den Nodes ein weiterer Typ zugeordnet, der CheckType: `emptyType, intType, intArrayType, arrayType, noType, errorType, opPlus, opMinus, opMult, opDiv, opLess, opGreater, opEqual, opUnequal, opAnd`
+
 
 Der Konstruktor der Klasse Node bekommt den NodeType übergeben und speichert ihn und setzt den CheckType auf `emptyType`.
 
@@ -85,9 +93,10 @@ zu 10.) Die Methode `Token* getToken()` liefert den Token des Node Objekts zurü
 
 zu 11.) Die Methode `void setToken(Token*)` setzt den Token des Node Objekts auf den angegebenen Wert.
 
-Verwendung von Scanner und Parser
+
+Verwendung des Compilers
 ------
 
 ### ParserTest
 
-Durch Aufrufargumente werden die Ein- und Ausgabedateien eingelesen und gespeichert als char\*. Es wird ein neuer Scanner erzeugt mit der Eingabedatei als Konstruktor Argument. Es wird ein neuer Parser mit dem Scanner und der Ausgabedatei als Konstruktor Argumente erzeugt. Auf dem Parser wird die Methode `Node* parse()` aufgerufen und der Rückgabewert wird gespeichert. Auf dem Parser werden nacheinander die Methoden `void checkType(Node*)` und `void makeCode(Node*)` mit dem Rückgabewert des `Node* parse()` Aufrufs als Argumente.
+Durch Aufrufargumente werden die Ein- und Ausgabedateien eingelesen und gespeichert als `char*`. Es wird ein neuer Scanner erzeugt mit der Eingabedatei als Konstruktor Argument. Es wird ein neuer Parser mit dem Scanner und der Ausgabedatei als Konstruktor Argumente erzeugt. Auf dem Parser wird die Methode `Node* parse()` aufgerufen und der Rückgabewert wird gespeichert. Auf dem Parser werden nacheinander die Methoden `void checkType(Node*)` und `void makeCode(Node*)` mit dem Rückgabewert des `Node* parse()` Aufrufs als Argumente. Anschliessend ist der Pseudo-Assembler in der Ausgabedatei zu finden.
