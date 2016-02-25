@@ -1,9 +1,20 @@
-Dokumentation "systemnahes Programmieren" Teil 1: Der Scanner
+Dokumentation "systemnahes Programmieren" 
 ==============================================================
+Teil 1: Der Scanner
+==================
+*Ein Projekt von Dennis Kühnen, Marius Wirtherle und Marvin Rühe*
+
 Aufgabe
 ------
-Die Aufgabe dieses Teils der systemnahen Programmier Übung ist es einen Scanner für eine erfundene Programmiersprache zu bauen.
+Die Aufgabe dieses Teils der systemnahen Programmierübung ist es einen Scanner für eine erfundene Programmiersprache zu bauen. Diese Sprache erklären wir im nächsten Abschnitt.
+
+Die Bearbeitung dieser Aufgabe soll in C++ erfolgen. Dabei sollen jedoch keine fertige Datenstrukturen verwendet werden.
 Dieser Scanner soll aus drei Teilen bestehen: Einem Buffer der die Quelltextdatei einliest, einem Automat der Tokens aus diesem Text erstellt und einer Symboltabelle in der Informationen über diese Tokens gespeichert werden.
+
+Die Sprache
+-----------
+
+
 
 Buffer
 ------
@@ -56,6 +67,10 @@ Automat
 ### Anforderungen
 Ziel des Automaten ist es, nach den Regeln der Programmiersprache den Quelltext in einzelne Tokens zu teilen. 
 Wenn man dem Automaten ein Zeichen übergibt, ändert er seinen internen Zustand und zählt Zeilen und Spalten.
+
+### Zustandsdiagramm
+
+![Zustandsdiagramm](StatechartDiagram1.png)
 
 ### Implementierung
 Es wird ein enum mit allen Zuständen die der Automat einnehmen kann definiert, `State`
