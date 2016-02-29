@@ -1,5 +1,6 @@
 Dokumentation "systemnahes Programmieren" 
 ==============================================================
+
 Teil 1: Der Scanner
 ==================
 *Ein Projekt von Dennis Kühnen, Marius Wirtherle und Marvin Rühe*
@@ -8,20 +9,41 @@ Aufgabe
 ------
 Die Aufgabe dieses Teils der systemnahen Programmierübung ist es einen Scanner für eine erfundene Programmiersprache zu bauen. Diese Sprache erklären wir im nächsten Abschnitt.
 
-Die Bearbeitung dieser Aufgabe soll in C++ erfolgen. Dabei sollen jedoch keine fertige Datenstrukturen verwendet werden.
-Dieser Scanner soll aus drei Teilen bestehen: Einem Buffer der die Quelltextdatei einliest, einem Automat der Tokens aus diesem Text erstellt und einer Symboltabelle in der Informationen über diese Tokens gespeichert werden.
+Die Bearbeitung dieser Aufgabe soll in C++ erfolgen. Dabei sollen jedoch keine fertigen Datenstrukturen verwendet werden.
+
+Der Scanner soll aus drei Teilen bestehen: Einem Buffer der die Quelltextdatei einliest, einem Automat der Tokens aus diesem Text erstellt und einer Symboltabelle in der Informationen über diese Tokens gespeichert werden.
 
 Die Sprache
 -----------
+Die Programmiersprache dieser Aufgabe ist als regulärer Ausdruck gegeben: 
 
+```
+digit ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+letter ::= A | B | C | ... | Z | a | b | ... | z
 
+sign... ::= + | - | / | * | < | > | = | := |<:> | ! | & | ; | ( | ) | { | } | [ | ]
+integer ::= digit digit*
+identifier ::= letter (letter | digit)*
+if ::=if |IF
+while ::= while | WHILE
+```
+
+Whitespace-Zeichen wie Leerzeichen, Tabs oder Zeilenumbrüche zwischen den Worten sind nicht notwendig, aber erlaubt.
+
+Kommentare beginnen mit `/*` und enden mit `*/` oder beim Dateienden. Innerhalb eines Kommentars darf alles stehen, außer `*/`. Kommentare dürfen nicht geschachtelt werden. Sie werden nicht als Token erfasst und trennen Worte. 
+
+Im zweiten Teil wird diese Definition um weitere Bezeichner erweitert und es wird eine Grammatik hinzugefügt.
+
+Diese Sprache wird in unserem Compiler von der Automaten Klasse implementiert, die wir weiter unten beschrieben haben.
 
 Buffer
 ------
 ### Anforderung
-Der Buffer wird zum einlesen von Dateien in unser Programm verwendet. Er verwendet die systemnahe Funktion open um Dateien von der Festplatte zu lesen. Um die Aufgabe zusätzlich kompliziert zu machen verwenden wir das Flag "O_Direct". 
+Der Buffer wird zum einlesen von Dateien in unser Programm verwendet. Er verwendet die systemnahe Funktion`open`  um Dateien von der Festplatte zu lesen.
+Besonders hardwarenah arbeitet diese Funktion wenn man das `O_Direct` Flag setzt. Dieses Flag mussten wir in dieser Aufgabe setzen.
+Dadurch erfolgt das Lesen ungepuffert und es können nur ganze Blöcke von der Festplatte gelesen werden. Ein Block ist in der Regel 512 Byte groß und in einer einfachen ASCII-Textdatei wird ein Zeichen als ein Byte abgespeichert. Daher werden mit jedem Block immer 512 Zeichen gleichzeitig eingelesen.
 
-Der Grund warum man hier einen Buffer extra programmieren muss ist, dass der Automat die Quelldatei zeichenweise ausliest und dabei auch zurückspringen muss. Dies wird nicht von Standard C-Schnittstellen implementiert, die wir verwenden durften.
+Unser Programm muss daher das Puffern des Einlesens selber vornehmen und kann sich nicht auf das Betriebssystem verlassen. Er ermöglicht es dem Automaten die Quelldatei zeichenweise auszulesen und dabei auch Zeichenweise zurück zuspringen. 
 
 ### Implementierung
 Der Konstruktor der Buffer-Klasse erwartet einen char* auf den Pfad an dem sich die Datei die gelesen werden soll befindet. 
@@ -69,6 +91,9 @@ Ziel des Automaten ist es, nach den Regeln der Programmiersprache den Quelltext 
 Wenn man dem Automaten ein Zeichen übergibt, ändert er seinen internen Zustand und zählt Zeilen und Spalten.
 
 ### Zustandsdiagramm
+
+Da die Sprache die wir weiter oben beschrieben haben als regulärer Ausdruck gegeben ist, kann man diese in einen Endlichen-Automaten umbauen. 
+Diesen Automaten haben wir in dieser Klasse implementiert:
 
 ![Zustandsdiagramm](StatechartDiagram1.png)
 
