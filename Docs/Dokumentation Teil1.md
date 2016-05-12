@@ -179,30 +179,28 @@ Wenn man am Ende der Datei ist und daher kein Token mehr gebaut werden kann, wir
 Die Methode `getInfo` gibt zu einem übergebenen Schlüssel die entsprechende Information aus der Symboltabelle zurück.
 
 ### Beschreibung
-Im Konstruktor des Scanners wird ein neuer Buffer mit dem Übergebenen Dateipfad hergestellt, außerdem wird ein neuer Automat und eine neue Symboltabelle erstellt.
-Solange das eingegebene Token noch leer ist, und kein Kommentar, wird nach dem nächsten Token gesucht:
+Im Konstruktor des Scanners wird ein neuer Buffer mit dem übergebenen Dateipfad erstellt, außerdem wird ein neuer Automat und eine neue Symboltabelle erstellt.
+Solange das eingegebene Token noch leer ist, und kein Kommentar, wird nach dem nächsten Token gesucht. Dazu wird wie folgt vorgegangen:
 
 Es wird immer ein Zeichen aus dem Buffer geladen, dieses Zeichen wird in einer Liste gespeichert, dann wird es in den Automaten gegeben. 
 Die Liste wird weiter unten dokumentiert.
-Es werden solange Zeichen aus dem Buffer in den Automaten geschoben, bis der Automat kein weiteres Zeichen möchte.
-Dann wird der letzten Finale Zustand des Automaten im Token gespeichert. Es wird zusätzlich so viele Zeichen wieder zurückgesprungen wie seit dem letzten Finalen Zustand in den Automaten gegeben wurden.
+Es werden solange Zeichen aus dem Buffer in den Automaten geschoben, bis der Automat kein weiteres Zeichen möchte, da er im Endzustand ist.
+Dann wird der letzten Finale Zustand des Automaten im Token gespeichert. Es wird zusätzlich so viele Zeichen wieder zurückgesprungen wie seit dem letzten Finalen Zustand in den Automaten gegeben wurden, wenn nach dem letzten Finalen Zustand noch weitere Zeichen gelesen wurden.
 Danach wird im Token die Zeile und Spalte die der Automat gezählt hat gespeichert.
 Jetzt wird noch mit Hilfe der privaten Methode `makeInfo(Token* t)` das Token in die Symboltabelle eingefügt.
 Am Ende wird zurückgegeben, ob der Buffer noch weitere Zeichen hat. 
 
-Die Methode `getInfo` ruft einfach nur die Methode `getInfo`  der Symboltabelle mit dem Übergebenen Schlüssel  auf und gibt deren Resultat zurück.
-
 ### Die Methode `makeInfo`
-Wandelt den TokenTyp im Token in einen InfoTyp um. State::Number wird zu InfoTyp::Integer, State::Identifier wird zu InfoTyp::Identifier, State::Fehler wird zu InfoTyp::Fehler, und die Zustände die ein Zeichen sind werden zu InfoTyp::Sign.
+Wandelt den TokenTyp (letzter Automatenzustand) im Token in einen InfoTyp um. State::Number wird zu InfoTyp::Integer, State::Identifier wird zu InfoTyp::Identifier, State::Fehler wird zu InfoTyp::Fehler, und die Zustände die ein Zeichen sind werden zu InfoTyp::Sign.
 
 Mit der newInfo Methode der Symboltabelle wird jetzt der Inhalt des Tokens und dessen InfoTyp gespeichert und zurück wird ein Key gegeben mit dem man später wieder auf die Information zugreifen kann. 
-Zur Kontrolle wird dann überprüft ob der Wert des Tokens ungleich -1 ist, dass würde eine Bereichsüberschreitung hinweisen., dann wird der Typ auf Fehler gesetzt.
+Zur Kontrolle wird dann überprüft ob der Wert des Tokens ungleich -1 ist, das würde auf eine Bereichsüberschreitung hinweisen, dann wird der Typ auf Fehler gesetzt.
 
 Abschließend wird noch der Key im Token gespeichert.
 
 ### Die Liste
 ### Anforderung
-Um Buchstaben bequem in einer Liste speichern zu können, von deren Ende man Buchstaben auch wieder entfernen kann, haben wir unsere Liste gebaut. Das macht natürlich nur Sinn wenn man weiß, dass wir keine fertigen Datenstrukturen verwenden dürfen.
+Um Buchstaben für den Token Inhalt bequem in einer Liste speichern zu können, von deren Ende man Buchstaben auch wieder entfernen kann, haben wir unsere Liste gebaut. Das macht natürlich nur Sinn wenn man weiß, dass wir keine fertigen Datenstrukturen verwenden dürfen.
 
 ### Implementierung
 Die Öffentlichen Methoden unserer Liste sind:
@@ -212,14 +210,14 @@ Die Öffentlichen Methoden unserer Liste sind:
 4. `bool isEmpty()`
 5. `void clear()`
 
-Die Liste ist eigentlich nicht als Liste implementiert, sondern als automatisch wachsendes Array.
+Die Liste ist eigentlich nicht als Liste implementiert, sondern als automatisch wachsendes Array. Sie verhält sich aber nach außen wie eine Liste.
 
 Mit `push` wird an die Stelle des internen Zählers ein neues Zeichen geschreiben. Der Zähler wird um eins erhöht und an die Stelle, an der der Zähler dann steht, wird `\0` eingefügt. 
 
 Probleme gibt es nur, wenn das aktuelle Array nicht groß genug ist:
 In diesem Fall wird doppelt so viel Speicher wie das Array im Moment belegt angefordert und der Inhalt des aktuellen Arrays in das neue Array kopiert. Dann wird das alte Array gelöscht und durch das neue Array ersetzt.
 
-Die Methode `pop` gibt das letzte Zeichen zurück und überschreibt seine Position vorher mit `\0`. Die Liste schrumpft nicht wieder.
+Die Methode `pop` gibt das letzte Zeichen zurück und überschreibt seine Position vorher mit `\0`.
 
 Die Methode `getString` gibt einfach einen Pointer auf das erste Element zurück, da wir immer am Ende des benutzen Bereichs des Arrays ein `\0` einfügen. `isEmpty` ist ebenfalls trivial: wir verwenden einen internen Zähler der einfach mit 0 verglichen wird.
 `clear` setzt den internen Zähler wieder auf 0 und fügt an der ersten Stelle im Array ein `\0` ein.
@@ -231,13 +229,13 @@ Im Destruktor wird der Speicherplatz der Liste immer wieder freigegeben.
 Token
 -----
 ### Anforderung
-Der Quelltext der vom Buffer eingelesen wird, soll im Scanner in Tokens aufgespalten werden. Diese Tokens haben Zeilen un Spalten Information, sowie einen Typen, einen Inhalt und einen Key. Mit dem Key kann man dann die Information die mit diesem Token verbunden ist in der Symboltabelle abrufen.
+Der Quelltext der vom Buffer eingelesen wird, soll im Scanner in Tokens aufgespalten werden. Diese Tokens haben Zeilen und Spalten Information, sowie einen Typen, einen Inhalt und einen Key. Mit dem Key kann man dann die Information die mit diesem Token verbunden ist in der Symboltabelle abrufen.
 
 ### Implementierung
 Für Zeile und Spalte gibt es Getter und Setter (`int getZeile(), int getSpalte(), void setZeile(int Zeile), void setSpalte(int Spalte)`).
 Für TokenTyp und Key ebenso (`State getTokenTyp(), void setTokenTyp(State t), void setKey(uint16_t key) und uint16_t getKey()`)
 
-Der Inhalt wird in einer Liste gespeichert. Die Funktionsweise der Liste ist weiter oben beschrieben. Sie wird im Konstruktor angelegt und ist über die `content` Variable öffentlich zugänglich. Die Methode `char* getContent()` liefert die Liste als Zeichenkette zurück.
+Der Inhalt des Tokens wird in einer Liste gespeichert. Der Inhalt sind die Zeichen aus dem Buffer, die dieses Token repräsentiert. Die Funktionsweise der Liste ist weiter oben beschrieben. Sie wird im Konstruktor angelegt und ist über die `content` Variable öffentlich zugänglich. Die Methode `char* getContent()` liefert die Liste als Zeichenkette zurück.
 
 Zusätzlich hat ein Token noch die Methode `const char* getTokenTypeString()` das den aktuellen TokenTyp als Zeichenkettte für die Ausgabe zurückgibt. Ein TokenTyp ist ein enum und kann damit in ein Integer umgewandelt werden. Dieser wird als Index für ein Array mit den Namen der TokenTypen verwendet und der String zurückgegeben.
 
@@ -265,7 +263,7 @@ zu 3. ) Der Hashwert der Informationen wird hier mithilfe des Lexems berechnet, 
 
 `void keySizeBigger()`: Diese Methode wird immer dann aufgerufen, wenn eine neue Information angelegt wurde. Sie inkrementiert das Attribut `keysize`. Wenn die `keys`-Liste voll ist verdoppelt sie deren Größe und reserviert neuen Speicher.
 
-`void initSymbols()`: Diese Methode wird vom Konstruktor der Symboltable aufgerufen und erzeugt Informationen für alle Schlüsselwörter der Sprache (if, else, while, int, read, write).
+`void initSymbols()`: Diese Methode wird vom Konstruktor der Symboltable aufgerufen und erzeugt Informationen für alle Schlüsselwörter der Sprache (if, else, while, int, read, write) mit dem entsprecenden Infotypen.
 
 Als Speicher der Keys und der Informationen dienen die Arrays `Information** informations` und `int* keys`. Das Attribut `memsize` legt die Größe der Hashmap `informations` fest und `keysizemax` die momentane Größe des Speichers des `keys` Arrays. Das Attribut `keysize` zählt die tatsächliche Größe des `keys` Arrays mit.
 
