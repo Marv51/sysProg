@@ -39,7 +39,7 @@ Diese Sprache wird in unserem Compiler von der Automaten Klasse implementiert, d
 Buffer
 ------
 ### Anforderung
-Der Buffer wird zum einlesen von Dateien in unser Programm verwendet. Er verwendet die systemnahe Funktion`open`  um Dateien von der Festplatte zu lesen.
+Der Buffer wird zum einlesen von Dateien in unser Programm verwendet. Er verwendet die systemnahe Funktion `open`  um Dateien von der Festplatte zu lesen.
 Besonders hardwarenah arbeitet diese Funktion wenn man das `O_Direct` Flag setzt. Dieses Flag mussten wir in dieser Aufgabe setzen.
 Dadurch erfolgt das Lesen ungepuffert und es können nur ganze Blöcke von der Festplatte gelesen werden. Ein Block ist in der Regel 512 Byte groß und in einer einfachen ASCII-Textdatei wird ein Zeichen als ein Byte abgespeichert. Daher werden mit jedem Block immer 512 Zeichen gleichzeitig eingelesen.
 
@@ -69,14 +69,18 @@ Der Datei Zugriff nutzt `read` und `O_DIRECT`, die drei entscheidenden Zeilen si
 
 Mit diesen drei Zeilen können wir jeder Zeit einen Block aus der Datei lesen. 
 
+In der ersten Zeile öffnen wir die Datei im read-only modus. Durch das `O_Direct` können immer nur ganze Festplattenblöcke gelesen werden.
+Für den Lesevorgang wird ein Stück Speicher benötigt, das an einer durch 512 teilbaren Startadresse beginnt. Das holen wir uns durch den aufruf von `posix_memalign` in der zweiten Zeile.
+Die `read` Funktion liest dann aus der Datei einen Festplattenblock in den Puffer. In der Regel hat ein Festplattenblock 512 Byte. 
+
 Intern wird der Buffer in zwei Teile aufgeteilt: `current_buffer` und `prev_buffer` Anfangs wird der `current_buffer` mit 512 Zeichen aus der Datei gefüllt und der Positionsindex `position` steht auf 0. 
 
-Wenn jetzt `getChar` aufgerufen wird, wird position um eins erhöht und die Stelle im `current_buffer` zurückgegeben an der Position vorher stand.  
+Wenn jetzt `getChar` aufgerufen wird, wird `position` um eins erhöht und das Zeichen an der Stelle im `current_buffer` zurückgegeben an der `position` vorher stand.  
 Mit der Methode `ungetChar()` wird einfach `position` um eins verringert. 
 
 Die Methode `hasCharLeft()`, ruft einfach `getChar()` auf, schaut ob das nächste Zeichen ein Dateiende-Zeichen ist (`\0`) und ruft dann `ungetChar()` auf um die Position wiederherzustellen. 
 
-Die beiden schwierigen Fälle sind: Wenn man am Ende eines Blockes angekommen ist muss mehr aus der Datei nachgeladen werden und wenn man über die Blockgrenzen hinweg `ungetChar()` aufruft. 
+Die beiden speziellen Fälle sind: Wenn man am Ende eines Blockes angekommen ist muss mehr aus der Datei nachgeladen werden und wenn man über die Blockgrenzen hinweg `ungetChar()` aufruft. 
 
 Zum ersten Fall wenn mehr Daten gebraucht werden (d.h. das 513 Zeichen aus einem Block), dann müssen neue Daten aus der Datei gelesen werden, dass machen wir so: 
 
@@ -101,34 +105,34 @@ Diesen Automaten haben wir in dieser Klasse implementiert:
 Es wird ein enum mit allen Zuständen die der Automat einnehmen kann definiert, `State`
 
     enum State {
-    	Undefined,
-    	Start,
-    	Number,
-    	Identifier,
-    	KleinerAls,
-    	GeschweifteKlammerAuf,
-    	GeschweifteKlammerZu,
-    	VorwaertsSchraegstrich,
-    	EckigeKlammerAuf,
-    	EckigeKlammerZu,
-    	UndZeichen,
-    	GroesserAls,
-    	Stern,
-    	Ausrufezeichen,
-    	RundeKlammerAuf,
-    	RundeKlammerZu,
-    	IstGleichZeichen,
-    	Minus,
-    	Plus,
-    	Doppelpunkt,
-    	DoppelpunktIstGleich,
-    	Semikolon,
-    	KleinerDoppelpunkt,
-    	kleinerDoppelpunktGroesser,
-    	SchraegStrichStern,
-    	SchraegstrichSternStern,
-    	SchraegstrichSternSternSchraegstrich,
-    	Fehler
+		Undefined,
+		Start,
+		Number,
+		Identifier,
+		KleinerAls,
+		GeschweifteKlammerAuf,
+		GeschweifteKlammerZu,
+		VorwaertsSchraegstrich,
+		EckigeKlammerAuf,
+		EckigeKlammerZu,
+		UndZeichen,
+		GroesserAls,
+		Stern,
+		Ausrufezeichen,
+		RundeKlammerAuf,
+		RundeKlammerZu,
+		IstGleichZeichen,
+		Minus,
+		Plus,
+		Doppelpunkt,
+		DoppelpunktIstGleich,
+		Semikolon,
+		KleinerDoppelpunkt,
+		kleinerDoppelpunktGroesser,
+		SchraegStrichStern,
+		SchraegstrichSternStern,
+		SchraegstrichSternSternSchraegstrich,
+		Fehler
     };
 
 Seine öffentlichen Methoden sind:
@@ -138,7 +142,6 @@ Seine öffentlichen Methoden sind:
 3. `bool testChar(char c)`
 4. `int getZeile();`
 5. `int getSpalte();`
-6. `void spalteZurueck();`
 
 zu 1.) Gibt den letzten finalen Zustand des Automaten zurück. Wenn noch kein Finaler Zustand erreicht wurde wird der Zustand `Start` zurückgegeben.
 
@@ -148,11 +151,12 @@ zu 3.) Die wichtigste Methode des Automaten: Sie führe die Übergänge der Zust
 
 zu 4. und 5.) Geben die Zeile und Spalte vom Anfang des Tokens zurück. (Ein neues Token beginnt wenn der Automat im Start Zustand ist und ein Zeichen getestet werden soll.)
 
-zu 6.) Wenn wir ein Zeichen mehr eingelesen haben als wir sollten, kann man hiermit den Spalten-Zähler wieder zurücksetzen.
+### Beschreibung
+Unser Automat basiert auf einer großen Übergangsmatrix (28x256), die aus die aus dem aktuellen Zustand (28 Verschiedene möglich) und einem beliebigen char (theoretisch 256 Verschiedene) einen Folgezustand zurückgibt.
 
-### Implementierung
-Unser Automat basiert auf einer großen Übergangsmatrix (28x256), die aus die aus dem aktuellen Zustand und einem bliebigen char einen Folgezustand zurückgibt.
-Anfangs sind alle Übergänge mit `Undefined` als Folgezustand definiert, außer den Übergängen die bewusst im Konstruktor gesetzt wurden.
+Anfangs sind alle Übergänge mit `Undefined` als Folgezustand definiert, außer den Übergängen die bewusst im Konstruktor gesetzt wurden. 
+Die erlaubten Übergänge sieht man in dem Zustandsdiagramm oben.
+
 Ein zweites Array finalStates ordnet jedem Zustand zu, ob dieser ein finaler Zustand ist.
 
 Mit dieser Information kann man jetzt für jedes Zeichen testen ob der Übergang `Undefined` ist oder ob es einen Folgezustand gibt.
@@ -174,7 +178,7 @@ Wenn man am Ende der Datei ist und daher kein Token mehr gebaut werden kann, wir
 
 Die Methode `getInfo` gibt zu einem übergebenen Schlüssel die entsprechende Information aus der Symboltabelle zurück.
 
-### Implementierung
+### Beschreibung
 Im Konstruktor des Scanners wird ein neuer Buffer mit dem Übergebenen Dateipfad hergestellt, außerdem wird ein neuer Automat und eine neue Symboltabelle erstellt.
 Solange das eingegebene Token noch leer ist, und kein Kommentar, wird nach dem nächsten Token gesucht:
 
@@ -184,7 +188,7 @@ Es werden solange Zeichen aus dem Buffer in den Automaten geschoben, bis der Aut
 Dann wird der letzten Finale Zustand des Automaten im Token gespeichert. Es wird zusätzlich so viele Zeichen wieder zurückgesprungen wie seit dem letzten Finalen Zustand in den Automaten gegeben wurden.
 Danach wird im Token die Zeile und Spalte die der Automat gezählt hat gespeichert.
 Jetzt wird noch mit Hilfe der privaten Methode `makeInfo(Token* t)` das Token in die Symboltabelle eingefügt.
-Am Ende wird zurückgegeben, ob der Buffer noch weitere Zeichen hat. Das Token wurde als Pointer übergeben, also wird es nicht zurückgegeben, sondern das ursprüngliche Objekt verändert.
+Am Ende wird zurückgegeben, ob der Buffer noch weitere Zeichen hat. 
 
 Die Methode `getInfo` ruft einfach nur die Methode `getInfo`  der Symboltabelle mit dem Übergebenen Schlüssel  auf und gibt deren Resultat zurück.
 
@@ -240,10 +244,10 @@ Zusätzlich hat ein Token noch die Methode `const char* getTokenTypeString()` da
 Symboltable
 ------
 ### Anforderung
-Die Symboltabelle speichert die Informationen in einer Hashtabelle. Bei doppelten Hashwerten wird eine Linked List angelegt. Um auf die Informationen zuzugreifen wird ein Key benötigt, welcher in einer dynamischen Liste gespeichert wird.
+Die Symboltabelle speichert die Informationen (Information wird weiter unten beschrieben) in einer Hashtabelle. Bei doppelten Hashwerten wird eine Linked List angelegt. Um auf die Informationen zuzugreifen wird ein Key benötigt, welcher in einer dynamischen Liste gespeichert wird.
 
 ### Implementierung
-Der Konstruktor der Symboltable-Klasse erwartet keine Parameter. Er initialisiert die ürsprüngliche größe der Keyliste und die größe der Hashmap und er reserviert den Speicher für beide.
+Der Konstruktor der Symboltable-Klasse erwartet keine Parameter. Er initialisiert die ürsprüngliche Größe der Keyliste und die Größe der Hashmap und er reserviert den Speicher für beide.
 
 Die Symboltabelle hat drei öffentliche Methoden: 
 
@@ -270,11 +274,11 @@ Information
 ------
 
 #### Anforderung
-Die Klasse `Information` dient zum speichern der Informationen in der Symboltabelle. Sie speichert das Lexem, den Key in der Symboltabelle, ihren `InfoTyp`, und ihren Wert für Zahlen.
+Die Klasse `Information` dient zum Speichern der Informationen in der Symboltabelle. Sie speichert das Lexem, den Key in der Symboltabelle, ihren `InfoTyp`, und ihren Wert für Zahlen.
 
 ### Implementierung
 
-Der Konstruktor der Klasse erwartet als Parameter das Lexem der Information und den Key. Diese werden abgespeichert und alle anderen Attribute werden auf ihre Standartwerte gesetzt.
+Der Konstruktor der Klasse erwartet als Parameter das Lexem der Information und den Key. Diese werden abgespeichert. Außerdem wird der Pointer auf die nächste Information auf `null` gesetzt. Der Zahlenwert wird mit -1 initalisiert und `type` wird auf `Unkown` gesetzt. 
 
 `char* getLexem()`: Liefert das Lexem der Information zurück.
 
@@ -282,7 +286,7 @@ Der Konstruktor der Klasse erwartet als Parameter das Lexem der Information und 
 
 `bool compareLexem(char* lex)`: Liefert `true` zurück, wenn das übergebene Lexem das gleiche ist wie das gespeicherte.
 
-`Information* getNextInfo()`: Liefert das Attribut `nextInfo` zurück.
+`Information* getNextInfo()`: Liefert das Attribut `nextInfo` zurück. Dieses wird von der Symboltabelle verwendet, wenn mehrere Informationen den selben Hash haben.
 
 `void setNextInfo(Information* info)`: Ändert das Attribut `nextInfo` zu dem Wert des Parameters.
 
@@ -324,7 +328,11 @@ enum class InfoTyp{
 
 ScannerTest
 -----------
-Die Klasse ScannerTest wird verwendet um diesen Teil der Aufgabe zu testen. Sie enthält eine `main` Methode. Als Kommandozeilen Argumente werden die Pfade zur Quellcodedatei und der Ausgabedatei übergeben.
-Es wird solange die Methode `nextToken` aufgerufen, bis die komplette Datei verarbeitet ist.
+Die Klasse ScannerTest wird verwendet um das Programm auszuführen. Sie enthält eine `main` Methode. Als Kommandozeilen Argumente werden die Pfade zur Quellcodedatei und der Ausgabedatei übergeben.
+```
+./ScannerTest in.txt out.txt
+```
+
+In der Main Funktion wird solange die Methode `nextToken` aufgerufen, bis die komplette Datei verarbeitet ist.
 
 In die Ausgabe Datei wird eine Liste der Tokens geschrieben. Auf der Konsole werden Fehler ausgegeben.
