@@ -1,9 +1,27 @@
-### Ideen:
-* sollten wir noch die Grammatik einfügen?
-* was ist mit den vorgeschriebenen regeln?
-
 Dokumentation "systemnahes Programmieren" Teil 2: Der Parser
 ==============================================================
+
+*Ein Projekt von Dennis Kühnen, Marius Wirtherle und Marvin Rühe*
+
+Grammatik
+---------
+
+```
+PROG ::= DECLS STATEMENTS
+DECLS ::= DECL ; DECLS | ε
+DECL ::= int ARRAY identifier
+ARRAY ::= [ integer ] | ε
+STATEMENTS ::= STATEMENT ; STATEMENTS | ε
+STATEMENT ::= identifier INDEX := EXP | write( EXP ) | read ( identifier INDEX) 
+              | {STATEMENTS} | if ( EXP ) STATEMENT else STATEMENT 
+              | while ( EXP ) STATEMENT
+EXP ::= EXP2 OP_EXP
+EXP2 ::= ( EXP ) | identifier INDEX | integer | - EXP2 | ! EXP2
+INDEX ::= [ EXP ] | ε
+OP_EXP ::= OP EXP | ε
+OP ::= + | - | * | / | < | > | = | <:> | &
+```
+Die Regeln für den Typecheck und das generieren des Codes waren als Pseudo-Code in der Aufgabenstellung enthalten.
 
 Parser
 ------
@@ -50,7 +68,7 @@ zu 1.) Die Methode `Node* parse()` startet das Parsen, indem sie die Methode `No
 
 zu 2.) Die Methoden `Node* parse[NodeType]()` rufen sich gegenseitig auf und Bauen so die Baumstruktur der Nodes auf, indem für jeden Knoten durch die Methode `Node* createNode(NodeType)` ein Node Objekt erzeugt wird. Für die Struktur wird die `void addNode(Node*)` Methode der Node Klasse verwendet. Wenn ein Token geparst wird rufen sie außerdem die Methode `Node* match(InfoType)` auf. Fehler werden ausgegeben und das Programm mit `exit(1)` beendet.
 
-zu 3.) Die Methode `void typeCheck(Node*)` funktioniert Rekursiv, indem sie sich immer wieder selbst aufruft mit der nächsten Node im Strukturbaum und prüft dabei auf Fehler im geparsten Programmcode. Dazu wird den Nodes ein Wert aus dem Enum CheckType zugeordnet. Die Möglichen Werte dieses Enums sind: `emptyType, intType, intArrayType, arrayType, noType, errorType, opPlus, opMinus, opMult, opDiv, opLess, opGreater, opEqual, opUnequal, opAnd`. Fehler werden mit der Methode `void errorTypeCheck(char* message, Token*)` ausgegeben.
+zu 3.) Die Methode `void typeCheck(Node*)` funktioniert Rekursiv, indem sie sich immer wieder selbst aufruft mit der nächsten Node im Strukturbaum und prüft dabei auf Fehler im geparsten Programmcode. Dazu wird den Nodes ein Wert aus dem Enum CheckType zugeordnet. Die Möglichen Werte dieses Enums sind: `emptyType, intType, intArrayType, arrayType, noType, errorType, opPlus, opMinus, opMult, opDiv, opLess, opGreater, opEqual, opUnequal, opAnd`. Fehler werden ausgegeben und das Programm mit `exit(1)` beendet.
 
 zu 4.) Die Methode `void makeCode(Node*)` funktioniert rekursiv, indem sie sich immer wieder selbst aufruft mit dem nächsten Node im Strukturbaum und erzeugt dabei den Assembler ähnlichen Code und schreibt ihn in die im Konstruktor spezifizierte Datei.
 
